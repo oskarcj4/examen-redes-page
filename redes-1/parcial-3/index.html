@@ -1,0 +1,826 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Redes I · Parcial III</title>
+<meta name="description" content="Guía de estudio del Parcial III de Redes de Computadoras I: diagrama de estado y de árbol, suma de verificación, CRC, switching, trama Ethernet, VLAN, direccionamiento jerárquico y enlaces troncales IEEE 802.1Q.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" type="image/svg+xml" href="../../img/logo.svg">
+<link rel="stylesheet" href="../../css/styles.css">
+</head>
+<body data-exam="redes-1/parcial-3" data-store="redes3-done">
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="Abrir índice" aria-expanded="false" aria-controls="side">
+    <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
+  <a class="back-btn" href="../../index.html" aria-label="Volver a todos los exámenes">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg><span>Exámenes</span>
+  </a>
+  <div class="brand">Redes de Computadoras I <span>· Guía Parcial III</span></div>
+  <div class="spacer"></div>
+  <div class="progress-pill" id="progress" aria-live="polite">0 de 0 repasados</div>
+</header>
+<div class="scrim" id="scrim"></div>
+<div class="layout">
+<nav class="side" id="side" aria-label="Índice">
+  <a class="side-back" href="../../index.html"><span class="n">←</span>Todos los exámenes</a>
+  <h4>Inicio</h4>
+  <a href="#inicio"><span class="n">00</span>Cómo usar esta guía</a>
+  <a href="#formulario"><span class="n">★</span>Hoja de fórmulas</a>
+  <h4>Temas por clase</h4>
+  <a href="#c18" data-sec="c18"><span class="n">C18</span>Diagrama de estado y de árbol<span class="done"></span></a>
+  <a href="#c19" data-sec="c19"><span class="n">C19</span>Suma de verificación<span class="done"></span></a>
+  <a href="#c20" data-sec="c20"><span class="n">C20</span>CRC · código polinomial<span class="done"></span></a>
+  <a href="#c21" data-sec="c21"><span class="n">C21</span>Switching y trama Ethernet<span class="done"></span></a>
+  <a href="#c22" data-sec="c22"><span class="n">C22</span>VLAN y sus beneficios<span class="done"></span></a>
+  <a href="#c23" data-sec="c23"><span class="n">C23</span>Direccionamiento y tipos de VLAN<span class="done"></span></a>
+  <a href="#c24" data-sec="c24"><span class="n">C24</span>Troncales e IEEE 802.1Q<span class="done"></span></a>
+  <h4>Práctica</h4>
+  <a href="#quiz" data-sec="quiz"><span class="n">Q</span>Cuestionario de práctica<span class="done"></span></a>
+  <a href="#ej-resueltos" data-sec="ejr"><span class="n">E·✓</span>Ejercicios resueltos<span class="done"></span></a>
+  <a href="#ej-propuestos" data-sec="ejp"><span class="n">E·?</span>Ejercicios propuestos<span class="done"></span></a>
+  <a href="#lab"><span class="n">LAB</span>Laboratorio interactivo</a>
+</nav>
+<main id="main">
+
+
+<section id="inicio" class="hero">
+  <p class="eyebrow">Universidad Mariano Gálvez · Redes de Computadoras I · Clases 18 a 24</p>
+  <h1>Todo el Parcial III,<br>de la trama a la VLAN.</h1>
+  <p class="lede">Síntesis de las 7 clases y de la hoja “Codificación · Diagrama de árbol”. Primero los tres métodos que se resuelven a mano (árbol, suma de verificación y CRC) con los ejemplos de clase paso a paso; después la teoría de switching, la trama Ethernet, las VLAN y el etiquetado 802.1Q. Al final, cuestionario, ejercicios y un laboratorio para practicar sin límite.</p>
+
+  <div class="legend" style="margin-top:22px" aria-label="Leyenda de colores">
+    <span><i></i>bit 0</span><span><i class="one"></i>bit 1</span><span><i class="p"></i>ceros anexados / campo destacado</span><span><i class="fix"></i>resultado (residuo, checksum)</span>
+  </div>
+
+  <h3>Plan de estudio sugerido</h3>
+  <div class="grid g3 toc-grid">
+    <a class="card" href="#c18"><span class="n">BLOQUE 1 · MÉTODOS</span><h4>Resolver a mano</h4><p>C18–C20: codificar con el diagrama de estado/árbol, calcular el checksum y el CRC, y verificar en el receptor.</p></a>
+    <a class="card" href="#c21"><span class="n">BLOQUE 2 · TEORÍA</span><h4>Switching</h4><p>C21: tabla MAC/CAM, inundación, almacenamiento y envío vs. corte, campos de la trama Ethernet.</p></a>
+    <a class="card" href="#c22"><span class="n">BLOQUE 3 · TEORÍA</span><h4>VLAN</h4><p>C22–C24: beneficios, tipos de VLAN, direccionamiento jerárquico, puertos de acceso y troncales, etiqueta 802.1Q.</p></a>
+    <a class="card" href="#quiz"><span class="n">BLOQUE 4 · EXAMEN</span><h4>Autoevaluación</h4><p>Cuestionario, ejercicios resueltos y propuestos (los mismos de las diapositivas) y el laboratorio para comprobar.</p></a>
+  </div>
+  <div class="key warn"><b>Lo que más pesa en el examen <span class="badge ded">deducido</span></b>Las diapositivas traen ejercicios de tres métodos: <b>codificar con el diagrama de estado y de árbol</b> (5 entradas), <b>obtener el checksum</b> (4 ejercicios) y <b>calcular y verificar el CRC</b> (ejercicio 7), además del cuadro <b>almacenamiento y envío vs. corte</b>. El profesor no dijo cuánto vale cada parte; si tienes poco tiempo empieza por C18 → C19 → C20 y luego repasa la teoría de C21–C24.</div>
+</section>
+
+<section id="formulario" class="topic">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Referencia rápida</p><h2>Hoja de fórmulas y reglas</h2></div></div>
+  <div class="grid g2">
+    <div class="card tile"><span class="tag">DIAGRAMA DE ESTADO / ÁRBOL (C18)</span>
+      <p class="formula">a = 00 · b = 10 · c = 01 · d = 11</p>
+      <ul class="small">
+        <li>Desde el estado inicial <b>a (00)</b>. Rama hacia <b>arriba ↑ = entrada 0</b>; hacia <b>abajo ↓ = entrada 1</b>.</li>
+        <li><b>a</b>: 0 → a / <b>00</b> · 1 → b / <b>11</b></li>
+        <li><b>b</b>: 0 → c / <b>10</b> · 1 → d / <b>01</b></li>
+        <li><b>c</b>: 0 → a / <b>11</b> · 1 → b / <b>00</b></li>
+        <li><b>d</b>: 0 → c / <b>01</b> · 1 → d / <b>10</b></li>
+        <li>Fórmula equivalente <span class="badge ded">deducido</span>: o1 = u⊕s1⊕s2 · o2 = u⊕s2 · siguiente = u s1.</li>
+      </ul></div>
+    <div class="card tile"><span class="tag">SUMA DE VERIFICACIÓN (C19)</span>
+      <p class="formula">0+0=0 · 0+1=1 · 1+1=0 llevo 1</p>
+      <ol class="small">
+        <li>Suma las palabras de dos en dos (8 o 16 bits).</li>
+        <li>Si sobra un acarreo a la izquierda, <b>súmalo al final (+1)</b>.</li>
+        <li><b>Checksum = invertir los bits</b> de la suma.</li>
+        <li>Receptor: palabras + checksum = <b>1111…1</b> → sin error.</li>
+      </ol></div>
+    <div class="card tile"><span class="tag">CRC (C20)</span>
+      <p class="formula">T(x) = x<sup>r</sup>M(x) − residuo</p>
+      <ol class="small">
+        <li>r = grado de G(x). Generador en binario: un bit por cada término de x<sup>r</sup> a x<sup>0</sup>.</li>
+        <li>Anexa <b>r ceros</b> a M.</li>
+        <li>Divide en <b>módulo 2</b> (restar = XOR) entre G.</li>
+        <li>El residuo (r bits) reemplaza los ceros → <b>T(x)</b>.</li>
+        <li>Receptor: T ÷ G → residuo <b>0</b> = sin error; distinto de 0 = error.</li>
+      </ol></div>
+    <div class="card tile"><span class="tag">ARITMÉTICA MÓDULO 2</span>
+      <p class="formula">suma = resta = XOR</p>
+      <ul class="small"><li>0⊕0 = 0 · 0⊕1 = 1 · 1⊕0 = 1 · 1⊕1 = 0.</li><li><b>Sin acarreos</b> en la suma ni <b>préstamos</b> en la resta.</li><li>Generador: el <b>primer y el último bit deben ser 1</b>.</li><li>Polinomios de ejemplo: x⁴+x+1 = 10011 · x⁴+x²+x+1 = 10111 · x³+x²+1 = 1101 · x³+1 = 1001.</li></ul></div>
+    <div class="card tile"><span class="tag">SWITCHING (C21)</span>
+      <ul class="small">
+        <li>Decide con <b>puerto de entrada + dirección MAC de destino</b>.</li>
+        <li>Tabla <b>MAC</b> = tabla <b>CAM</b> (memoria de contenido direccionable).</li>
+        <li>Destino desconocido → <b>inunda</b> todos los puertos menos el de entrada.</li>
+        <li><b>Almacenamiento y envío</b>: trama completa + revisa FCS (CRC) → descarta errores. Más lento.</li>
+        <li><b>Corte</b>: reenvía al leer la MAC destino. Más rápido, reenvía tramas dañadas.</li>
+      </ul></div>
+    <div class="card tile"><span class="tag">TRAMA ETHERNET 802.3 (bytes)</span>
+      <p class="formula">7 · 1 · 6 · 6 · 2 · 46–1500 · 4</p>
+      <ul class="small"><li>Preámbulo · SFD · MAC destino · MAC origen · Longitud/Tipo · Datos+relleno · FCS.</li><li>Mínimo <b>64 bytes</b>. Longitud/Tipo ≥ <b>0x0600 (1536)</b> → es un tipo (protocolo).</li><li>FCS = 4 bytes con <b>CRC-32</b>.</li></ul></div>
+    <div class="card tile"><span class="tag">VLAN (C22–C23)</span>
+      <ul class="small"><li>Dominio de difusión <b>lógico</b> de capa 2; una VLAN = <b>una subred IP</b>.</li><li>Tipos: <b>datos</b>, <b>predeterminada</b> (VLAN 1), <b>nativa</b> (802.1Q, sin etiqueta), <b>administración</b> (SVI con IP).</li><li>Beneficios: seguridad, costos, rendimiento, dominios de difusión reducidos, eficiencia de TI, administración de proyectos.</li></ul></div>
+    <div class="card tile"><span class="tag">IEEE 802.1Q (C24)</span>
+      <p class="formula">TPID 16 · PCP 3 · DEI 1 · VID 12</p>
+      <ul class="small"><li>Etiqueta de <b>4 bytes</b> entre la MAC de origen y el EtherType.</li><li>TPID = <b>0x8100</b>. VID de 12 bits → <b>2¹² = 4096</b> VLAN (0–4095).</li><li>Acceso = 1 VLAN, sin etiqueta. Troncal = varias VLAN, etiquetado (la nativa va sin etiqueta).</li></ul></div>
+  </div>
+</section>
+
+<!-- ======================= CLASE 18 ======================= -->
+<section id="c18" class="topic" data-sec="c18">
+  <div class="sec-head"><div class="meta"><span class="src">📄 P3-038-Clase18-2026 · 20 diapositivas + hoja “Codificación · Diagrama de árbol”</span><h2>Diagrama de estado y diagrama de árbol</h2></div><button class="mark-btn" data-mark="c18" aria-pressed="false">Marcar como repasado</button></div>
+  <p>Continúa los códigos convolucionales del parcial II. Un mismo codificador se puede representar de tres maneras: <b>diagrama de estado</b>, <b>diagrama de árbol</b> y <b>Trellis</b>. Esta clase usa el codificador de <b>tasa 1/2</b>: cada bit de entrada produce <b>2 bits</b> de salida (una “palabra de rama”).</p>
+
+  <div class="grid g2x">
+    <div class="card tile"><span class="tag">DIAGRAMA DE ESTADO</span><p class="small">Una manera de representar codificadores simples. Los <b>estados</b> (círculos) son los posibles contenidos de los <b>K − 1</b> registros de la derecha. Los <b>caminos</b> entre estados llevan escrita la palabra de rama de salida de esa transición, en la forma <b>entrada/salida</b>.</p></div>
+    <div class="card tile"><span class="tag">SOLO DOS TRANSICIONES</span><p class="small">Como el registro se desplaza <b>un bit por vez</b>, de cada estado salen solo <b>dos</b> transiciones (entrada 0 o 1). Ejemplo: si el estado presente es <b>00</b>, el siguiente solo puede ser <b>00</b> o <b>10</b>.</p></div>
+    <div class="card tile"><span class="tag">DIAGRAMA DE ÁRBOL</span><p class="small">Agrega la <b>dimensión del tiempo</b> al diagrama de estado. Los bits de entrada se describen <b>cruzando el diagrama de izquierda a derecha</b>; las ramas representan los posibles estados con sus codificaciones.</p></div>
+    <div class="card tile"><span class="tag">REGLA DE LA BIFURCACIÓN</span><p class="small">Entrada <b>0</b> → la palabra está en la siguiente rama a la derecha, en dirección <b>ascendente ↑</b>.<br>Entrada <b>1</b> → siguiente rama a la derecha, en dirección <b>descendente ↓</b>.</p></div>
+  </div>
+
+  <h3>Estados del codificador</h3>
+  <p>Estados de los registros: <b>a = 00, b = 10, c = 01, d = 11</b>. Ojo: aquí <b>b = 10</b> y <b>c = 01</b>, al revés que en el Trellis del parcial II (b = 01, c = 10). El código es el mismo; solo cambian las letras.</p>
+
+  <figure>
+    <svg viewBox="0 0 640 420" class="r3-state" role="img" aria-label="Diagrama de estado: a=00, b=10, c=01, d=11 con sus transiciones entrada/salida">
+      <defs><marker id="r3ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--text-2)"/></marker></defs>
+      <g class="st-e">
+        <path d="M304 46 C 278 -2, 362 -2, 336 46" marker-end="url(#r3ar)"/>
+        <path d="M296 88 L160 178" class="one" marker-end="url(#r3ar)"/>
+        <path d="M484 182 L346 90" marker-end="url(#r3ar)"/>
+        <path d="M162 192 L478 192" marker-end="url(#r3ar)"/>
+        <path d="M478 212 L162 212" class="one" marker-end="url(#r3ar)"/>
+        <path d="M152 226 L294 316" class="one" marker-end="url(#r3ar)"/>
+        <path d="M346 316 L488 226" marker-end="url(#r3ar)"/>
+        <path d="M304 362 C 278 412, 362 412, 336 362" class="one" marker-end="url(#r3ar)"/>
+      </g>
+      <g class="st-l mono">
+        <text x="372" y="22">0/00</text>
+        <text x="196" y="122">1/11</text>
+        <text x="424" y="122">0/11</text>
+        <text x="320" y="184" text-anchor="middle">0/10</text>
+        <text x="320" y="232" text-anchor="middle">1/00</text>
+        <text x="190" y="296">1/01</text>
+        <text x="424" y="296">0/01</text>
+        <text x="372" y="404">1/10</text>
+      </g>
+      <g class="st-n">
+        <circle cx="320" cy="70" r="30"/><text x="320" y="76" class="mono">00</text><text x="362" y="62" class="st-k">a</text>
+        <circle cx="130" cy="202" r="30"/><text x="130" y="208" class="mono">10</text><text x="88" y="196" class="st-k">b</text>
+        <circle cx="510" cy="202" r="30"/><text x="510" y="208" class="mono">01</text><text x="552" y="196" class="st-k">c</text>
+        <circle cx="320" cy="338" r="30"/><text x="320" y="344" class="mono">11</text><text x="362" y="332" class="st-k">d</text>
+      </g>
+      <text x="8" y="404" class="mut" font-size="12">— entrada 0 · - - entrada 1</text>
+    </svg>
+    <figcaption>Diagrama de estado redibujado con las salidas de la <b>tabla de transiciones del profesor</b>. Etiqueta = entrada/salida.</figcaption>
+  </figure>
+  <div class="key warn"><b>Cuidado con la figura de las diapositivas</b>En la imagen del diagrama de estado de la clase 18 aparecen <b>0/01</b> (10→01), <b>1/10</b> (10→11), <b>1/01</b> (11→11) y <b>0/10</b> (11→01). Esas cuatro salidas están intercambiadas respecto a la <b>tabla de transiciones</b> y al <b>árbol</b> del profesor, y con ellas el ejemplo oficial 11011 no daría 11 01 01 00 01. Usa la tabla: es la que reproduce todos los ejemplos de clase. La diapositiva 7 además mezcla otro ejemplo (11010011 con salidas de 3 bits, del codificador R = 1/3 del parcial II).</div>
+
+  <h3>Tabla de transiciones (hoja del profesor)</h3>
+  <div class="tbl-wrap"><table class="bitt">
+    <tr><th>Estado actual</th><th>Entrada</th><th>Estado siguiente</th><th>Salida generada</th></tr>
+    <tr><td>a (00)</td><td>0 (↑)</td><td>a</td><td class="k">00</td></tr>
+    <tr><td>a (00)</td><td>1 (↓)</td><td>b</td><td class="k">11</td></tr>
+    <tr><td>b (10)</td><td>0 (↑)</td><td>c</td><td class="k">10</td></tr>
+    <tr><td>b (10)</td><td>1 (↓)</td><td>d</td><td class="k">01</td></tr>
+    <tr><td>c (01)</td><td>0 (↑)</td><td>a</td><td class="k">11</td></tr>
+    <tr><td>c (01)</td><td>1 (↓)</td><td>b</td><td class="k">00</td></tr>
+    <tr><td>d (11)</td><td>0 (↑)</td><td>c</td><td class="k">01</td></tr>
+    <tr><td>d (11)</td><td>1 (↓)</td><td>d</td><td class="k">10</td></tr>
+  </table></div>
+  <p class="small muted">Truco para recordar el siguiente estado: el bit que entra se pone a la <b>izquierda</b> y se pierde el de la derecha (b = 10 con entrada 0 → <b>0</b>1 = c). <span class="badge ded">deducido</span></p>
+
+  <h3>El árbol y el ejemplo oficial · entrada 11011</h3>
+  <p>Partiendo con el codificador en ceros: si el primer bit es 0 la salida es <b>00</b>, si es 1 la salida es <b>11</b>; si el primer bit es 1 y el segundo es 0, la segunda palabra es <b>10</b>. Para <b>11011</b> se baja, baja, sube, baja, baja:</p>
+  <figure><div data-arbol="11011" data-niveles="5"></div><figcaption>Árbol de 5 niveles (t1–t5). Sobre cada rama, la palabra de salida; al final de la rama, el estado alcanzado. En azul, el camino de 11011.</figcaption></figure>
+  <div data-arbtabla="11011"></div>
+  <div class="key ok"><b>Resultado de clase</b>11011 → <span class="mono"><b>11 01 01 00 01</b></span> (en la diapositiva: 1101010001).</div>
+
+  <h4>Receta para el examen</h4>
+  <ol class="steps">
+    <li><b>Empieza en a (00).</b>Escribe la tabla de 8 transiciones o dibuja el diagrama de estado a un lado.</li>
+    <li><b>Lee la entrada de izquierda a derecha.</b>0 = rama de arriba, 1 = rama de abajo.</li>
+    <li><b>Anota la palabra de rama y el nuevo estado.</b>Cada bit de entrada da 2 bits de salida.</li>
+    <li><b>Une las palabras.</b>La codeword es la concatenación en el orden en que salen.</li>
+  </ol>
+  <figure><div data-arbol="" data-niveles="4"></div><figcaption>Árbol en blanco de 4 niveles para practicar (todas las ramas con su salida y estado).</figcaption></figure>
+
+  <h3>Ejercicio de la clase · codificar con el diagrama de estados y de árbol</h3>
+  <ol class="qlist">
+    <li><b class="mono">1110</b> <button class="board-open" type="button" data-board="grid">✏️ Resolver en la pizarra</button>
+      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><p><span class="mono">11 01 10 01</span> · estados a → b → d → d → c</p></div></details></li>
+    <li><b class="mono">1101</b>
+      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><p><span class="mono">11 01 01 00</span> · a → b → d → c → b (es el ejemplo “Sec. in = 1 1 0 1 · Sec. out = 11 01 01 00” de la diapositiva 19)</p></div></details></li>
+    <li><b class="mono">11010</b>
+      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><p><span class="mono">11 01 01 00 10</span> · a → b → d → c → b → c</p></div></details></li>
+    <li><b class="mono">11011</b>
+      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><p><span class="mono">11 01 01 00 01</span> · a → b → d → c → b → d</p></div></details></li>
+    <li><b class="mono">001001</b>
+      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><p><span class="mono">00 00 11 10 11 11</span> · a → a → a → b → c → a → b</p></div></details></li>
+  </ol>
+</section>
+
+<!-- ======================= CLASE 19 ======================= -->
+<section id="c19" class="topic" data-sec="c19">
+  <div class="sec-head"><div class="meta"><span class="src">📄 P3-038-Clase19-2026 · 17 diapositivas</span><h2>Códigos de detección de errores · suma de verificación</h2></div><button class="mark-btn" data-mark="c19" aria-pressed="false">Marcar como repasado</button></div>
+  <p>Los códigos de <b>corrección</b> se usan mucho en enlaces <b>inalámbricos</b>, que son más ruidosos que la fibra óptica: sin ellos sería difícil hacer pasar cualquier cosa. En enlaces más confiables basta con <b>detectar</b> el error. La clase examina tres códigos de detección; los tres son <b>códigos de bloques sistemáticos lineales</b>:</p>
+  <div class="grid g3">
+    <div class="card tile"><span class="tag">1 · PARIDAD</span><p class="small">Un bit que hace par (o impar) la cantidad de unos. Detecta un número impar de errores. Visto en el parcial II.</p></div>
+    <div class="card tile"><span class="tag">2 · SUMA DE VERIFICACIÓN</span><p class="small">Grupo de bits de verificación calculados <b>sumando palabras</b> del mensaje. Tema de esta clase.</p></div>
+    <div class="card tile"><span class="tag">3 · CRC</span><p class="small">Prueba de redundancia cíclica: división polinomial módulo 2. Clase 20.</p></div>
+  </div>
+
+  <h3>¿Qué es la suma de verificación (checksum)?</h3>
+  <ul>
+    <li>Está muy relacionada con los <b>grupos de bits de paridad</b>. La palabra “suma de verificación” se usa a menudo para cualquier grupo de bits de verificación asociado a un mensaje, sin importar cómo se calcule.</li>
+    <li>Normalmente se coloca <b>al final del mensaje</b>, como el <b>complemento</b> de la función de suma. Así el receptor detecta errores sumando <b>toda</b> la palabra recibida: datos + checksum.</li>
+    <li>Ejemplo real: la suma de verificación de <b>Internet de 16 bits</b>, usada en todos los paquetes como parte del protocolo <b>IP</b> (Braden y colaboradores, 1988): suma de los bits del mensaje divididos en palabras de 16 bits.</li>
+    <li>Como opera sobre <b>palabras</b> y no sobre bits sueltos (como la paridad), los errores que no cambian la paridad <b>sí pueden alterar la suma</b> y ser detectados.</li>
+  </ul>
+
+  <h3>Ejemplo de clase · 3 palabras de 16 bits</h3>
+  <div class="chips"><span class="chip">n1 = <b>0110011001100110</b></span><span class="chip">n2 = <b>0101010101010101</b></span><span class="chip">n3 = <b>0000111100001111</b></span></div>
+  <div data-ck="0110011001100110 0101010101010101 0000111100001111"></div>
+  <p>n1 + n2 = <span class="mono">1011101110111011</span>; + n3 = <span class="mono">1100101011001010</span> (aquí no sobra acarreo). El <b>CHECKSUM</b> es invertir los bits del resultado: <b class="mono">0011010100110101</b>.</p>
+  <div class="grid g2">
+    <div class="card tile"><span class="tag">SE ENVÍA</span><p class="small">Las tres palabras, la suma n1+n2+n3 = <span class="mono">1100101011001010</span> y el checksum <span class="mono">0011010100110101</span>.</p></div>
+    <div class="card tile"><span class="tag">AL PRODUCIRSE UN ERROR</span><p class="small">Si llega la suma con el último bit cambiado (<span class="mono">110010101100101<b>1</b></span>), al sumarle el checksum ya <b>no da todo 1</b> (da 1 0000000000000000 → con el acarreo, 0000000000000001): <b>error detectado</b>.</p></div>
+  </div>
+
+  <h3>Ejemplo de clase · 4 palabras de 8 bits (con acarreo)</h3>
+  <div class="chips"><span class="chip">n1 = <b>10110011</b></span><span class="chip">n2 = <b>10101011</b></span><span class="chip">n3 = <b>01011010</b></span><span class="chip">n4 = <b>11010101</b></span></div>
+  <div data-ck="10110011 10101011 01011010 11010101"></div>
+  <p>Cuando la suma <b>se pasa de 8 bits</b> sobra un 1 a la izquierda: se quita y se <b>suma al final (+1)</b>. n1+n2 = 1 01011110 → <span class="mono">01011111</span>; + n3 = <span class="mono">10111001</span>; + n4 = 1 10001110 → <span class="mono">10001111</span> = SUMA. CHECKSUM = <b class="mono">01110000</b>.</p>
+  <div class="key ok"><b>Comprobación</b>SUMA <span class="mono">10001111</span> + CHECKSUM <span class="mono">01110000</span> = <span class="mono"><b>11111111</b></span>. Si el receptor obtiene todo 1, no detecta error.</div>
+
+  <h4>Receta para el examen</h4>
+  <ol class="steps">
+    <li><b>Alinea las palabras.</b>Todas del mismo tamaño (8 o 16 bits).</li>
+    <li><b>Suma de dos en dos.</b>0+0 = 0, 0+1 = 1, 1+1 = 0 y llevo 1 (escribe los acarreos arriba, como en clase).</li>
+    <li><b>Acarreo final.</b>Si queda un 1 fuera del tamaño de palabra, súmalo al resultado (+1).</li>
+    <li><b>Invierte.</b>Checksum = cambiar cada 0 por 1 y cada 1 por 0. Comprueba: suma + checksum = todo 1.</li>
+  </ol>
+
+  <h3>Ejercicios de la clase</h3>
+  <ol class="qlist">
+    <li>Obtener el checksum: <span class="mono">10110111 · 10101111 · 01011110 · 11010101</span> <button class="board-open" type="button" data-board="grid">✏️ Resolver en la pizarra</button>
+      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><div data-ck="10110111 10101111 01011110 11010101"></div><p>SUMA = <span class="mono">10011011</span> → CHECKSUM = <b class="mono">01100100</b></p></div></details></li>
+    <li>Obtener el checksum: <span class="mono">1110011001100110 · 0101011101010101 · 0111000111001111</span>
+      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><div data-ck="1110011001100110 0101011101010101 0111000111001111"></div><p>SUMA = <span class="mono">1010111110001011</span> → CHECKSUM = <b class="mono">0101000001110100</b></p></div></details></li>
+    <li>Obtener el checksum y comparar con el ejercicio 1: <span class="mono">11110111 · 10101111 · 01011100 · 11010101</span>
+      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><div data-ck="11110111 10101111 01011100 11010101"></div><p>SUMA = <span class="mono">11011001</span> → CHECKSUM = <b class="mono">00100110</b>. Cambian n1 (bit 7: 1<b>0</b>110111 → 1<b>1</b>110111) y n3 (01011110 → 010111<b>0</b>0), así que el checksum ya no coincide con el del ejercicio 1 (01100100): si esto fuera lo recibido, el receptor <b>detecta el error</b>.</p></div></details></li>
+    <li>Obtener el checksum y comparar con el ejercicio 2: <span class="mono">1110011001100110 · 1101011101010101 · 0111000111001111</span>
+      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><div data-ck="1110011001100110 1101011101010101 0111000111001111"></div><p>SUMA = <span class="mono">0010111110001100</span> → CHECKSUM = <b class="mono">1101000001110011</b>. Solo cambió el primer bit de n2 y el checksum cambió en varios bits (por el acarreo final) respecto a 0101000001110100: error detectado.</p></div></details></li>
+  </ol>
+</section>
+
+<!-- ======================= CLASE 20 ======================= -->
+<section id="c20" class="topic" data-sec="c20">
+  <div class="sec-head"><div class="meta"><span class="src">📄 P3-038-Clase20-2026 · 25 diapositivas</span><h2>Pruebas de redundancia cíclica (CRC)</h2></div><button class="mark-btn" data-mark="c20" aria-pressed="false">Marcar como repasado</button></div>
+  <p><b>CRC</b> (Comprobación de Redundancia Cíclica, <i>Cyclic Redundancy Check</i>), también llamado <b>código polinomial</b>: código de detección de errores usado en redes y almacenamiento para verificar que los datos enviados o guardados <b>no fueron modificados ni corrompidos</b>.</p>
+  <div class="grid g2x">
+    <div class="card tile"><span class="tag">QUÉ ES</span><p class="small">Función matemática <b>no criptográfica</b>, basada en <b>división polinómica binaria módulo 2</b>, que toma un bloque de datos y genera un valor de <b>longitud fija</b>: el código CRC. Trata las cadenas de bits como polinomios con coeficientes 0 y 1.</p></div>
+    <div class="card tile"><span class="tag">POR QUÉ ESE NOMBRE</span><p class="small"><b>Redundante</b>: añade bits extra sin aportar información nueva. <b>Cíclico</b>: el cálculo usa desplazamientos y división binaria en bucle.</p></div>
+  </div>
+
+  <h3>¿Dónde se utiliza?</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>Ámbito</th><th>Uso</th></tr>
+    <tr><td><b>Capa de enlace</b> (Ethernet y Wi-Fi)</td><td>Campo <b>FCS</b> (Frame Check Sequence) al final del tráiler de la trama, con <b>CRC-32</b>: valida que la trama no sufrió ruido ni interferencias.</td></tr>
+    <tr><td><b>WAN y telecomunicaciones</b></td><td>HDLC, PPP, ATM y redes celulares (4G/5G).</td></tr>
+    <tr><td><b>Almacenamiento</b></td><td>Discos (SATA/NVMe), memorias RAM, tarjetas SD y archivos comprimidos (.zip, .rar, .tar.gz).</td></tr>
+    <tr><td><b>Industria y sistemas embebidos</b></td><td>Buses como CAN Bus (automotriz) e I2C/SPI.</td></tr>
+  </table></div>
+
+  <h3>Funcionamiento</h3>
+  <ul>
+    <li>Una trama de <b>k bits</b> se ve como la lista de coeficientes de un polinomio de k términos, de <b>x<sup>k−1</sup></b> a <b>x<sup>0</sup></b>: un polinomio de <b>grado k − 1</b>. El bit de la izquierda (orden mayor) es el coeficiente de x<sup>k−1</sup>.</li>
+    <li>La aritmética es <b>módulo 2</b>: no hay acarreos al sumar ni préstamos al restar. <b>Suma y resta son idénticas a un OR exclusivo (XOR)</b>.</li>
+    <li>Emisor y receptor acuerdan por adelantado un <b>polinomio generador G(x)</b>. Sus bits de orden mayor y menor (el primero y el último) <b>deben ser 1</b>.</li>
+    <li>La trama M(x) (m bits) debe ser <b>más larga</b> que el generador. Se agrega un CRC al final para que la trama completa sea <b>divisible entre G(x)</b>.</li>
+    <li>El receptor divide lo recibido entre G(x): <b>si hay residuo, ocurrió un error de transmisión</b>.</li>
+  </ul>
+  <h4>Ejemplos de aritmética módulo 2 (de la clase)</h4>
+  <div class="tbl-wrap"><table class="bitt">
+    <tr><th>Operación</th><th>A</th><th>B</th><th>Resultado (XOR)</th></tr>
+    <tr><td>Suma</td><td>10011011</td><td>11001010</td><td class="k">01010001</td></tr>
+    <tr><td>Suma</td><td>00110011</td><td>11001101</td><td class="k">11111110</td></tr>
+    <tr><td>Resta</td><td>11110000</td><td>10100110</td><td class="k">01010110</td></tr>
+    <tr><td>Resta</td><td>01010101</td><td>10101111</td><td class="k">11111010</td></tr>
+  </table></div>
+
+  <h3>Propiedades de un buen generador G(x)</h3>
+  <div class="grid g3">
+    <div class="card tile"><span class="tag">1 · PRIMER Y ÚLTIMO TÉRMINO EN 1</span><p class="small">Forma x<sup>n</sup> + … + 1. Con el +1 detecta <b>todos los errores de un solo bit</b>.</p></div>
+    <div class="card tile"><span class="tag">2 · DIVISIBLE POR (x + 1)</span><p class="small">Garantiza detectar <b>todos los errores de un número impar de bits</b> (1, 3, 5…).</p></div>
+    <div class="card tile"><span class="tag">3 · RÁFAGAS</span><p class="small">Un polinomio de grado n detecta todas las <b>ráfagas</b> de longitud ≤ n bits. CRC-32 detecta cualquier ráfaga contigua de hasta 32 bits.</p></div>
+  </div>
+  <div class="tbl-wrap"><table>
+    <tr><th>Estándar</th><th>Polinomio G(x)</th><th>Binario</th><th>Uso principal</th></tr>
+    <tr><td><b>CRC-8</b></td><td>x⁸ + x² + x + 1</td><td class="mono">100000111</td><td>Redes ATM, sensores e I2C</td></tr>
+    <tr><td><b>CRC-16-CCITT</b></td><td>x¹⁶ + x¹² + x⁵ + 1</td><td class="mono">10001000000100001</td><td>Bluetooth, HDLC, USB y X.25</td></tr>
+    <tr><td><b>CRC-32</b> (IEEE 802.3)</td><td>x³² + x²⁶ + x²³ + x²² + x¹⁶ + x¹² + x¹¹ + x¹⁰ + x⁸ + x⁷ + x⁵ + x⁴ + x² + x + 1</td><td>33 bits de longitud</td><td>Ethernet (LAN), Wi-Fi (802.11), archivos ZIP y PNG</td></tr>
+  </table></div>
+
+  <h3>Algoritmo (sea r el grado de G(x))</h3>
+  <ol class="steps">
+    <li><b>Anexa r ceros</b>al final de la trama: ahora tiene m + r bits y corresponde a x<sup>r</sup>M(x).</li>
+    <li><b>Divide</b>x<sup>r</sup>M(x) entre G(x) usando división módulo 2 (cada resta es un XOR; se baja el siguiente bit).</li>
+    <li><b>Resta el residuo</b>(siempre de r bits o menos) a x<sup>r</sup>M(x) con resta módulo 2: en la práctica, el residuo <b>reemplaza los r ceros</b>. El resultado es la trama con suma de verificación a transmitir: <b>T(x)</b>.</li>
+  </ol>
+
+  <h3>De polinomio a binario · x⁴ + x + 1</h3>
+  <div class="tbl-wrap"><table class="bitt">
+    <tr><th>Término</th><th>x⁴</th><th>x³</th><th>x²</th><th>x¹</th><th>x⁰</th></tr>
+    <tr><td>¿Está en G(x)?</td><td>Sí</td><td>No</td><td>No</td><td>Sí</td><td>Sí</td></tr>
+    <tr><td>Bit</td><td class="k">1</td><td>0</td><td>0</td><td class="k">1</td><td class="k">1</td></tr>
+  </table></div>
+  <p>Divisor = <b class="mono">10011</b>; grado r = 4 → <b>4 bits de complemento</b> (en la diapositiva: n − 1 = 4, con n = bits del divisor).</p>
+
+  <h3>Ejemplo 1 · M = 1101011111, G(x) = x⁴ + x + 1</h3>
+  <p>x<sup>4</sup>M(x) = <span class="mono">1101011111<span class="r3-pad">0000</span></span>. División (en amarillo/azul el divisor, en verde el residuo):</p>
+  <div data-crc="1101011111|10011"></div>
+  <div class="key ok"><b>Resultado de clase</b>Residuo = <span class="mono">0010</span> (la diapositiva lo escribe “10”) → se envía <b>T(x) = <span class="mono">1101011111<span class="r3-rem">0010</span></span></b> junto con G(x) = 10011.</div>
+
+  <h3>Ejemplo 2 · M = 110101000, G(x) = x³ + 1</h3>
+  <p>x³ + 1 → x³ x² x¹ x⁰ = 1 0 0 1 → <b>G = 1001</b>, r = 3. x³M(x) = <span class="mono">110101000<span class="r3-pad">000</span></span>.</p>
+  <div data-crc="110101000|1001"></div>
+  <p>Residuo = <b class="mono">011</b> → <b>T(x) = <span class="mono">110101000<span class="r3-rem">011</span></span></b>.</p>
+  <div class="grid g2">
+    <div class="card tile"><span class="tag">1) RECIBE 110101000011 (SIN ERROR)</span><div data-crc="110101000011|1001|verif"></div><p class="small">Residuo <b>000</b> → la trama es divisible entre G: <b>sin error</b>.</p></div>
+    <div class="card tile"><span class="tag">2) RECIBE 110111000011 (UN BIT CAMBIADO)</span><div data-crc="110111000011|1001|verif"></div><p class="small">Residuo <b>010 ≠ 0</b> → <b>error de transmisión</b>.</p></div>
+  </div>
+
+  <h3>Ejercicio 7 de la clase · M = 1011010111</h3>
+  <p>La diapositiva pide M(x), G(x), T(x) y verificar, pero <b>no indica qué polinomio usar</b>. <span class="badge ded">deducido</span> Lo más probable es uno de los “Ejemplos de polinomios” de la clase; aquí están los cuatro:</p>
+  <p>M(x) = x⁹ + x⁷ + x⁶ + x⁴ + x² + x + 1</p>
+  <div class="tbl-wrap"><table class="bitt">
+    <tr><th>G(x)</th><th>Divisor</th><th>x<sup>r</sup>M(x)</th><th>Residuo</th><th>T(x)</th><th>Verificación</th></tr>
+    <tr><td>x⁴ + x + 1</td><td>10011</td><td>1011010111<span class="r3-pad">0000</span></td><td class="k">1000</td><td>1011010111<b>1000</b></td><td>residuo 0000 ✓</td></tr>
+    <tr><td>x⁴ + x² + x + 1</td><td>10111</td><td>1011010111<span class="r3-pad">0000</span></td><td class="k">0100</td><td>1011010111<b>0100</b></td><td>residuo 0000 ✓</td></tr>
+    <tr><td>x³ + x² + 1</td><td>1101</td><td>1011010111<span class="r3-pad">000</span></td><td class="k">010</td><td>1011010111<b>010</b></td><td>residuo 000 ✓</td></tr>
+    <tr><td>x³ + 1</td><td>1001</td><td>1011010111<span class="r3-pad">000</span></td><td class="k">111</td><td>1011010111<b>111</b></td><td>residuo 000 ✓</td></tr>
+  </table></div>
+  <details class="qa"><summary><span class="qn">VER</span>División completa con G(x) = x⁴ + x + 1</summary><div class="ans"><div data-crc="1011010111|10011"></div><p>Verificación de T(x) = 10110101111000:</p><div data-crc="10110101111000|10011|verif"></div></div></details>
+</section>
+
+<!-- ======================= CLASE 21 ======================= -->
+<section id="c21" class="topic" data-sec="c21">
+  <div class="sec-head"><div class="meta"><span class="src">📄 P3-038-Clase21-2026 · 39 diapositivas</span><h2>Routing y switching · la trama Ethernet</h2></div><button class="mark-btn" data-mark="c21" aria-pressed="false">Marcar como repasado</button></div>
+  <p>El concepto de <b>switching</b> y reenvío de tramas es universal en redes y telecomunicaciones: en LAN, WAN y en la red pública de telefonía conmutada (<b>PSTN</b>) se usan diversos tipos de switches.</p>
+  <div class="grid g2x">
+    <div class="card tile"><span class="tag">DOS CRITERIOS</span><p class="small">Un switch decide según el <b>puerto de entrada</b> y la <b>dirección de destino</b>. “Entrada” = puerto por donde ingresa la trama; “salida” = puerto por donde sale.</p></div>
+    <div class="card tile"><span class="tag">SU ÚNICA INTELIGENCIA</span><p class="small">Usar su <b>tabla</b> para reenviar el tráfico según el puerto de entrada y el destino. Los switches LAN reenvían tramas Ethernet según la <b>dirección MAC de destino</b>.</p></div>
+  </div>
+
+  <h3>Tabla de direcciones MAC (CAM)</h3>
+  <div class="grid g2">
+    <div>
+      <ul>
+        <li>Para transmitir, el switch primero debe <b>descubrir qué dispositivos hay en cada puerto</b>.</li>
+        <li>Crea la <b>tabla de direcciones MAC</b> o tabla de <b>memoria de contenido direccionable (CAM)</b>: guarda la relación dispositivo ↔ puerto.</li>
+        <li>CAM es una <b>memoria especial</b> para búsquedas de alta velocidad.</li>
+        <li>Si llega una trama con una MAC de destino que <b>no figura</b> en la tabla, el switch <b>satura (inunda) todos los puertos</b> con la trama, <b>excepto</b> el puerto por el que la recibió.</li>
+        <li>La MAC de <b>origen</b> de cada trama sirve para ampliar la tabla (así aprende).</li>
+      </ul>
+    </div>
+    <div class="tbl-wrap"><table>
+      <tr><th>Dirección de destino</th><th>Puerto</th></tr>
+      <tr><td class="mono">EE</td><td>1</td></tr><tr><td class="mono">AA</td><td>2</td></tr><tr><td class="mono">BA</td><td>3</td></tr>
+      <tr><td class="mono"><b>EA</b></td><td><b>4</b></td></tr><tr><td class="mono">AC</td><td>5</td></tr><tr><td class="mono">AB</td><td>6</td></tr>
+    </table></div>
+  </div>
+  <div class="key"><b>Ejemplo de la clase</b>Si un mensaje entra por el <b>puerto 1</b> y la dirección de destino es <b>EA</b>, el switch lo reenvía <b>solo por el puerto 4</b>. Pruébalo en el <a href="#lab-sw">simulador del laboratorio</a>.</div>
+
+  <h3>Métodos de reenvío de un switch</h3>
+  <div class="grid g2x">
+    <div class="card tile"><span class="tag">ALMACENAMIENTO Y ENVÍO (store-and-forward)</span>
+      <p class="small">Recibe la <b>trama completa</b> y calcula el <b>CRC</b>. Si es válido, busca la dirección de destino, que determina la interfaz de salida, y envía la trama por el puerto correcto.</p>
+      <ul class="small">
+        <li><b>Verificación de errores</b>: compara el FCS del último campo con su propio cálculo. Sin errores → la reenvía; con errores → <b>la descarta</b>.</li>
+        <li><b>Almacenamiento en búfer automático</b>: admite cualquier combinación de velocidades. Ej.: una trama que entra por un puerto de <b>100 Mb/s</b> y sale por una interfaz de <b>1 Gb/s</b> requiere este método: se guarda completa, se verifica el FCS, pasa al búfer del puerto de salida y se envía.</li>
+        <li>Reenvío <b>más lento</b>.</li>
+      </ul></div>
+    <div class="card tile"><span class="tag">MÉTODO DE CORTE (cut-through)</span>
+      <p class="small">Envía la trama <b>antes de recibirla completa</b>; como mínimo debe leer la <b>dirección de destino</b>.</p>
+      <ul class="small">
+        <li><b>Reenvío rápido</b>: decide en cuanto encuentra la MAC de destino en la tabla, sin esperar el resto de la trama.</li>
+        <li><b>Procesa tramas no válidas</b>: no verifica el FCS, así que reenvía tramas con errores a otros segmentos.</li>
+        <li>Con un índice de error alto, las tramas dañadas <b>obstruyen el ancho de banda</b>.</li>
+        <li>Con controladores MAC y <b>ASIC</b> actuales puede mirar más allá de los primeros <b>14 bytes</b> (MAC origen, MAC destino, EtherType) y examinar <b>40 bytes</b> más para funciones de capas 3 y 4 de IPv4.</li>
+      </ul></div>
+  </div>
+  <div class="tbl-wrap"><table>
+    <tr><th>Criterio</th><th>Almacenamiento y envío</th><th>Corte</th></tr>
+    <tr><td>¿Cuándo reenvía?</td><td>Tras recibir la trama completa</td><td>Al leer la MAC de destino</td></tr>
+    <tr><td>Verifica FCS (CRC)</td><td>Sí: descarta tramas con error</td><td>No</td></tr>
+    <tr><td>Velocidad</td><td>Más lento (más latencia)</td><td>El más rápido</td></tr>
+    <tr><td>Tramas inválidas</td><td>No las propaga</td><td>Las propaga; la NIC de destino las descarta</td></tr>
+    <tr><td>Ancho de banda</td><td>Lo conserva</td><td>Puede desperdiciarlo con tramas dañadas</td></tr>
+    <tr><td>Velocidades distintas entre puertos</td><td>Sí (búfer automático)</td><td>— <span class="badge ded">deducido</span>: necesita búfer igual que A&amp;E</td></tr>
+  </table></div>
+
+  <h3>Ejercicio de la clase · ¿almacenamiento y envío o corte?</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>#</th><th>Afirmación</th><th>Método</th></tr>
+    <tr><td>1</td><td>Almacena las tramas en búfer hasta que el switch recibe la trama completa.</td><td><details class="r3-rev"><summary>Ver</summary><b>Almacenamiento y envío</b></details></td></tr>
+    <tr><td>2</td><td>Revisa la trama para detectar errores antes de liberarla por los puertos. Si no se recibió completa, la descarta.</td><td><details class="r3-rev"><summary>Ver</summary><b>Almacenamiento y envío</b></details></td></tr>
+    <tr><td>3</td><td>No realiza ninguna verificación de errores de la trama antes de liberarla.</td><td><details class="r3-rev"><summary>Ver</summary><b>Corte</b></details></td></tr>
+    <tr><td>4</td><td>Un excelente método para conservar el ancho de banda de la red.</td><td><details class="r3-rev"><summary>Ver</summary><b>Almacenamiento y envío</b> (no reenvía tramas dañadas)</details></td></tr>
+    <tr><td>5</td><td>Con este método, la NIC de destino descarta cualquier trama incompleta.</td><td><details class="r3-rev"><summary>Ver</summary><b>Corte</b> (el switch no filtra; filtra el destino)</details></td></tr>
+    <tr><td>6</td><td>Es el método más rápido, pero puede producir más errores de integridad y consumir más ancho de banda.</td><td><details class="r3-rev"><summary>Ver</summary><b>Corte</b></details></td></tr>
+  </table></div>
+
+  <h3>Campos de la trama Ethernet</h3>
+  <p class="small muted">IEEE 802.3 (bytes por campo):</p>
+  <div class="r3-frame" aria-label="Trama IEEE 802.3">
+    <div class="f"><b>7</b>Preámbulo</div><div class="f"><b>1</b>SFD</div><div class="f w"><b>6</b>MAC destino</div><div class="f w"><b>6</b>MAC origen</div><div class="f"><b>2</b>Longitud / Tipo</div><div class="f xw"><b>46–1500</b>Encabezado y datos 802.2</div><div class="f hi"><b>4</b>FCS</div>
+  </div>
+  <p class="small muted">Ethernet II (la que se usa en redes TCP/IP):</p>
+  <div class="r3-frame" aria-label="Trama Ethernet II">
+    <div class="f"><b>8</b>Preámbulo</div><div class="f w"><b>6</b>MAC destino</div><div class="f w"><b>6</b>MAC origen</div><div class="f"><b>2</b>Tipo</div><div class="f xw"><b>46–1500</b>Datos</div><div class="f hi"><b>4</b>FCS</div>
+  </div>
+  <dl class="defs">
+    <dt>Preámbulo (7) + SFD (1)</dt><dd>Sincronización entre emisor y receptor. Estos 8 primeros bytes “captan la atención” del receptor: le indican que se prepare para una trama nueva. SFD = delimitador de inicio de trama.</dd>
+    <dt>MAC destino (6)</dt><dd>Identifica al receptor deseado. La capa 2 la compara con la MAC del dispositivo: si coinciden, <b>acepta</b> la trama.</dd>
+    <dt>MAC origen (6)</dt><dd>Identifica la NIC o interfaz que origina la trama. Los switches la usan para <b>ampliar sus tablas</b> de búsqueda.</dd>
+    <dt>Longitud / Tipo (2)</dt><dd>Longitud exacta del campo de datos (se usa luego en el FCS) <b>o</b> el tipo de protocolo; solo uno de los dos por implementación. Si el valor es <b>≥ 0x0600 hexadecimal (1536 decimal)</b>, indica el protocolo de capa superior (campo Tipo de Ethernet II, incorporado al 802.3).</dd>
+    <dt>Datos y relleno (46–1500)</dt><dd>PDU de capa 3 encapsulada, normalmente un paquete <b>IPv4</b>. Toda trama debe medir al menos <b>64 bytes</b>; si el paquete es pequeño se agrega <b>relleno (pad)</b>.</dd>
+    <dt>FCS (4)</dt><dd>Secuencia de verificación de trama: detecta errores con una <b>CRC</b>. El emisor pone el resultado del CRC; el receptor (o el switch A&amp;E) lo recalcula y compara.</dd>
+  </dl>
+  <div class="key"><b>Cuentas útiles <span class="badge ded">deducido</span></b>Mínimo: 6 + 6 + 2 + 46 + 4 = <b>64 bytes</b>. Máximo: 6 + 6 + 2 + 1500 + 4 = <b>1518 bytes</b> (sin contar preámbulo y SFD). Los 14 bytes que lee primero el método de corte son 6 + 6 + 2.</div>
+</section>
+
+<!-- ======================= CLASE 22 ======================= -->
+<section id="c22" class="topic" data-sec="c22">
+  <div class="sec-head"><div class="meta"><span class="src">📄 P3-038-Clase22-2026 · 25 diapositivas</span><h2>VLAN · red de área local virtual</h2></div><button class="mark-btn" data-mark="c22" aria-pressed="false">Marcar como repasado</button></div>
+  <p>La función principal de un <b>router</b> es trasladar información <b>entre redes</b>, no dar acceso a las terminales; eso lo hacen los <b>switches de la capa de acceso</b>. En un switch de capa 2 se puede crear una <b>VLAN</b> para <b>reducir el tamaño de los dominios de difusión</b>, igual que lo haría un dispositivo de capa 3.</p>
+
+  <h3>Ideas clave</h3>
+  <div class="grid g2x">
+    <div class="card tile"><span class="tag">CONEXIONES LÓGICAS</span><p class="small">Una VLAN agrupa dispositivos dentro de una LAN; se comunican <b>como si estuvieran en el mismo cable</b>. Se basan en <b>conexiones lógicas</b>, no físicas.</p></div>
+    <div class="card tile"><span class="tag">SEGMENTAR POR FUNCIÓN</span><p class="small">El administrador divide la red por <b>función, equipo de proyecto o aplicación</b>, sin importar la ubicación física. Se usan sobre todo en LAN conmutadas; hoy pueden abarcar <b>MAN y WAN</b>.</p></div>
+    <div class="card tile"><span class="tag">RED LÓGICA INDEPENDIENTE</span><p class="small">Cada VLAN es una red lógica independiente aunque comparta infraestructura. El tráfico hacia otra VLAN debe pasar por un <b>dispositivo que admita routing</b>.</p></div>
+    <div class="card tile"><span class="tag">DIFUSIÓN CONTENIDA</span><p class="small">Unidifusión, difusión y multidifusión <b>solo</b> llegan a las estaciones de la VLAN de origen. Si un dispositivo envía una difusión, <b>la reciben todos los de su VLAN y NO los de otras VLAN</b>.</p></div>
+  </div>
+  <ul>
+    <li>Una VLAN crea un <b>dominio de difusión lógico</b> que puede abarcar <b>varios segmentos LAN físicos</b>.</li>
+    <li>Mejoran el rendimiento dividiendo grandes dominios de difusión en otros más pequeños.</li>
+    <li>Permiten aplicar <b>políticas de acceso y seguridad</b> por grupos de usuarios.</li>
+    <li>Cada puerto de switch se asigna a <b>una sola VLAN</b>, excepto un puerto conectado a un <b>teléfono IP</b> o a <b>otro switch</b>.</li>
+  </ul>
+
+  <figure>
+    <svg viewBox="0 0 700 380" class="dg wide r3-vlan" role="img" aria-label="Red de ejemplo con VLAN 10 Cuerpo docente, VLAN 20 Estudiantes y VLAN 30 Invitados">
+      <g class="r3-trk"><path d="M350 56 V96"/><path d="M350 126 L215 196"/><path d="M350 126 L485 196"/></g>
+      <g class="r3-acc">
+        <path d="M200 210 L96 120" class="v10"/><path d="M196 212 L100 214" class="v20"/><path d="M200 222 L112 302" class="v30"/>
+        <path d="M500 210 L604 120" class="v10"/><path d="M504 212 L600 214" class="v20"/><path d="M500 222 L588 302" class="v30"/>
+      </g>
+      <rect x="320" y="26" width="60" height="30" rx="8" class="r3-dev"/><text x="350" y="46" text-anchor="middle" font-weight="700">R1</text>
+      <rect x="320" y="96" width="60" height="30" rx="8" class="r3-dev"/><text x="350" y="116" text-anchor="middle" font-weight="700">S1</text>
+      <rect x="170" y="196" width="60" height="30" rx="8" class="r3-dev"/><text x="200" y="216" text-anchor="middle" font-weight="700">S2</text>
+      <rect x="470" y="196" width="60" height="30" rx="8" class="r3-dev"/><text x="500" y="216" text-anchor="middle" font-weight="700">S3</text>
+      <text x="262" y="156" class="sm mut" text-anchor="middle">troncal</text><text x="438" y="156" class="sm mut" text-anchor="middle">troncal</text><text x="358" y="80" class="sm mut">troncal</text>
+      <g class="sm">
+        <rect x="40" y="96" width="58" height="26" rx="6" class="pc v10"/><text x="69" y="113" text-anchor="middle">PC1</text><text x="20" y="88" class="v10t">Docente · VLAN 10</text><text x="20" y="140" class="mono mut">172.17.10.21/24</text>
+        <rect x="40" y="200" width="58" height="26" rx="6" class="pc v20"/><text x="69" y="217" text-anchor="middle">PC2</text><text x="20" y="192" class="v20t">Estudiante · VLAN 20</text><text x="20" y="244" class="mono mut">172.17.20.22/24</text>
+        <rect x="56" y="300" width="58" height="26" rx="6" class="pc v30"/><text x="85" y="317" text-anchor="middle">PC3</text><text x="20" y="292" class="v30t">Invitado · VLAN 30</text><text x="20" y="344" class="mono mut">172.17.30.23/24</text>
+        <rect x="602" y="96" width="58" height="26" rx="6" class="pc v10"/><text x="631" y="113" text-anchor="middle">PC4</text><text x="680" y="88" text-anchor="end" class="v10t">Docente · VLAN 10</text><text x="680" y="140" text-anchor="end" class="mono mut">172.17.10.24/24</text>
+        <rect x="602" y="200" width="58" height="26" rx="6" class="pc v20"/><text x="631" y="217" text-anchor="middle">PC5</text><text x="680" y="192" text-anchor="end" class="v20t">Estudiante · VLAN 20</text><text x="680" y="244" text-anchor="end" class="mono mut">172.17.20.25/24</text>
+        <rect x="586" y="300" width="58" height="26" rx="6" class="pc v30"/><text x="615" y="317" text-anchor="middle">PC6</text><text x="680" y="292" text-anchor="end" class="v30t">Invitado · VLAN 30</text><text x="680" y="344" text-anchor="end" class="mono mut">172.17.30.26/24</text>
+      </g>
+      <text x="350" y="372" text-anchor="middle" class="sm mut">6 computadoras · 3 switches · 3 dominios de difusión</text>
+    </svg>
+    <figcaption>Red de ejemplo de la clase (“Beneficios de las redes VLAN”). PC1 y PC4 están en switches distintos pero en la misma VLAN 10: se comunican como si compartieran cable.</figcaption>
+  </figure>
+
+  <h3>Beneficios de las VLAN</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>Beneficio</th><th>Explicación (con el ejemplo)</th></tr>
+    <tr><td><b>Seguridad</b></td><td>Los grupos con datos sensibles se separan del resto: menos violaciones de información confidencial. Las PC del cuerpo docente (VLAN 10) quedan separadas del tráfico de estudiantes e invitados.</td></tr>
+    <tr><td><b>Reducción de costos</b></td><td>Menos necesidad de actualizaciones costosas y uso más eficaz de los enlaces y del ancho de banda existentes.</td></tr>
+    <tr><td><b>Mejor rendimiento</b></td><td>Dividir redes planas de capa 2 en grupos lógicos (dominios de difusión) reduce el tráfico innecesario.</td></tr>
+    <tr><td><b>Dominios de difusión reducidos</b></td><td>Menos dispositivos por dominio. En el ejemplo: 6 computadoras pero <b>3 dominios</b>: Cuerpo docente, Estudiantes e Invitados.</td></tr>
+    <tr><td><b>Mayor eficiencia del personal de TI</b></td><td>Usuarios con requerimientos similares comparten VLAN y es fácil identificar su función con un <b>nombre</b>: VLAN 10 “Cuerpo Docente”, VLAN 20 “Estudiantes”, VLAN 30 “Invitados”.</td></tr>
+    <tr><td><b>Administración más simple de aplicaciones y proyectos</b></td><td>Agrupan dispositivos y usuarios según requisitos geográficos o comerciales; facilita administrar un proyecto o una aplicación especializada.</td></tr>
+  </table></div>
+</section>
+
+<!-- ======================= CLASE 23 ======================= -->
+<section id="c23" class="topic" data-sec="c23">
+  <div class="sec-head"><div class="meta"><span class="src">📄 P3-038-Clase23-2026 · 18 diapositivas</span><h2>Direccionamiento jerárquico y tipos de VLAN</h2></div><button class="mark-btn" data-mark="c23" aria-pressed="false">Marcar como repasado</button></div>
+
+  <h3>Direccionamiento jerárquico</h3>
+  <p>Cada VLAN de una red conmutada corresponde a <b>una red IP</b>. Por eso, al diseñar las VLAN hay que planear un <b>esquema de direccionamiento jerárquico</b>: los números de red IP se aplican a los segmentos o VLAN de <b>manera ordenada</b>, para que la red se pueda ver como un conjunto.</p>
+  <div class="tbl-wrap"><table>
+    <tr><th>VLAN</th><th>Nombre</th><th>Red IP</th><th>Hosts del ejemplo</th></tr>
+    <tr><td><b>10</b></td><td>Cuerpo docente</td><td class="mono">172.17.<b>10</b>.0/24</td><td class="mono">.21 (PC1) · .24 (PC4)</td></tr>
+    <tr><td><b>20</b></td><td>Estudiantes</td><td class="mono">172.17.<b>20</b>.0/24</td><td class="mono">.22 (PC2) · .25 (PC5)</td></tr>
+    <tr><td><b>30</b></td><td>Invitados</td><td class="mono">172.17.<b>30</b>.0/24</td><td class="mono">.23 (PC3) · .26 (PC6)</td></tr>
+  </table></div>
+  <p class="small muted">En la red del ejemplo el tercer octeto coincide con el número de VLAN: viendo la IP sabes a qué VLAN pertenece. Así se ve un esquema “ordenado”.</p>
+
+  <h3>Tipos de VLAN según su función</h3>
+  <div class="grid g2x">
+    <div class="card tile"><span class="tag">VLAN DE DATOS (de usuario)</span><p class="small">Transporta tráfico <b>generado por usuarios</b>. Una VLAN de voz o de administración <b>no</b> es de datos. Es práctica común separar voz y administración de los datos. Divide la red en grupos de usuarios o dispositivos.</p></div>
+    <div class="card tile"><span class="tag">VLAN PREDETERMINADA</span><p class="small">Tras el arranque con configuración de fábrica, <b>todos los puertos</b> pertenecen a ella y forman un mismo dominio de difusión. En Cisco es la <b>VLAN 1</b>: tiene todas las características de una VLAN, pero <b>no se puede renombrar ni eliminar</b>. Todo el tráfico de control de capa 2 va asociado a la VLAN 1 por defecto.</p></div>
+    <div class="card tile"><span class="tag">VLAN NATIVA</span><p class="small">Se asigna a un <b>puerto troncal 802.1Q</b> (enlace entre switches que lleva varias VLAN). El troncal admite tráfico <b>etiquetado</b> (de muchas VLAN) y <b>sin etiquetar</b>; el sin etiquetar va a la VLAN nativa (<b>VLAN 1</b> por defecto). Existe por compatibilidad con LAN antiguas y funciona como identificador común en ambos extremos del troncal.</p></div>
+    <div class="card tile"><span class="tag">VLAN DE ADMINISTRACIÓN</span><p class="small">Cualquier VLAN configurada para acceder a la administración del switch. Se le asigna IP y máscara a la <b>interfaz virtual del switch (SVI)</b> para administrarlo por <b>HTTP, Telnet, SSH o SNMP</b>. Por defecto es la VLAN 1, pero <b>la VLAN 1 no es buena elección</b> porque es la predeterminada de fábrica.</p></div>
+  </div>
+  <div class="key warn"><b>VLAN 1 aparece en tres papeles</b>Por defecto es a la vez la <b>predeterminada</b>, la <b>nativa</b> y la de <b>administración</b>. Pregunta típica: ¿por qué no usar la VLAN 1 para administrar? Porque todos los puertos ya están en ella desde fábrica: cualquiera conectado a un puerto sin configurar quedaría en la red de administración.</div>
+</section>
+
+<!-- ======================= CLASE 24 ======================= -->
+<section id="c24" class="topic" data-sec="c24">
+  <div class="sec-head"><div class="meta"><span class="src">📄 P3-038-Clase24-2026 · 16 diapositivas</span><h2>Enlaces troncales (trunking) y etiquetado IEEE 802.1Q</h2></div><button class="mark-btn" data-mark="c24" aria-pressed="false">Marcar como repasado</button></div>
+  <div class="key"><b>Resumen con el que abre la clase</b>Una VLAN subdivide un dominio de difusión lógico en capa 2 (enlace de datos) sin importar la ubicación física. Da seguridad, ahorro de costos y mejor rendimiento. Tipos: datos/usuario, predeterminada (VLAN 1), nativa y administración. Cada VLAN debe mapearse de forma jerárquica a una <b>subred IP única</b>.</div>
+
+  <h3>Enlace troncal</h3>
+  <p>Un <b>enlace troncal</b> (trunk link) es un enlace físico y lógico <b>punto a punto</b> que conecta dos switches (o un switch y un router/servidor) y transporta el tráfico de <b>múltiples VLAN por un solo cable</b>.</p>
+  <div class="tbl-wrap"><table>
+    <tr><th></th><th>Puerto de acceso (access port)</th><th>Puerto troncal (trunk port)</th></tr>
+    <tr><td><b>VLAN</b></td><td>Pertenece a <b>una sola</b> VLAN</td><td>A <b>todas</b> por defecto (o a un grupo permitido)</td></tr>
+    <tr><td><b>Tramas</b></td><td>Ethernet estándar <b>sin etiquetar</b></td><td>Multiplexa varias VLAN; tramas <b>etiquetadas</b> 802.1Q (la nativa sin etiqueta)</td></tr>
+    <tr><td><b>Se conecta a</b></td><td>Terminales: PC, impresoras…</td><td>Otros switches, router, servidor</td></tr>
+  </table></div>
+  <div class="grid g2x">
+    <div class="card tile"><span class="tag">NO HAY “PUERTO TRONCAL DE FÁBRICA”</span><p class="small">Casi cualquier puerto Ethernet (Gigabit, 10 Gigabit) se configura como troncal <b>por software</b>. En muchos Cisco Catalyst está activo <b>DTP</b> (Dynamic Trunking Protocol): los puertos suelen estar en modo <b>dynamic auto</b> o <b>dynamic desirable</b> y DTP negocia el troncal al conectar el cable.</p>
+      <p class="small"><span class="badge ded">deducido</span> Detalle de Cisco: <i>auto + auto</i> no forma troncal; hace falta que al menos un extremo sea <i>desirable</i> (o <i>trunk</i>).</p></div>
+    <div class="card tile"><span class="tag">PUERTOS UPLINK Y SFP+</span><p class="small">Por buen diseño se eligen los puertos de <b>mayor velocidad y menor latencia</b> como troncales. Ej.: en un switch de 48 puertos Gigabit + 4 <b>SFP+</b> de 10 Gigabit, los SFP+ conectan con otros switches.</p>
+      <p class="small"><b>SFP+</b> (Enhanced Small Form-factor Pluggable): puerto <b>modular</b> de alta velocidad. No recibe el cable directo: se inserta un <b>módulo transceptor</b> que define la conexión: <b>fibra óptica</b> o <b>cobre</b> (DAC o RJ-45 SFP+). Uso: uplink de un switch de acceso al <b>core</b>, servidores de alto rendimiento y almacenamiento (<b>SAN/NAS</b>).</p></div>
+  </div>
+
+  <h3>Estándar IEEE 802.1Q (Dot1q) · etiquetado de tramas</h3>
+  <p>Para que los switches sepan a qué VLAN pertenece cada trama en el troncal, la trama se <b>etiqueta</b> (tagged) antes de enviarla y se <b>desetiqueta</b> (untagged) al llegar al switch de destino. Se insertan <b>4 bytes</b> entre la <b>MAC de origen</b> y el <b>EtherType</b>:</p>
+  <div class="r3-frame" aria-label="Trama Ethernet con etiqueta 802.1Q">
+    <div class="f w"><b>6</b>MAC destino</div><div class="f w"><b>6</b>MAC origen</div><div class="f tag"><b>4</b>Etiqueta 802.1Q</div><div class="f"><b>2</b>EtherType</div><div class="f xw"><b>46–1500</b>Datos</div><div class="f hi"><b>4</b>FCS</div>
+  </div>
+  <div class="r3-frame r3-tci" aria-label="Campos de la etiqueta 802.1Q">
+    <div class="f xw tag"><b>16 bits</b>TPID = 0x8100</div><div class="f"><b>3 bits</b>PCP</div><div class="f"><b>1 bit</b>DEI</div><div class="f xw"><b>12 bits</b>VID</div>
+  </div>
+  <dl class="defs">
+    <dt>TPID (2 bytes)</dt><dd>Tag Protocol Identifier, fijo en <b>0x8100</b>: indica que la trama lleva etiqueta 802.1Q.</dd>
+    <dt>PCP (3 bits)</dt><dd>Priority Code Point: prioridad de la trama para <b>calidad de servicio</b> (QoS / IEEE 802.1p). 0–7.</dd>
+    <dt>DEI (1 bit)</dt><dd>Drop Eligible Indicator: marca tramas que se pueden <b>descartar si hay congestión</b>.</dd>
+    <dt>VID (12 bits)</dt><dd>VLAN Identifier: la VLAN de la trama. 12 bits → <b>2¹² = 4 096</b> VLAN (de la 0 a la 4095).</dd>
+  </dl>
+  <p class="small muted"><span class="badge ded">deducido</span> Complementos del estándar (no están en las diapositivas): los VID 0 y 4095 están reservados, así que se usan del 1 al 4094; y con la etiqueta la trama máxima pasa de 1518 a 1522 bytes. PCP + DEI + VID forman el campo TCI (16 bits).</p>
+
+  <h3>Tráfico etiquetado vs. no etiquetado</h3>
+  <div class="grid g2x">
+    <div class="card tile"><span class="tag">ETIQUETADO</span><p class="small">Todo el tráfico de las <b>VLAN de datos</b> que viaja por el troncal lleva la etiqueta 802.1Q.</p></div>
+    <div class="card tile"><span class="tag">NO ETIQUETADO (VLAN NATIVA)</span><p class="small">Si una trama llega al troncal <b>sin etiqueta</b>, se asigna a la <b>VLAN nativa</b> (VLAN 1 por defecto). Del mismo modo, lo enviado a la VLAN nativa viaja <b>sin etiqueta</b>, por compatibilidad con equipos antiguos.</p></div>
+  </div>
+  <div class="key"><b>Ejemplo</b>Una trama de la VLAN 20 con prioridad 5: PCP = 101, DEI = 0, VID = 000000010100 → TCI = 1010 0000 0001 0100 = <b>0xA014</b> → etiqueta <span class="mono"><b>81 00 A0 14</b></span>. Calcula otras en el <a href="#lab-tag">laboratorio</a>.</div>
+</section>
+
+<!-- ======================= CUESTIONARIO ======================= -->
+<section id="quiz" class="topic" data-sec="quiz">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Creado a partir de las 7 clases</p><h2>Cuestionario de práctica</h2></div><button class="mark-btn" data-mark="quiz" aria-pressed="false">Marcar como repasado</button></div>
+  <p class="muted">Responde mentalmente y toca cada pregunta para ver la respuesta y el porqué.</p>
+
+  <h3>Opción múltiple</h3>
+  <details class="qa"><summary><span class="qn">Q1</span>En el diagrama de estado de la clase 18, el estado b es…<ul class="opts"><li>a) 00</li><li>b) 01</li><li>c) 10</li><li>d) 11</li></ul></summary><div class="ans"><p><b>c) 10.</b> a = 00, b = 10, c = 01, d = 11.</p></div></details>
+  <details class="qa"><summary><span class="qn">Q2</span>Si el estado presente es 00, los únicos estados siguientes posibles son…<ul class="opts"><li>a) 00 y 01</li><li>b) 00 y 10</li><li>c) 10 y 11</li><li>d) cualquiera de los 4</li></ul></summary><div class="ans"><p><b>b) 00 y 10.</b> Se desplaza un bit por vez: solo dos transiciones por estado.</p></div></details>
+  <details class="qa"><summary><span class="qn">Q3</span>En el diagrama de árbol, una entrada 1 se representa…<ul class="opts"><li>a) con la rama ascendente</li><li>b) con la rama descendente</li><li>c) con una línea punteada hacia atrás</li><li>d) volviendo al estado a</li></ul></summary><div class="ans"><p><b>b) Rama descendente.</b> El 0 sube y el 1 baja.</p></div></details>
+  <details class="qa"><summary><span class="qn">Q4</span>¿Qué agrega el diagrama de árbol al diagrama de estado?<ul class="opts"><li>a) La dimensión del tiempo</li><li>b) La distancia de Hamming</li><li>c) Los bits de paridad</li><li>d) La métrica de Viterbi</li></ul></summary><div class="ans"><p><b>a) El tiempo.</b> Se recorre de izquierda a derecha, un nivel por bit.</p></div></details>
+  <details class="qa"><summary><span class="qn">Q5</span>Desde el estado d (11) con entrada 0, la salida y el siguiente estado son…<ul class="opts"><li>a) 10 · d</li><li>b) 01 · c</li><li>c) 11 · a</li><li>d) 00 · b</li></ul></summary><div class="ans"><p><b>b) 01 y c.</b></p></div></details>
+  <details class="qa"><summary><span class="qn">Q6</span>Paridad, suma de verificación y CRC son códigos…<ul class="opts"><li>a) convolucionales</li><li>b) de bloques sistemáticos lineales</li><li>c) criptográficos</li><li>d) de corrección</li></ul></summary><div class="ans"><p><b>b)</b> Los tres son códigos de bloques sistemáticos lineales de <b>detección</b>.</p></div></details>
+  <details class="qa"><summary><span class="qn">Q7</span>La suma de verificación de Internet usada en IP trabaja con palabras de…<ul class="opts"><li>a) 8 bits</li><li>b) 16 bits</li><li>c) 32 bits</li><li>d) 64 bits</li></ul></summary><div class="ans"><p><b>b) 16 bits</b> (Braden y colaboradores, 1988).</p></div></details>
+  <details class="qa"><summary><span class="qn">Q8</span>Después de sumar las palabras, el checksum se obtiene…<ul class="opts"><li>a) dividiendo entre G(x)</li><li>b) invirtiendo los bits de la suma</li><li>c) tomando el residuo</li><li>d) aplicando XOR con la primera palabra</li></ul></summary><div class="ans"><p><b>b) Invirtiendo los bits</b> (complemento).</p></div></details>
+  <details class="qa"><summary><span class="qn">Q9</span>El receptor no detecta error en la suma de verificación cuando palabras + checksum da…<ul class="opts"><li>a) todo 0</li><li>b) todo 1</li><li>c) el mismo checksum</li><li>d) residuo 0</li></ul></summary><div class="ans"><p><b>b) Todo 1</b> (ej.: 10001111 + 01110000 = 11111111).</p></div></details>
+  <details class="qa"><summary><span class="qn">Q10</span>¿Por qué la suma de verificación detecta errores que la paridad no ve?<ul class="opts"><li>a) Porque usa más bits de paridad</li><li>b) Porque opera sobre palabras y no sobre bits</li><li>c) Porque corrige el error</li><li>d) Porque usa un polinomio</li></ul></summary><div class="ans"><p><b>b)</b> Errores que no cambian la paridad sí alteran la suma.</p></div></details>
+  <details class="qa"><summary><span class="qn">Q11</span>G(x) = x⁴ + x + 1 en binario es…<ul class="opts"><li>a) 1011</li><li>b) 10011</li><li>c) 11001</li><li>d) 10111</li></ul></summary><div class="ans"><p><b>b) 10011</b> (x⁴ sí, x³ no, x² no, x sí, 1 sí).</p></div></details>
+  <details class="qa"><summary><span class="qn">Q12</span>Si G(x) es de grado 3, ¿cuántos ceros se anexan a M y cuántos bits tiene el residuo?<ul class="opts"><li>a) 4 y 4</li><li>b) 3 y 3</li><li>c) 3 y 4</li><li>d) 4 y 3</li></ul></summary><div class="ans"><p><b>b) 3 y 3.</b> r = grado.</p></div></details>
+  <details class="qa"><summary><span class="qn">Q13</span>En aritmética módulo 2, 1 − 1 y 0 − 1 dan…<ul class="opts"><li>a) 0 y 1, sin préstamo</li><li>b) 0 y 1, con préstamo</li><li>c) 1 y 0</li><li>d) 0 y −1</li></ul></summary><div class="ans"><p><b>a)</b> Resta = XOR, sin préstamos.</p></div></details>
+  <details class="qa"><summary><span class="qn">Q14</span>¿Qué CRC usa el campo FCS de Ethernet?<ul class="opts"><li>a) CRC-8</li><li>b) CRC-16-CCITT</li><li>c) CRC-32</li><li>d) Checksum de 16 bits</li></ul></summary><div class="ans"><p><b>c) CRC-32</b> (IEEE 802.3), polinomio de grado 32 → 4 bytes de FCS.</p></div></details>
+  <details class="qa"><summary><span class="qn">Q15</span>Un switch que recibe una trama con MAC de destino desconocida…<ul class="opts"><li>a) la descarta</li><li>b) la devuelve al origen</li><li>c) la inunda por todos los puertos excepto el de entrada</li><li>d) la envía al router</li></ul></summary><div class="ans"><p><b>c)</b></p></div></details>
+  <details class="qa"><summary><span class="qn">Q16</span>La tabla de direcciones MAC también se llama…<ul class="opts"><li>a) Tabla ARP</li><li>b) Tabla CAM</li><li>c) Tabla de enrutamiento</li><li>d) Tabla FCS</li></ul></summary><div class="ans"><p><b>b) CAM</b>: memoria de contenido direccionable.</p></div></details>
+  <details class="qa"><summary><span class="qn">Q17</span>Una trama entra por un puerto de 100 Mb/s y sale por uno de 1 Gb/s. ¿Qué método se requiere?<ul class="opts"><li>a) Corte</li><li>b) Almacenamiento y envío</li><li>c) Inundación</li><li>d) DTP</li></ul></summary><div class="ans"><p><b>b)</b> Por el almacenamiento en búfer automático.</p></div></details>
+  <details class="qa"><summary><span class="qn">Q18</span>¿Cuántos bytes lee como mínimo el método de corte antes de poder reenviar con filtrado básico (MAC destino, origen y EtherType)?<ul class="opts"><li>a) 6</li><li>b) 14</li><li>c) 40</li><li>d) 64</li></ul></summary><div class="ans"><p><b>b) 14</b> (6 + 6 + 2). Con ASIC puede examinar 40 bytes adicionales (capas 3 y 4). Como mínimo absoluto debe leer la MAC de destino.</p></div></details>
+  <details class="qa"><summary><span class="qn">Q19</span>Tamaño mínimo de una trama Ethernet…<ul class="opts"><li>a) 46 bytes</li><li>b) 64 bytes</li><li>c) 1500 bytes</li><li>d) 1518 bytes</li></ul></summary><div class="ans"><p><b>b) 64 bytes</b>; si falta, se agrega relleno (pad).</p></div></details>
+  <details class="qa"><summary><span class="qn">Q20</span>El campo Longitud/Tipo vale 0x0800. Se interpreta como…<ul class="opts"><li>a) longitud de 2048 bytes</li><li>b) tipo de protocolo</li><li>c) error</li><li>d) VLAN 8</li></ul></summary><div class="ans"><p><b>b) Tipo</b>, porque es ≥ 0x0600 (1536). <span class="badge ded">deducido</span> 0x0800 corresponde a IPv4.</p></div></details>
+  <details class="qa"><summary><span class="qn">Q21</span>¿Qué VLAN no se puede renombrar ni eliminar en un switch Cisco?<ul class="opts"><li>a) VLAN 0</li><li>b) VLAN 1</li><li>c) VLAN 10</li><li>d) VLAN 4095</li></ul></summary><div class="ans"><p><b>b) VLAN 1</b>, la predeterminada.</p></div></details>
+  <details class="qa"><summary><span class="qn">Q22</span>El tráfico sin etiquetar que llega a un troncal 802.1Q va a la…<ul class="opts"><li>a) VLAN de datos</li><li>b) VLAN de administración</li><li>c) VLAN nativa</li><li>d) VLAN de voz</li></ul></summary><div class="ans"><p><b>c) VLAN nativa</b> (VLAN 1 por defecto).</p></div></details>
+  <details class="qa"><summary><span class="qn">Q23</span>Para administrar un switch por SSH se configura IP en…<ul class="opts"><li>a) el puerto troncal</li><li>b) la SVI de la VLAN de administración</li><li>c) la VLAN nativa</li><li>d) el campo TPID</li></ul></summary><div class="ans"><p><b>b) La SVI</b> (interfaz virtual del switch).</p></div></details>
+  <details class="qa"><summary><span class="qn">Q24</span>¿Cuántos bits tiene el VID y cuántas VLAN admite?<ul class="opts"><li>a) 8 → 256</li><li>b) 10 → 1024</li><li>c) 12 → 4096</li><li>d) 16 → 65 536</li></ul></summary><div class="ans"><p><b>c) 12 bits → 4096</b> (0–4095).</p></div></details>
+  <details class="qa"><summary><span class="qn">Q25</span>Valor del TPID de una trama etiquetada 802.1Q…<ul class="opts"><li>a) 0x0600</li><li>b) 0x0800</li><li>c) 0x8100</li><li>d) 0xFFFF</li></ul></summary><div class="ans"><p><b>c) 0x8100.</b></p></div></details>
+  <details class="qa"><summary><span class="qn">Q26</span>El campo de 3 bits de la etiqueta que define la prioridad (QoS) es…<ul class="opts"><li>a) DEI</li><li>b) VID</li><li>c) PCP</li><li>d) TPID</li></ul></summary><div class="ans"><p><b>c) PCP</b> (IEEE 802.1p).</p></div></details>
+
+  <h3>Verdadero o falso</h3>
+  <details class="qa"><summary><span class="qn">V1</span>En el diagrama de estado salen tres transiciones de cada estado.</summary><div class="ans"><p><b>Falso.</b> Solo dos (entrada 0 o 1).</p></div></details>
+  <details class="qa"><summary><span class="qn">V2</span>Los códigos de corrección se usan más en enlaces inalámbricos que en fibra óptica.</summary><div class="ans"><p><b>Verdadero.</b> Los inalámbricos son más ruidosos.</p></div></details>
+  <details class="qa"><summary><span class="qn">V3</span>En CRC, el primer y el último bit del generador deben ser 1.</summary><div class="ans"><p><b>Verdadero.</b></p></div></details>
+  <details class="qa"><summary><span class="qn">V4</span>El CRC es una función criptográfica.</summary><div class="ans"><p><b>Falso.</b> Es no criptográfica: detecta errores accidentales, no protege contra ataques.</p></div></details>
+  <details class="qa"><summary><span class="qn">V5</span>Un switch con método de corte descarta las tramas con FCS inválido.</summary><div class="ans"><p><b>Falso.</b> No verifica el FCS; las reenvía.</p></div></details>
+  <details class="qa"><summary><span class="qn">V6</span>Una difusión enviada en la VLAN 20 llega también a la VLAN 10 si están en el mismo switch.</summary><div class="ans"><p><b>Falso.</b> Solo la reciben los de la VLAN 20.</p></div></details>
+  <details class="qa"><summary><span class="qn">V7</span>Las VLAN se basan en conexiones físicas.</summary><div class="ans"><p><b>Falso.</b> En conexiones lógicas.</p></div></details>
+  <details class="qa"><summary><span class="qn">V8</span>Un puerto de acceso transporta tramas etiquetadas de varias VLAN.</summary><div class="ans"><p><b>Falso.</b> Eso es un troncal; el de acceso lleva una sola VLAN sin etiqueta.</p></div></details>
+  <details class="qa"><summary><span class="qn">V9</span>La VLAN 1 es una buena elección para la VLAN de administración.</summary><div class="ans"><p><b>Falso.</b> Es la predeterminada de fábrica.</p></div></details>
+  <details class="qa"><summary><span class="qn">V10</span>La etiqueta 802.1Q se inserta entre la MAC de origen y el EtherType.</summary><div class="ans"><p><b>Verdadero.</b></p></div></details>
+
+  <h3>Respuesta corta</h3>
+  <details class="qa"><summary><span class="qn">R1</span>¿Qué representan los estados del diagrama de estado y qué los caminos?</summary><div class="ans"><p>Los estados son los posibles contenidos de los K − 1 registros de la derecha; los caminos son las palabras de rama de salida de cada transición (entrada/salida).</p></div></details>
+  <details class="qa"><summary><span class="qn">R2</span>¿Por qué se llama “redundante” y “cíclico” el CRC?</summary><div class="ans"><p>Redundante: agrega bits sin información nueva. Cíclico: el cálculo usa desplazamientos y división binaria en bucle.</p></div></details>
+  <details class="qa"><summary><span class="qn">R3</span>Menciona dos características que diferencian al almacenamiento y envío del método de corte.</summary><div class="ans"><p>La verificación de errores (FCS) y el almacenamiento en búfer automático.</p></div></details>
+  <details class="qa"><summary><span class="qn">R4</span>¿Para qué sirven el preámbulo y el SFD?</summary><div class="ans"><p>Para sincronizar emisor y receptor: avisan que se prepare para recibir una trama nueva (8 bytes).</p></div></details>
+  <details class="qa"><summary><span class="qn">R5</span>Menciona los cuatro tipos de VLAN según su función.</summary><div class="ans"><p>Datos (usuario), predeterminada, nativa y de administración.</p></div></details>
+  <details class="qa"><summary><span class="qn">R6</span>¿Qué es el direccionamiento jerárquico y por qué importa con VLAN?</summary><div class="ans"><p>Asignar los números de red IP a las VLAN de forma ordenada para ver la red como conjunto. Importa porque cada VLAN corresponde a una red IP distinta.</p></div></details>
+  <details class="qa"><summary><span class="qn">R7</span>¿Qué es un puerto SFP+ y para qué se usa?</summary><div class="ans"><p>Puerto modular de alta velocidad (10 G) donde se inserta un transceptor de fibra o cobre (DAC/RJ-45). Se usa como uplink al core y para servidores o almacenamiento SAN/NAS.</p></div></details>
+  <details class="qa"><summary><span class="qn">R8</span>¿Qué hace un router que no hace un switch de capa 2, según la clase 22?</summary><div class="ans"><p>Traslada información <b>entre redes</b> (y entre VLAN). El switch de acceso da acceso a las terminales dentro de la LAN.</p></div></details>
+</section>
+
+<!-- ======================= EJERCICIOS RESUELTOS ======================= -->
+<section id="ej-resueltos" class="topic" data-sec="ejr">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Paso a paso</p><h2>Ejercicios prácticos resueltos</h2></div><button class="mark-btn" data-mark="ejr" aria-pressed="false">Marcar como repasado</button></div>
+
+  <h3>E1 · Árbol: codificar 1101 (diapositiva 19)</h3>
+  <figure><div data-arbol="1101" data-niveles="4"></div><figcaption>Sec. in = 1 1 0 1 → baja, baja, sube, baja.</figcaption></figure>
+  <div data-arbtabla="1101"></div>
+
+  <h3>E2 · Checksum de 8 bits y verificación con error</h3>
+  <p>Con las palabras del ejemplo de clase el checksum es <span class="mono">01110000</span>. Si el receptor recibe n2 = <span class="mono">1010101<b>0</b></span> (último bit cambiado) y el mismo checksum:</p>
+  <div data-ck="10110011 10101010 01011010 11010101 01110000"></div>
+  <div class="verdict bad">La suma final da <span class="mono">11111110</span>, no todo 1 → <b>error detectado</b>.</div>
+
+  <h3>E3 · CRC clásico: M = 1101011011, G(x) = x⁴ + x + 1</h3>
+  <div data-crc="1101011011|10011"></div>
+  <p>Residuo <b class="mono">1110</b> → T(x) = <span class="mono">1101011011<span class="r3-rem">1110</span></span>.</p>
+
+  <h3>E4 · Switch aprendiendo (puertos de la clase 21)</h3>
+  <p>Tabla CAM vacía; EE en el puerto 1, AA en el 2, EA en el 4. Todos en la misma VLAN.</p>
+  <div class="tbl-wrap"><table>
+    <tr><th>#</th><th>Trama</th><th>Aprende</th><th>Decisión</th></tr>
+    <tr><td>1</td><td>AA → EA</td><td>AA = puerto 2</td><td>EA desconocida → <b>inunda</b> todos menos el 2</td></tr>
+    <tr><td>2</td><td>EA → AA</td><td>EA = puerto 4</td><td>AA conocida → <b>reenvía</b> solo por el 2</td></tr>
+    <tr><td>3</td><td>EE → difusión</td><td>EE = puerto 1</td><td>Difusión → todos menos el 1</td></tr>
+    <tr><td>4</td><td>AA → EA</td><td>(ya la conoce)</td><td>EA conocida → <b>reenvía</b> solo por el 4</td></tr>
+  </table></div>
+
+  <h3>E5 · Etiqueta 802.1Q</h3>
+  <p>Decodifica la etiqueta <span class="mono">81 00 60 64</span>.</p>
+  <ol class="steps">
+    <li><b>TPID</b>8100 → trama etiquetada 802.1Q.</li>
+    <li><b>TCI a binario</b>0x6064 = 0110 0000 0110 0100.</li>
+    <li><b>Separa 3 · 1 · 12</b>PCP = 011 (3) · DEI = 0 · VID = 0000 0110 0100 = <b>100</b>.</li>
+  </ol>
+
+  <h3>E6 · Plan de direccionamiento jerárquico</h3>
+  <p>Una escuela con VLAN 10 (Docentes), 20 (Estudiantes), 30 (Invitados) y 99 (Administración) en la red 172.17.0.0 <span class="badge ded">deducido</span> (la VLAN 99 es un ejemplo: la clase solo dice que no conviene la VLAN 1):</p>
+  <div class="tbl-wrap"><table>
+    <tr><th>VLAN</th><th>Tipo</th><th>Subred</th></tr>
+    <tr><td>10</td><td>Datos</td><td class="mono">172.17.10.0/24</td></tr>
+    <tr><td>20</td><td>Datos</td><td class="mono">172.17.20.0/24</td></tr>
+    <tr><td>30</td><td>Datos</td><td class="mono">172.17.30.0/24</td></tr>
+    <tr><td>99</td><td>Administración (IP en la SVI)</td><td class="mono">172.17.99.0/24</td></tr>
+  </table></div>
+</section>
+
+<!-- ======================= EJERCICIOS PROPUESTOS ======================= -->
+<section id="ej-propuestos" class="topic" data-sec="ejp">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Hazlos en papel</p><h2>Ejercicios propuestos</h2></div><button class="mark-btn" data-mark="ejp" aria-pressed="false">Marcar como repasado</button></div>
+  <p class="muted">Resuelve primero; la respuesta está oculta en cada tarjeta. Comprueba el procedimiento completo en el <a href="#lab">laboratorio</a>.</p>
+  <ol class="qlist">
+    <li>Codifica con el diagrama de árbol <b class="mono">101100</b> y <b class="mono">1001</b>. Indica los estados recorridos.
+      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><p>101100 → <span class="mono">11 10 00 01 01 11</span> (a→b→c→b→d→c→a) · 1001 → <span class="mono">11 10 11 11</span> (a→b→c→a→b)</p></div></details></li>
+    <li>Se recibe la codeword <span class="mono">11 01 10 01</span>. ¿Qué entrada la produjo? (Recorre el árbol buscando las ramas.)
+      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><p><b>1110</b>: 11 (a→b, entrada 1), 01 (b→d, 1), 10 (d→d, 1), 01 (d→c, 0).</p></div></details></li>
+    <li>Obtén el checksum de <span class="mono">11001100 · 10101010 · 11110000</span>.
+      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><p>SUMA = <span class="mono">01101000</span> → CHECKSUM = <b class="mono">10010111</b>.</p></div></details></li>
+    <li>Obtén el checksum de 16 bits de <span class="mono">1010101010101010 · 1111000011110000 · 0000111111110000</span>.
+      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><p>SUMA = <span class="mono">1010101110001011</span> → CHECKSUM = <b class="mono">0101010001110100</b>.</p></div></details></li>
+    <li>Calcula T(x) para M = <b class="mono">11100110</b> con G(x) = x³ + x² + 1.
+      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><p>G = 1101, r = 3 → residuo <b>111</b> → T = <span class="mono">11100110111</span>.</p></div></details></li>
+    <li>Calcula T(x) para M = <b class="mono">10110</b> con G(x) = x³ + 1 y verifica.
+      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><p>G = 1001 → residuo <b>100</b> → T = <span class="mono">10110100</span>; 10110100 ÷ 1001 deja residuo 000.</p></div></details></li>
+    <li>Calcula T(x) para M = <b class="mono">1010001101</b> con G(x) = x⁵ + x⁴ + x² + 1.
+      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><p>G = 110101, r = 5 → residuo <b>01110</b> → T = <span class="mono">101000110101110</span>.</p></div></details></li>
+    <li>Escribe en binario CRC-16-CCITT (x¹⁶ + x¹² + x⁵ + 1). ¿Cuántos bits de FCS genera?
+      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><p><span class="mono">10001000000100001</span> (17 bits) → residuo de <b>16 bits</b>.</p></div></details></li>
+    <li>Un switch con método de corte recibe una trama dañada. ¿Qué pasa con ella y quién la descarta?
+      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><p>El switch la reenvía (no verifica el FCS) y consume ancho de banda; la descarta la <b>NIC de destino</b>.</p></div></details></li>
+    <li>Arma la etiqueta 802.1Q para VLAN 30, prioridad 0, DEI 0.
+      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><p>VID 30 = 0000 0001 1110 → TCI = 0x001E → <span class="mono">81 00 00 1E</span>.</p></div></details></li>
+    <li>En la red del ejemplo (3 VLAN, 6 PC), PC2 envía una difusión. ¿Quién la recibe? ¿Cuántos dominios de difusión hay?
+      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><p>Solo PC5 (VLAN 20). Hay <b>3</b> dominios de difusión.</p></div></details></li>
+  </ol>
+</section>
+
+<!-- ======================= LABORATORIO ======================= -->
+<section id="lab" class="topic">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Practica sin límite</p><h2>Laboratorio interactivo</h2></div></div>
+  <p class="muted">Escribe tus propios datos y compara con tu solución en papel. Todo se calcula con los mismos métodos de clase.</p>
+
+  <div class="lab">
+    <h3>Diagrama de árbol (clase 18)</h3>
+    <div class="row">
+      <div class="field"><label for="arbIn">Entrada (de izquierda a derecha)</label><input id="arbIn" value="11011" inputmode="numeric" autocomplete="off" spellcheck="false"></div>
+      <button class="btn" id="arbGo">Codificar</button>
+    </div>
+    <div class="out" id="arbOut" aria-live="polite"></div>
+  </div>
+
+  <div class="lab">
+    <h3>Suma de verificación (clase 19)</h3>
+    <div class="row">
+      <div class="field"><label for="ckIn">Palabras (separadas por espacio o salto de línea)</label><input id="ckIn" value="10110011 10101011 01011010 11010101" inputmode="numeric" autocomplete="off" spellcheck="false"></div>
+      <div class="field"><label for="ckRx">Checksum recibido (opcional)</label><input id="ckRx" value="" inputmode="numeric" autocomplete="off" spellcheck="false"></div>
+      <button class="btn" id="ckGo">Calcular</button>
+    </div>
+    <div class="out" id="ckOut" aria-live="polite"></div>
+  </div>
+
+  <div class="lab">
+    <h3>CRC (clase 20)</h3>
+    <div class="row">
+      <div class="field"><label for="crcM">Datos M</label><input id="crcM" value="1101011111" inputmode="numeric" autocomplete="off" spellcheck="false"></div>
+      <div class="field"><label for="crcG">G(x): binario o polinomio</label><input id="crcG" value="x^4 + x + 1" autocomplete="off" spellcheck="false"></div>
+      <div class="field"><label for="crcRx">Trama recibida (opcional)</label><input id="crcRx" value="" inputmode="numeric" autocomplete="off" spellcheck="false"></div>
+      <button class="btn" id="crcGo">Calcular</button>
+    </div>
+    <div class="out" id="crcOut" aria-live="polite"></div>
+  </div>
+
+  <div class="lab" id="lab-sw">
+    <h3>Switch: tabla CAM, métodos de reenvío y VLAN (clases 21–22)</h3>
+    <div class="row">
+      <div class="field"><label for="swVlan">Configuración</label><select id="swVlan"><option value="no">Sin VLAN (todos en VLAN 1)</option><option value="si">VLAN 10 / 20 / 30 (ejemplo de clase)</option></select></div>
+      <div class="field"><label for="swMet">Método de reenvío</label><select id="swMet"><option value="sf">Almacenamiento y envío</option><option value="ct">Corte</option></select></div>
+    </div>
+    <div class="row">
+      <div class="field"><label for="swSrc">Origen</label><select id="swSrc"></select></div>
+      <div class="field"><label for="swDst">Destino</label><select id="swDst"></select></div>
+      <label class="r3-check"><input type="checkbox" id="swErr"> Trama con error de FCS</label>
+      <button class="btn" id="swSend">Enviar trama</button>
+      <button class="btn sec" id="swReset">Vaciar tabla</button>
+    </div>
+    <div id="swApp" class="r3-sw">
+      <div class="r3-ports" id="swPorts" aria-label="Puertos del switch"></div>
+      <div class="grid g2">
+        <div><h4>Tabla CAM</h4><div id="swCam"></div></div>
+        <div><h4>Decisiones</h4><div id="swLog" aria-live="polite"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lab" id="lab-tag">
+    <h3>Etiqueta IEEE 802.1Q (clase 24)</h3>
+    <div class="row">
+      <div class="field"><label for="tagPcp">PCP (0–7)</label><input id="tagPcp" type="number" min="0" max="7" value="5"></div>
+      <div class="field"><label for="tagDei">DEI</label><select id="tagDei"><option value="0">0</option><option value="1">1</option></select></div>
+      <div class="field"><label for="tagVid">VID (0–4095)</label><input id="tagVid" type="number" min="0" max="4095" value="20"></div>
+      <div class="field"><label for="tagHex">…o decodifica un hex (opcional)</label><input id="tagHex" value="" placeholder="8100A014" autocomplete="off" spellcheck="false"></div>
+      <button class="btn" id="tagGo">Calcular</button>
+    </div>
+    <div class="out" id="tagOut" aria-live="polite"></div>
+  </div>
+</section>
+
+<footer>
+  <p>Fuentes: P3-038 Clases 18–24 (2026) y la hoja “Codificación · Diagrama de árbol” · Universidad Mariano Gálvez. Lo marcado como <span class="badge ded">deducido</span> no lo dijo el profesor: es una inferencia o un complemento del estándar. Los resultados de árbol, checksum y CRC se generaron con el mismo algoritmo del laboratorio y se comprobaron contra los ejemplos de las diapositivas.</p>
+  <p class="credit">Desarrollado por Oskar · <span>@migit</span></p>
+</footer>
+</main>
+</div>
+
+<div class="fab-dock">
+  <button class="board-fab" id="inkFab" type="button" aria-controls="inkBar" aria-expanded="false" title="Anotar sobre la página (el stylus siempre dibuja)">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></svg><span>Anotar</span>
+  </button>
+  <button class="board-fab" id="boardFab" type="button" aria-controls="board" aria-expanded="false" title="Mostrar u ocultar la pizarra">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span>Pizarra</span>
+  </button>
+</div>
+<section class="board" id="board" hidden aria-label="Pizarra de borrador">
+  <div class="board-bar" id="boardBar">
+    <span class="board-title"><span class="grip" aria-hidden="true">⋮⋮</span>Pizarra</span>
+    <span class="spacer"></span>
+    <label class="sr-only" for="boardBg">Fondo</label>
+    <select id="boardBg" title="Fondo">
+      <option value="plain">Liso</option>
+      <option value="grid">Cuadrícula</option>
+      <option value="trellis">Trellis</option>
+    </select>
+    <button class="bd-btn" id="boardHide" type="button" title="Ocultar (se conserva el dibujo)" aria-label="Ocultar pizarra"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg></button>
+  </div>
+  <div class="board-tools" role="toolbar" aria-label="Herramientas de la pizarra">
+    <button class="bd-btn" type="button" data-tool="pen" aria-pressed="true" title="Lápiz (P)" aria-label="Lápiz"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>
+    <button class="bd-btn" type="button" data-tool="eraser" aria-pressed="false" title="Borrador (E)" aria-label="Borrador"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 21-4.3-4.3a1 1 0 0 1 0-1.4l10-10a1 1 0 0 1 1.4 0l5.6 5.6a1 1 0 0 1 0 1.4L11 21"/><path d="M22 21H7"/><path d="m5 11 9 9"/></svg></button>
+    <span class="board-sep"></span>
+    <button class="bd-btn" type="button" data-color="--text" aria-pressed="true" title="Tinta" aria-label="Color tinta"><span class="bd-sw" style="--sw:var(--text)"></span></button>
+    <button class="bd-btn" type="button" data-color="--accent" aria-pressed="false" title="Azul" aria-label="Color azul"><span class="bd-sw" style="--sw:var(--accent)"></span></button>
+    <button class="bd-btn" type="button" data-color="--err" aria-pressed="false" title="Rojo" aria-label="Color rojo"><span class="bd-sw" style="--sw:var(--err)"></span></button>
+    <button class="bd-btn" type="button" data-color="--ok" aria-pressed="false" title="Verde" aria-label="Color verde"><span class="bd-sw" style="--sw:var(--ok)"></span></button>
+    <span class="board-sep"></span>
+    <button class="bd-btn" type="button" data-size="5" aria-pressed="false" title="Fino" aria-label="Trazo fino"><span class="bd-dot" style="width:4px;height:4px"></span></button>
+    <button class="bd-btn" type="button" data-size="8" aria-pressed="true" title="Medio" aria-label="Trazo medio"><span class="bd-dot" style="width:7px;height:7px"></span></button>
+    <button class="bd-btn" type="button" data-size="14" aria-pressed="false" title="Grueso" aria-label="Trazo grueso"><span class="bd-dot" style="width:11px;height:11px"></span></button>
+    <span class="bd-group">
+      <button class="bd-btn" type="button" id="boardUndo" title="Deshacer (Ctrl+Z)" aria-label="Deshacer" disabled><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg></button>
+      <button class="bd-btn" type="button" id="boardRedo" title="Rehacer (Ctrl+Y)" aria-label="Rehacer" disabled><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 14 5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/></svg></button>
+      <button class="bd-btn danger" type="button" id="boardClear" title="Borrar todo" aria-label="Borrar todo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+    </span>
+  </div>
+  <div class="board-area" id="boardArea">
+    <canvas id="boardBase"></canvas>
+    <canvas id="boardLive"></canvas>
+    <div class="board-eraser" id="boardEraser"></div>
+  </div>
+  <div class="board-resize" id="boardResize" title="Redimensionar" aria-hidden="true"></div>
+</section>
+
+<script src="../../js/main.js"></script>
+<script src="../../js/redes3.js"></script>
+</body>
+</html>

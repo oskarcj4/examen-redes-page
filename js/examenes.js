@@ -24,6 +24,12 @@ window.CURSOS = [
         descripcion: 'TCP/IP y OSI, encapsulamiento, control de errores, Hamming, códigos convolucionales, Trellis y Viterbi. Incluye repaso resuelto, cuestionario, laboratorio y pizarra.'
       },
       {
+        id: 'redes-1/parcial-3',
+        titulo: 'Parcial III',
+        etiqueta: 'CLASES 18–24',
+        descripcion: 'Diagrama de estado y de árbol, suma de verificación, CRC, switching y trama Ethernet, VLAN, tipos de VLAN, enlaces troncales e IEEE 802.1Q. Incluye ejercicios de clase resueltos, cuestionario, laboratorio (árbol, checksum, CRC, switch con VLAN y etiqueta 802.1Q) y pizarra.'
+      },
+      {
         id: 'redes-1/final',
         titulo: 'Examen final',
         etiqueta: 'TODO EL CURSO',

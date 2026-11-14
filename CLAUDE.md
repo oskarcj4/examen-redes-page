@@ -26,6 +26,8 @@ C:.
 |           index.html              Arquitectura II (ensamblador 8086)                · usa asm8086.js, arqui2-datos.js, arqui2.js
 +---redes-1\parcial-2
 |           index.html              Redes I (TCP/IP, Hamming, Viterbi)                · todo en main.js
++---redes-1\parcial-3
+|           index.html              Redes I (árbol, checksum, CRC, switching, VLAN, 802.1Q) · usa redes3.js
 +---desarrollo-web\parcial-2
 |           index.html              Desarrollo Web (fetch, plantillas, caso integral) · usa web2-api.js, web2-datos.js, web2.js
 |
@@ -44,6 +46,7 @@ C:.
         arqui2.js                   UI de Arquitectura II: simulador paso a paso, trazas, banco, direcciones
         web2-api.js                 Servidor simulado del caso integral (modo original/corregido) + 14 pruebas. Sirve en Node
         web2-datos.js               Desarrollo Web: 8 ejercicios de fetch (con pruebas), diagnóstico, quiz, abiertas. Sirve en Node
+        redes3.js                   Redes I · Parcial III: árbol, checksum, CRC (división mód. 2), 802.1Q, simulador de switch (window.R3). Sirve en Node
         web2.js                     UI de Desarrollo Web: laboratorio, matriz de pruebas, demo de escape, ejercicios en Worker
 ```
 

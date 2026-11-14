@@ -735,3 +735,91 @@ pre.code.tpl{max-height:520px;overflow:auto}
   .w2-bar .seg{width:100%}.w2-bar .seg .btn{flex:1 1 100%}
 }
 @media print{#labApp,#plantillaApp,#fetchApp,#matrizApp,#diagApp{display:none!important}}
+
+/* ===== Guía Redes I · Parcial III ===== */
+/* Diagrama de árbol (lo genera js/redes3.js) */
+svg.arbol{display:block;max-width:none;margin:0 auto;font-size:12px}
+svg.arbol text{fill:var(--text)}
+svg.arbol .ar-e{fill:none;stroke:var(--text-2);stroke-width:1.3}
+svg.arbol .ar-e.one{stroke-dasharray:5 3}
+svg.arbol .ar-e.alt{opacity:.45}
+svg.arbol .ar-e.on{stroke:var(--accent);stroke-width:3;opacity:1}
+svg.arbol .ar-l{font-family:var(--mono);fill:var(--text-2)}
+svg.arbol .ar-l.on{fill:var(--accent);font-weight:700}
+svg.arbol .ar-s{font-weight:700;text-anchor:end;fill:var(--par);font-size:11px}
+svg.arbol .ar-s.on{fill:var(--accent)}
+svg.arbol .ar-t{font:600 11px var(--mono);fill:var(--text-2);text-anchor:middle}
+svg.arbol .ar-n{fill:var(--accent)}
+svg.arbol .ar-g text{fill:var(--text-2);font-size:11px}
+/* Diagrama de estado estático */
+svg.r3-state{display:block;width:100%;max-width:640px;height:auto;margin:0 auto;font-size:14px}
+svg.r3-state text{fill:var(--text)}
+svg.r3-state .mut{fill:var(--text-2)}
+svg.r3-state .st-e path{fill:none;stroke:var(--text-2);stroke-width:1.6}
+svg.r3-state .st-e path.one{stroke-dasharray:6 4}
+svg.r3-state .st-l text{font-family:var(--mono);font-weight:700;fill:var(--accent);paint-order:stroke;stroke:var(--surface);stroke-width:4px;stroke-linejoin:round}
+svg.r3-state .st-n circle{fill:var(--surface-2);stroke:var(--text);stroke-width:1.6}
+svg.r3-state .st-n text{text-anchor:middle;font-weight:700}
+svg.r3-state .st-k{fill:var(--par)!important;font-size:18px}
+/* Checksum paso a paso */
+table.r3-ck td{padding:6px 7px}
+table.r3-ck tr.add td{border-bottom:2px solid var(--text-2)}
+table.r3-ck tr.carry td{color:var(--par);background:var(--warn-soft)}
+table.r3-ck tr.res td{font-weight:700}
+table.r3-ck tr.ck td{background:var(--ok-soft);color:var(--ok);font-weight:700}
+table.r3-ck td.small{font-family:var(--font);white-space:normal;text-align:left;min-width:140px;color:var(--text-2)}
+/* División módulo 2 (CRC) */
+table.r3-div{border-collapse:collapse;margin:6px auto;width:auto}
+table.r3-div td{font:600 14px var(--mono);width:22px;min-width:22px;height:24px;padding:0;text-align:center;border:0}
+table.r3-div tr.dvd td{border-bottom:2px solid var(--text-2);font-weight:700}
+table.r3-div td.pad{color:var(--par)}
+table.r3-div td.dv{color:var(--accent);background:var(--accent-soft)}
+table.r3-div tr.div td.dv{border-bottom:1px solid var(--accent)}
+table.r3-div td.rs{color:var(--text)}
+table.r3-div td.rem{background:var(--ok-soft);color:var(--ok);font-weight:800}
+.r3-pad{color:var(--par);font-weight:700}
+.r3-rem{color:var(--ok);font-weight:800}
+details.r3-rev summary{cursor:pointer;color:var(--accent);font-weight:600}
+/* Trama Ethernet / etiqueta 802.1Q */
+.r3-frame{display:flex;flex-wrap:wrap;gap:4px;margin:10px 0 16px}
+.r3-frame .f{flex:1 1 70px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:2px;padding:8px 6px;border-radius:10px;background:var(--surface);box-shadow:var(--shadow);border:1px solid var(--sep);font-size:12.5px;color:var(--text-2);line-height:1.25}
+.r3-frame .f b{font:700 14px var(--mono);color:var(--text)}
+.r3-frame .f.w{flex-basis:96px}
+.r3-frame .f.xw{flex:2 1 130px}
+.r3-frame .f.hi{background:var(--ok-soft);border-color:var(--ok)}
+.r3-frame .f.tag{background:var(--accent-soft);border-color:var(--accent)}
+.r3-frame .f.tag b{color:var(--accent)}
+.r3-tag{margin-top:6px}
+.r3-tagrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:8px 0}
+.r3-tagrow .lbl{font:700 12px var(--mono);letter-spacing:.06em;color:var(--text-2);min-width:42px}
+.bit.dei{background:var(--err-soft);color:var(--err);border-color:transparent}
+.bit.dei.one{background:var(--err);color:var(--bg)}
+/* Figura VLAN */
+svg.r3-vlan .r3-dev{fill:var(--surface-2);stroke:var(--text);stroke-width:1.5}
+svg.r3-vlan .r3-trk path{stroke:var(--text);stroke-width:3.5;fill:none}
+svg.r3-vlan .r3-acc path{stroke-width:2;fill:none}
+svg.r3-vlan .pc{stroke-width:1.5}
+svg.r3-vlan .v10{stroke:var(--l2)} svg.r3-vlan .pc.v10{fill:color-mix(in srgb,var(--l2) 14%,var(--surface))}
+svg.r3-vlan .v20{stroke:var(--l4)} svg.r3-vlan .pc.v20{fill:color-mix(in srgb,var(--l4) 14%,var(--surface))}
+svg.r3-vlan .v30{stroke:var(--l6)} svg.r3-vlan .pc.v30{fill:color-mix(in srgb,var(--l6) 14%,var(--surface))}
+svg.r3-vlan .v10t{fill:var(--l2);font-weight:700} svg.r3-vlan .v20t{fill:var(--l4);font-weight:700} svg.r3-vlan .v30t{fill:var(--l6);font-weight:700}
+/* Simulador de switch */
+.r3-check{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--text-2);min-height:46px}
+.r3-check input{width:20px;height:20px;accent-color:var(--accent)}
+.r3-sw{margin-top:14px}
+.r3-ports{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.r3-port{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 4px;border-radius:12px;background:var(--surface-2);border:2px solid var(--sep);border-top-width:5px;font-size:13px;transition:background .2s,border-color .2s}
+.r3-port b{font-size:18px}
+.r3-port .v{font-size:11px;color:var(--text-2)}
+.r3-port[data-vlan="10"]{border-top-color:var(--l2)}
+.r3-port[data-vlan="20"]{border-top-color:var(--l4)}
+.r3-port[data-vlan="30"]{border-top-color:var(--l6)}
+.r3-port.src{background:var(--warn-soft);border-color:var(--par)}
+.r3-port.out{background:var(--ok-soft);border-color:var(--ok)}
+.r3-log{margin:0;padding-left:20px;font-size:14px;max-height:280px;overflow:auto}
+.r3-log li{margin:4px 0}
+@media (max-width:600px){
+  .r3-ports{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .r3-frame .f{flex-basis:calc(33% - 4px)}
+}
+@media print{#lab-sw,#swApp{display:none!important}}
