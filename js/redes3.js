@@ -1,4 +1,4 @@
-/* ===== Redes I · Parcial III (clases 18–24) =====
+/* ===== Redes I · Examen final (clases 18–24) =====
    Núcleo sin DOM (sirve en Node con require) + render de figuras y laboratorio.
    Todo va dentro de una IIFE: main.js ya declara STATES, clean, hd… en el ámbito global. */
 (function (global) {

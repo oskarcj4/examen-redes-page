@@ -3,7 +3,9 @@
    1. Copia una carpeta existente (p. ej. redes-1/parcial-2/) a <curso>/<examen>/.
    2. En su <body> cambia data-exam="<curso>/<examen>" y data-store="<clave-única>".
    3. Agrégalo aquí con el mismo id y quita "proximamente".
-   Los exámenes con proximamente: true se muestran como tarjeta deshabilitada. */
+   Los exámenes con proximamente: true se muestran como tarjeta deshabilitada.
+   Cada curso tiene 3 exámenes (parcial-1, parcial-2, final). El final es el tercer examen:
+   cubre solo el material de su bloque, no todo el curso. */
 window.CURSOS = [
   {
     id: 'redes-1',
@@ -24,17 +26,10 @@ window.CURSOS = [
         descripcion: 'TCP/IP y OSI, encapsulamiento, control de errores, Hamming, códigos convolucionales, Trellis y Viterbi. Incluye repaso resuelto, cuestionario, laboratorio y pizarra.'
       },
       {
-        id: 'redes-1/parcial-3',
-        titulo: 'Parcial III',
-        etiqueta: 'CLASES 18–24',
-        descripcion: 'Diagrama de estado y de árbol, suma de verificación, CRC, switching y trama Ethernet, VLAN, tipos de VLAN, enlaces troncales e IEEE 802.1Q. Incluye ejercicios de clase resueltos, cuestionario, laboratorio (árbol, checksum, CRC, switch con VLAN y etiqueta 802.1Q) y pizarra.'
-      },
-      {
         id: 'redes-1/final',
         titulo: 'Examen final',
-        etiqueta: 'TODO EL CURSO',
-        descripcion: 'Repaso integral del curso.',
-        proximamente: true
+        etiqueta: 'CLASES 18–24',
+        descripcion: 'Diagrama de estado y de árbol, suma de verificación, CRC, switching y trama Ethernet, VLAN, tipos de VLAN, enlaces troncales e IEEE 802.1Q. Incluye ejercicios de clase resueltos, cuestionario, laboratorio (árbol, checksum, CRC, switch con VLAN y etiqueta 802.1Q) y pizarra.'
       }
     ]
   },
@@ -60,8 +55,8 @@ window.CURSOS = [
       {
         id: 'analisis-2/final',
         titulo: 'Examen final',
-        etiqueta: 'TODO EL CURSO',
-        descripcion: 'Repaso integral del curso.',
+        etiqueta: 'TERCERA PARTE',
+        descripcion: 'Guía del examen final.',
         proximamente: true
       }
     ]
@@ -88,8 +83,8 @@ window.CURSOS = [
       {
         id: 'arquitectura-2/final',
         titulo: 'Examen final',
-        etiqueta: 'TODO EL CURSO',
-        descripcion: 'Repaso integral del curso.',
+        etiqueta: 'TERCERA PARTE',
+        descripcion: 'Guía del examen final.',
         proximamente: true
       }
     ]
@@ -115,8 +110,8 @@ window.CURSOS = [
       {
         id: 'desarrollo-web/final',
         titulo: 'Examen final',
-        etiqueta: 'TODO EL CURSO',
-        descripcion: 'Repaso integral del curso.',
+        etiqueta: 'TERCERA PARTE',
+        descripcion: 'Guía del examen final.',
         proximamente: true
       }
     ]

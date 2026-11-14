@@ -736,7 +736,7 @@ pre.code.tpl{max-height:520px;overflow:auto}
 }
 @media print{#labApp,#plantillaApp,#fetchApp,#matrizApp,#diagApp{display:none!important}}
 
-/* ===== Guía Redes I · Parcial III ===== */
+/* ===== Guía Redes I · Examen final ===== */
 /* Diagrama de árbol (lo genera js/redes3.js) */
 svg.arbol{display:block;max-width:none;margin:0 auto;font-size:12px}
 svg.arbol text{fill:var(--text)}

@@ -4,6 +4,7 @@ Sitio **100 % estático** (HTML + CSS + JS sin build, sin dependencias, sin back
 `<curso>/<examen>/index.html` con su guía, cuestionarios y laboratorios. El portal (`index.html`) lista los cursos
 desde `js/examenes.js`. Todo corre en el navegador; el progreso y los borradores viven en `localStorage`.
 
+- Cada curso tiene 3 exámenes: `parcial-1`, `parcial-2` y `final` (el final es el **tercer examen**). Cada guía cubre **solo el material que entrega el usuario** para ese examen; el final **no** es un repaso de todo el curso.
 - Idioma: **español** (código, comentarios, textos de UI y mensajes de error). Responde al usuario en español.
 - Antes de cambios estructurales (renombrar carpetas, cambiar el catálogo, tocar `main.js`/`styles.css` globales), **pregunta con una recomendación**.
 - Despliegue: push a `main` → GitHub Actions sube todo el repo a S3 + CloudFront (`.github/workflows/deploy.yml`, excluye `.git*`, `.claude/*` y `*.md`).
@@ -26,8 +27,8 @@ C:.
 |           index.html              Arquitectura II (ensamblador 8086)                · usa asm8086.js, arqui2-datos.js, arqui2.js
 +---redes-1\parcial-2
 |           index.html              Redes I (TCP/IP, Hamming, Viterbi)                · todo en main.js
-+---redes-1\parcial-3
-|           index.html              Redes I (árbol, checksum, CRC, switching, VLAN, 802.1Q) · usa redes3.js
++---redes-1inal
+|           index.html              Redes I examen final (árbol, checksum, CRC, switching, VLAN, 802.1Q) · usa redes3.js
 +---desarrollo-web\parcial-2
 |           index.html              Desarrollo Web (fetch, plantillas, caso integral) · usa web2-api.js, web2-datos.js, web2.js
 |
@@ -46,7 +47,7 @@ C:.
         arqui2.js                   UI de Arquitectura II: simulador paso a paso, trazas, banco, direcciones
         web2-api.js                 Servidor simulado del caso integral (modo original/corregido) + 14 pruebas. Sirve en Node
         web2-datos.js               Desarrollo Web: 8 ejercicios de fetch (con pruebas), diagnóstico, quiz, abiertas. Sirve en Node
-        redes3.js                   Redes I · Parcial III: árbol, checksum, CRC (división mód. 2), 802.1Q, simulador de switch (window.R3). Sirve en Node
+        redes3.js                   Redes I · Examen final: árbol, checksum, CRC (división mód. 2), 802.1Q, simulador de switch (window.R3). Sirve en Node
         web2.js                     UI de Desarrollo Web: laboratorio, matriz de pruebas, demo de escape, ejercicios en Worker
 ```
 
