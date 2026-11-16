@@ -477,6 +477,12 @@
   function init() {
     try { pintarFiguras(); } catch (e) { console.error(e); }
     laboratorio();
+    $$('[data-toggle-all]').forEach(b => b.addEventListener('click', () => {
+      const abrir = b.getAttribute('aria-pressed') !== 'true';
+      $$(b.dataset.toggleAll + ' details.qa').forEach(d => { d.open = abrir; });
+      b.setAttribute('aria-pressed', String(abrir));
+      b.textContent = abrir ? 'Ocultar todas las respuestas' : 'Mostrar todas las respuestas';
+    }));
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })(typeof window !== 'undefined' ? window : globalThis);
