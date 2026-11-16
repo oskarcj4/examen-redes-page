@@ -61,6 +61,7 @@
     <a class="card" href="#c22"><span class="n">BLOQUE 3 · TEORÍA</span><h4>VLAN</h4><p>C22–C24: beneficios, tipos de VLAN, direccionamiento jerárquico, puertos de acceso y troncales, etiqueta 802.1Q.</p></a>
     <a class="card" href="#quiz"><span class="n">BLOQUE 4 · EXAMEN</span><h4>Autoevaluación</h4><p>Cuestionario, ejercicios resueltos y propuestos (los mismos de las diapositivas) y el laboratorio para comprobar.</p></a>
   </div>
+  <div class="key"><b>Conocimientos previos</b>Este examen se apoya en el <a href="../parcial-2/index.html">Parcial II</a>: códigos convolucionales y Trellis (para C18), control de errores y Hamming (C19–C20) y las capas de enlace y de red (C21–C24). Al inicio de cada clase hay un recuadro <b>↩ Viene del Parcial II</b> con el enlace exacto.</div>
   <div class="key warn"><b>Lo que más pesa en el examen <span class="badge ded">deducido</span></b>Las diapositivas traen ejercicios de tres métodos: <b>codificar con el diagrama de estado y de árbol</b> (5 entradas), <b>obtener el checksum</b> (4 ejercicios) y <b>calcular y verificar el CRC</b> (ejercicio 7), además del cuadro <b>almacenamiento y envío vs. corte</b>. El profesor no dijo cuánto vale cada parte; si tienes poco tiempo empieza por C18 → C19 → C20 y luego repasa la teoría de C21–C24.</div>
 </section>
 
@@ -180,33 +181,85 @@
   </table></div>
   <p class="small muted">Truco para recordar el siguiente estado: el bit que entra se pone a la <b>izquierda</b> y se pierde el de la derecha (b = 10 con entrada 0 → <b>0</b>1 = c). <span class="badge ded">deducido</span></p>
 
-  <h3>El árbol y el ejemplo oficial · entrada 11011</h3>
-  <p>Partiendo con el codificador en ceros: si el primer bit es 0 la salida es <b>00</b>, si es 1 la salida es <b>11</b>; si el primer bit es 1 y el segundo es 0, la segunda palabra es <b>10</b>. Para <b>11011</b> se baja, baja, sube, baja, baja:</p>
-  <figure><div data-arbol="11011" data-niveles="5"></div><figcaption>Árbol de 5 niveles (t1–t5). Sobre cada rama, la palabra de salida; al final de la rama, el estado alcanzado. En azul, el camino de 11011.</figcaption></figure>
+  <h3>Cómo se lee el árbol · una bifurcación</h3>
+  <p>Todo el árbol es la misma pieza repetida: un estado del que salen <b>dos ramas</b>. Antes de ver el árbol completo, aprende a leer una sola. Ejemplo con el estado <b>b (10)</b>:</p>
+  <figure>
+    <svg viewBox="0 0 640 230" width="640" height="230" class="arbol r3-anat" role="img" aria-label="Bifurcación desde b (10): con entrada 0 sube, sale 10 y llega a c (01); con entrada 1 baja, sale 01 y llega a d (11)">
+      <path d="M150 115 V55 H360" class="ar-e zero on"/>
+      <path d="M150 115 V175 H360" class="ar-e one on"/>
+      <circle cx="150" cy="115" r="5" class="ar-n"/>
+      <text x="142" y="107" class="ar-s on" text-anchor="end">b<tspan class="ar-r">(10)</tspan></text>
+      <text x="156" y="89" class="ar-m zero on">0↑</text>
+      <text x="156" y="149" class="ar-m one on">1↓</text>
+      <text x="200" y="49" class="ar-l on" text-anchor="middle">10</text>
+      <text x="200" y="169" class="ar-l on" text-anchor="middle">01</text>
+      <text x="356" y="49" class="ar-s on" text-anchor="end">c<tspan class="ar-r">(01)</tspan></text>
+      <text x="356" y="169" class="ar-s on" text-anchor="end">d<tspan class="ar-r">(11)</tspan></text>
+      <g class="r3-call">
+        <path d="M100 118 L60 150"/><text x="8" y="166">① estado actual</text><text x="8" y="182">y su registro</text>
+        <path d="M176 84 L120 50"/><text x="8" y="30">② bit que entra:</text><text x="8" y="44">0 sube · 1 baja</text>
+        <path d="M214 44 L250 18"/><text x="254" y="20">③ salida que se transmite (2 bits)</text>
+        <text x="368" y="60">④ estado al que llegas</text>
+        <path d="M362 168 L392 182"/><text x="396" y="186">④ el bit nuevo entra a la izquierda:</text><text x="396" y="202" class="mono">1 + 10 → 11 (el 0 sale)</text>
+      </g>
+    </svg>
+    <figcaption>Lee cada rama en este orden: ② qué bit entra → ③ qué sale → ④ adónde llegas. La salida está <b>encima</b> de la rama; el estado nuevo, <b>al final</b>.</figcaption>
+  </figure>
+
+  <h3>Las dos mitades del árbol (como en la hoja)</h3>
+  <p>El árbol se <b>duplica en cada nivel</b>: 2, 4, 8, 16 ramas… Por eso la hoja del profesor lo parte en dos dibujos según el <b>primer bit</b>. Siempre se empieza en <b>a (00)</b>:</p>
+  <div>
+    <figure><div data-arbol="" data-niveles="4" data-mitad="0"></div><figcaption><b>Primer bit 0</b> → sube, sale <b>00</b> y te quedas en <b>a</b>. Mientras sigan entrando ceros, el codificador no sale de a (00).</figcaption></figure>
+    <figure><div data-arbol="" data-niveles="4" data-mitad="1"></div><figcaption><b>Primer bit 1</b> → baja, sale <b>11</b> y llegas a <b>b (10)</b>. Desde ahí cada estado repite sus dos ramas de la tabla.</figcaption></figure>
+  </div>
+  <div class="key"><b>Patrones que ayudan a revisar</b>
+    <ul class="small">
+      <li>Todas las ramas que salen de un mismo estado tienen siempre las mismas salidas: de <b>b</b> siempre 10 (↑) y 01 (↓); de <b>d</b> siempre 01 (↑) y 10 (↓).</li>
+      <li>Las dos salidas de una bifurcación son <b>complementarias</b> (00/11, 10/01): si te sale la misma en las dos, hay un error. <span class="badge ded">deducido</span></li>
+      <li>Desde el nivel 3 el árbol <b>se repite</b>: cada vez que llegas a la misma letra, lo que cuelga de ella es idéntico. Por eso alcanza con la tabla de 8 filas.</li>
+    </ul></div>
+  <div class="key warn"><b>Sobre la imagen de la hoja</b>En la hoja hay números pequeños en rojo bajo algunas ramas que no siempre coinciden con el registro del estado (por ejemplo, junto a <i>d</i> aparece 01 aunque d = 11). Para resolver, guíate por la <b>tabla de transiciones</b>: es la que reproduce los ejemplos de clase.</div>
+
+  <h3>Ejemplo oficial paso a paso · entrada 11011</h3>
+  <p>Usa los botones: en cada paso se resalta una rama y abajo se explica qué entró, qué salió y a qué estado llegas. Como el primer bit es 1, basta con la <b>mitad de abajo</b> del árbol.</p>
+  <div data-arbol="11011" data-niveles="5" data-mitad="1" data-pasos></div>
   <div data-arbtabla="11011"></div>
   <div class="key ok"><b>Resultado de clase</b>11011 → <span class="mono"><b>11 01 01 00 01</b></span> (en la diapositiva: 1101010001).</div>
 
-  <h4>Receta para el examen</h4>
+  <h3>En el examen: dibuja solo el camino</h3>
+  <p>No hace falta dibujar 32 ramas. Basta con el <b>camino</b> de la entrada y, en cada paso, la <b>rama que no tomaste</b> (para mostrar que sabes leer la bifurcación). Así se ve 11011:</p>
+  <figure><div data-arbol="11011" data-podado></div><figcaption>Árbol podado: en color, el camino de 11011; en gris, la rama alterna de cada paso con su salida y su estado.</figcaption></figure>
+  <h4>Receta</h4>
   <ol class="steps">
-    <li><b>Empieza en a (00).</b>Escribe la tabla de 8 transiciones o dibuja el diagrama de estado a un lado.</li>
-    <li><b>Lee la entrada de izquierda a derecha.</b>0 = rama de arriba, 1 = rama de abajo.</li>
-    <li><b>Anota la palabra de rama y el nuevo estado.</b>Cada bit de entrada da 2 bits de salida.</li>
-    <li><b>Une las palabras.</b>La codeword es la concatenación en el orden en que salen.</li>
+    <li><b>Copia la tabla de 8 transiciones.</b>O el diagrama de estado. Es tu “diccionario” de ramas.</li>
+    <li><b>Empieza en a (00) y escribe los bits arriba.</b>Una columna por bit, de izquierda a derecha.</li>
+    <li><b>En cada columna, bifurca.</b>Rama de arriba = 0, rama de abajo = 1. Sobre cada rama escribe su salida; al final, el estado nuevo.</li>
+    <li><b>Sigue la rama del bit que toca.</b>El estado nuevo es el punto de partida de la siguiente columna.</li>
+    <li><b>Une las salidas del camino.</b>Esa es la codeword: 2 bits por cada bit de entrada.</li>
   </ol>
-  <figure><div data-arbol="" data-niveles="4"></div><figcaption>Árbol en blanco de 4 niveles para practicar (todas las ramas con su salida y estado).</figcaption></figure>
+
+  <h4>Errores típicos</h4>
+  <div class="tbl-wrap"><table>
+    <tr><th>Error</th><th>Cómo se ve</th><th>Cómo evitarlo</th></tr>
+    <tr><td>Usar las letras del parcial II</td><td>Escribir b = 01 y c = 10</td><td>Aquí <b>b = 10</b> y <b>c = 01</b>: el bit nuevo queda a la izquierda.</td></tr>
+    <tr><td>Escribir el estado en lugar de la salida</td><td>Codeword “10 11 01…” (son registros, no salidas)</td><td>La salida va <b>encima</b> de la rama; el registro va entre paréntesis junto a la letra.</td></tr>
+    <tr><td>Leer la entrada al revés</td><td>Empezar por el último bit</td><td>La primera columna es el bit de la <b>izquierda</b>.</td></tr>
+    <tr><td>No volver a empezar en a</td><td>Arrancar desde el estado final de otro ejercicio</td><td>Cada entrada nueva empieza con el registro en <b>00</b>.</td></tr>
+  </table></div>
+  <details class="qa"><summary><span class="qn">?</span>Explícalo con tus palabras: ¿por qué desde c (01) con entrada 1 llegas a b (10)?</summary><div class="ans"><p>El 1 entra por la izquierda del registro (1 + 01 → <b>10</b>) y el bit de la derecha (1) sale. El registro 10 es el estado <b>b</b>. La salida 00 de esa rama la da la tabla.</p></div></details>
 
   <h3>Ejercicio de la clase · codificar con el diagrama de estados y de árbol</h3>
   <ol class="qlist">
     <li><b class="mono">1110</b> <button class="board-open" type="button" data-board="grid">✏️ Resolver en la pizarra</button>
-      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><p><span class="mono">11 01 10 01</span> · estados a → b → d → d → c</p></div></details></li>
+      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><p><span class="mono">11 01 10 01</span> · estados a → b → d → d → c</p><figure><div data-arbol="1110" data-podado></div></figure></div></details></li>
     <li><b class="mono">1101</b>
-      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><p><span class="mono">11 01 01 00</span> · a → b → d → c → b (es el ejemplo “Sec. in = 1 1 0 1 · Sec. out = 11 01 01 00” de la diapositiva 19)</p></div></details></li>
+      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><p><span class="mono">11 01 01 00</span> · a → b → d → c → b (es el ejemplo “Sec. in = 1 1 0 1 · Sec. out = 11 01 01 00” de la diapositiva 19)</p><figure><div data-arbol="1101" data-podado></div></figure></div></details></li>
     <li><b class="mono">11010</b>
-      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><p><span class="mono">11 01 01 00 10</span> · a → b → d → c → b → c</p></div></details></li>
+      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><p><span class="mono">11 01 01 00 10</span> · a → b → d → c → b → c</p><figure><div data-arbol="11010" data-podado></div></figure></div></details></li>
     <li><b class="mono">11011</b>
-      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><p><span class="mono">11 01 01 00 01</span> · a → b → d → c → b → d</p></div></details></li>
+      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><p><span class="mono">11 01 01 00 01</span> · a → b → d → c → b → d (el ejemplo oficial de arriba)</p></div></details></li>
     <li><b class="mono">001001</b>
-      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><p><span class="mono">00 00 11 10 11 11</span> · a → a → a → b → c → a → b</p></div></details></li>
+      <details class="qa"><summary>Ver respuesta</summary><div class="ans"><p><span class="mono">00 00 11 10 11 11</span> · a → a → a → b → c → a → b</p><figure><div data-arbol="001001" data-podado></div></figure></div></details></li>
   </ol>
 </section>
 
@@ -626,7 +679,8 @@
   <div class="sec-head"><div class="meta"><p class="eyebrow">Paso a paso</p><h2>Ejercicios prácticos resueltos</h2></div><button class="mark-btn" data-mark="ejr" aria-pressed="false">Marcar como repasado</button></div>
 
   <h3>E1 · Árbol: codificar 1101 (diapositiva 19)</h3>
-  <figure><div data-arbol="1101" data-niveles="4"></div><figcaption>Sec. in = 1 1 0 1 → baja, baja, sube, baja.</figcaption></figure>
+  <p>Sec. in = 1 1 0 1 → baja, baja, sube, baja. Avanza con los botones:</p>
+  <div data-arbol="1101" data-niveles="4" data-mitad="1" data-pasos></div>
   <div data-arbtabla="1101"></div>
 
   <h3>E2 · Checksum de 8 bits y verificación con error</h3>
@@ -700,6 +754,13 @@
 <!-- ======================= LABORATORIO ======================= -->
 <section id="lab" class="topic">
   <div class="sec-head"><div class="meta"><p class="eyebrow">Practica sin límite</p><h2>Laboratorio interactivo</h2></div></div>
+  <p class="r3-prev"><span>↩ Viene del Parcial II</span><a href="../parcial-2/index.html#c10">C10 · Capa de enlace de datos</a> · <a href="../parcial-2/index.html#c9">C9 · Encapsulamiento (encabezados que se agregan)</a></p>
+  <p class="r3-prev"><span>↩ Viene del Parcial II</span><a href="../parcial-2/index.html#c10">C10 · Capa de red (direcciones IP)</a> · <a href="../parcial-2/index.html#c8">C8 · Capa de red de Internet</a></p>
+  <p class="r3-prev"><span>↩ Viene del Parcial II</span><a href="../parcial-2/index.html#c10">C10 · Capa de red y routing</a> · <a href="../parcial-2/index.html#c8">C8 · Arquitectura en capas</a></p>
+  <p class="r3-prev"><span>↩ Viene del Parcial II</span><a href="../parcial-2/index.html#c10">C10 · Routing y switching · capa de enlace</a> · <a href="../parcial-2/index.html#c9">C9 · Encapsulamiento y PDU (trama)</a></p>
+  <p class="r3-prev"><span>↩ Viene del Parcial II</span><a href="../parcial-2/index.html#c12">C12 · Control de errores</a> · <a href="../parcial-2/index.html#c13">C13 · Redundancia y códigos de bloque</a> · <a href="../parcial-2/index.html#c10">C10 · Capa de enlace de datos (la trama lleva el FCS)</a></p>
+  <p class="r3-prev"><span>↩ Viene del Parcial II</span><a href="../parcial-2/index.html#c12">C12 · Control de errores: detección vs. corrección</a> · <a href="../parcial-2/index.html#c13">C13 · Redundancia y códigos de bloque</a> · <a href="../parcial-2/index.html#c14">C14 · Hamming (bits de paridad)</a></p>
+  <p class="r3-prev"><span>↩ Viene del Parcial II</span><a href="../parcial-2/index.html#c15">C15 · Códigos convolucionales (registro, K, tasa R)</a> · <a href="../parcial-2/index.html#c16">C16 · Trellis (el del repaso R = 1/2, K = 3 es este mismo código)</a> · <a href="../parcial-2/index.html#c17">C17 · Viterbi</a></p>
   <p class="muted">Escribe tus propios datos y compara con tu solución en papel. Todo se calcula con los mismos métodos de clase.</p>
 
   <div class="lab">

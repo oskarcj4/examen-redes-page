@@ -185,64 +185,99 @@
   /* =================== Render (DOM) =================== */
   const $ = (s, c = document) => c.querySelector(s), $$ = (s, c = document) => [...c.querySelectorAll(s)];
 
-  /* Árbol: ramas hacia arriba = 0, hacia abajo = 1; sobre cada rama la salida; al final el estado */
-  function arbolSVG(bits, niveles) {
+  /* Árbol con el formato de la hoja del profesor:
+     cada rama es una línea horizontal; ENCIMA va la palabra de salida (2 bits) y al FINAL el estado
+     con su registro, p. ej. «b (10)». En cada bifurcación: 0↑ (azul, rama de arriba) y 1↓ (rojo, rama de abajo).
+     opts: niveles · mitad (0/1: solo la mitad que empieza con ese bit, como la hoja) · podado (solo camino + rama alterna)
+           hasta (pasos del camino resaltados; por defecto todos) */
+  function arbolSVG(bits, opts = {}) {
+    if (typeof opts === 'number') opts = { niveles: opts };
     bits = soloBits(bits);
-    const D = Math.max(1, niveles || bits.length);
-    const full = D <= 5;
-    const colW = 92, left = 34, top = 30;
     const path = bits.split('').map(Number);
-    let edges = '', labels = '', hi = '', hiLab = '';
-    let H, Y;
-    if (full) {
-      const leafH = D <= 3 ? 34 : 20; H = top + (2 ** D) * leafH + 34;
-      Y = (t, i) => top + (i + 0.5) * ((2 ** D) * leafH) / (2 ** t);
-    }
+    const D = Math.max(1, opts.niveles || bits.length || 3);
+    const podado = opts.podado ?? D > 5;
+    const mitad = opts.mitad === 0 || opts.mitad === 1 ? opts.mitad : null;
+    const hasta = opts.hasta ?? path.length;
+    const colW = 112, left = 62, top = 46, gap = podado ? 34 : (D <= 3 ? 44 : 30);
     const X = t => left + t * colW;
-    const W = left + D * colW + 60;
-    if (full) {
-      // recorrer todos los nodos
-      const walk = (t, i, st, onPath) => {
-        if (t === D) return;
-        for (const u of [0, 1]) {
-          const ci = 2 * i + u, { out, next } = paso(st, u);
-          const on = onPath && t < path.length && path[t] === u;
-          const x1 = X(t), y1 = Y(t, i), x2 = X(t + 1), y2 = Y(t + 1, ci);
-          const seg = `<path d="M${x1} ${y1} V${y2} H${x2}" class="ar-e${u ? ' one' : ''}${on ? ' on' : ''}"/>`;
-          const lab = `<text x="${(x1 + x2) / 2 + 4}" y="${y2 - 5}" class="ar-l${on ? ' on' : ''}">${out}</text><text x="${x2 - 6}" y="${y2 - 5}" class="ar-s${on ? ' on' : ''}">${NOMBRE[next]}</text>`;
-          if (on) { hi += seg; hiLab += lab; } else { edges += seg; labels += lab; }
-          walk(t + 1, ci, next, on);
-        }
-      };
-      walk(0, 0, '00', bits.length > 0);
-    } else {
-      // árbol podado: solo el camino y la rama alternativa de cada paso
-      const dy = 30; let y = 0, st = '00', ys = [0];
-      const pts = [];
-      for (let t = 0; t < D; t++) {
-        const u = path[t];
-        for (const v of [0, 1]) {
-          const { out, next } = paso(st, v); const yy = y + (v ? dy : -dy);
-          pts.push({ t, y0: y, y1: yy, out, next, on: v === u, v });
-        }
-        y = y + (u ? dy : -dy); ys.push(y); st = paso(st, u).next;
+    let leaf = 0;
+    const hoja = (t, st) => ({ t, st, kids: [], y: top + (leaf++) * gap });
+    // construcción recursiva: la y de un nodo es el promedio de las y de sus hijos
+    function build(t, st, enCamino) {
+      if (t >= D) return hoja(t, st);
+      const n = { t, st, kids: [] };
+      for (const u of [0, 1]) {
+        if (t === 0 && mitad !== null && u !== mitad) continue;
+        const sigue = enCamino && t < path.length && path[t] === u;
+        const { out, next } = paso(st, u);
+        // podado: solo se expande la rama del camino; la alterna queda como un tramo suelto
+        const nodo = podado && path.length && !sigue ? hoja(t + 1, next) : build(t + 1, next, sigue);
+        n.kids.push({ u, out, next, on: sigue && t < hasta, nodo });
       }
-      const minY = Math.min(...pts.map(p => p.y1)) - 10, maxY = Math.max(...pts.map(p => p.y1));
-      const off = top - minY + 10; H = maxY + off + 34;
-      for (const p of pts) {
-        const x1 = X(p.t), x2 = X(p.t + 1), y1 = p.y0 + off, y2 = p.y1 + off;
-        const seg = `<path d="M${x1} ${y1} V${y2} H${x2}" class="ar-e${p.v ? ' one' : ''}${p.on ? ' on' : ' alt'}"/>`;
-        const lab = `<text x="${(x1 + x2) / 2 + 4}" y="${y2 - 5}" class="ar-l${p.on ? ' on' : ''}">${p.out}</text><text x="${x2 - 6}" y="${y2 - 5}" class="ar-s${p.on ? ' on' : ''}">${NOMBRE[p.next]}</text>`;
-        if (p.on) { hi += seg; hiLab += lab; } else { edges += seg; labels += lab; }
-      }
-      Y = () => off;
+      n.y = n.kids.reduce((s, k) => s + k.nodo.y, 0) / n.kids.length;
+      return n;
     }
-    let times = '';
-    for (let t = 1; t <= D; t++) times += `<text x="${X(t) - colW / 2}" y="${H - 10}" class="ar-t">t${t}${t <= path.length ? ' · ' + path[t - 1] : ''}</text>`;
-    const y0 = full ? Y(0, 0) : Y();
-    const raiz = `<circle cx="${X(0)}" cy="${y0}" r="4.5" class="ar-n"/><text x="${X(0) - 8}" y="${y0 + 4}" class="ar-s on" text-anchor="end">a</text>`;
-    const guia = `<g class="ar-g"><text x="6" y="16">↑ 0 · ↓ 1</text></g>`;
-    return `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" class="arbol" role="img" aria-label="Diagrama de árbol${bits ? ' para la entrada ' + bits : ''}">${guia}${edges}${labels}${hi}${hiLab}${raiz}${times}</svg>`;
+    const hay = path.length > 0;
+    const raiz = build(0, '00', hay);
+    const H = top + Math.max(leaf - 1, 0) * gap + 46, W = X(D) + 78;
+    let ramas = '', resaltes = '', textos = '', marcas = '';
+    (function dibujar(n) {
+      for (const k of n.kids) {
+        const x1 = X(n.t), x2 = X(n.t + 1), y1 = n.y, y2 = k.nodo.y;
+        const est = k.on ? ' on' : hay ? ' dim' : '';
+        const seg = `<path d="M${x1} ${y1} V${y2} H${x2}" class="ar-e ${k.u ? 'one' : 'zero'}${est}"/>`;
+        if (k.on) resaltes += seg; else ramas += seg;
+        // flecha de entrada pegada a la bifurcación (contigüidad: sin leyenda aparte)
+        marcas += `<text x="${x1 + 5}" y="${y1 === y2 ? y1 + 15 : (y1 + y2) / 2 + 4}" class="ar-m ${k.u ? 'one' : 'zero'}${est}">${k.u ? '1↓' : '0↑'}</text>`;
+        // palabra de salida encima de la rama; estado y registro al final de la rama
+        const xc = x1 + 46;
+        if (k.on) textos += `<rect x="${xc - 14}" y="${y2 - 19}" width="28" height="16" rx="4" class="ar-pill"/>`;
+        textos += `<text x="${xc}" y="${y2 - 6}" class="ar-l${est}" text-anchor="middle">${k.out}</text>`;
+        textos += `<text x="${x2 - 4}" y="${y2 - 6}" class="ar-s${est}" text-anchor="end">${NOMBRE[k.next]}<tspan class="ar-r">(${k.next})</tspan></text>`;
+        dibujar(k.nodo);
+      }
+    })(raiz);
+    // encabezados de columna: qué bit de la entrada se lee en cada nivel
+    let cab = '';
+    for (let t = 0; t < D; t++) {
+      const bit = t < path.length ? path[t] : null;
+      cab += `<text x="${(X(t) + X(t + 1)) / 2}" y="18" class="ar-t${bit !== null && t < hasta ? ' on' : ''}" text-anchor="middle">Bit ${t + 1}${bit !== null ? ' = ' + bit : ''}</text>`;
+    }
+    const inicio = `<circle cx="${X(0)}" cy="${raiz.y}" r="5" class="ar-n"/><text x="${X(0) - 8}" y="${raiz.y - 8}" class="ar-s on" text-anchor="end">a<tspan class="ar-r">(00)</tspan></text><text x="${X(0) - 8}" y="${raiz.y + 16}" class="ar-g" text-anchor="end">inicio</text>`;
+    return `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" class="arbol" role="img" aria-label="Diagrama de árbol${bits ? ' para la entrada ' + bits : ''}: arriba entrada 0, abajo entrada 1">${cab}${ramas}${resaltes}${marcas}${textos}${inicio}</svg>`;
+  }
+
+  /* Explicación de un paso del camino (canal verbal que acompaña al dibujo) */
+  function narrar(bits, k) {
+    const { filas } = codificar(bits);
+    if (k === 0) return `<b>Paso 0 · Punto de partida.</b> El registro está vacío: estado <b>a (00)</b>. Vas a leer <span class="mono">${bits}</span> de <b>izquierda a derecha</b>, un bit por columna del árbol.`;
+    const f = filas[k - 1], acum = filas.slice(0, k).map(x => x.out).join(' ');
+    const dir = f.u ? 'baja por la rama de <b class="r3-uno">abajo 1↓</b>' : 'sube por la rama de <b class="r3-cero">arriba 0↑</b>';
+    return `<b>Paso ${k} · Bit ${k} = ${f.u}.</b> Estás en <b>${NOMBRE[f.st]} (${f.st})</b> y entra un ${f.u}: ${dir}. ` +
+      `Encima de esa rama está la salida <b class="mono">${f.out}</b>. Llegas a <b>${NOMBRE[f.next]} (${f.next})</b>: el ${f.u} entra por la izquierda del registro y el bit de la derecha sale ` +
+      `(<span class="mono">${f.u}·${f.st}</span> → <span class="mono">${f.next}</span>).<br>Salida acumulada: <b class="mono">${acum}</b>` +
+      (k === filas.length ? ' ← <b>codeword final</b>.' : '');
+  }
+
+  /* Árbol con botones paso a paso: el dibujo y la explicación avanzan juntos */
+  function arbolPasos(el, bits, opts = {}) {
+    bits = soloBits(bits); let k = 0;
+    el.classList.add('r3-pasos');
+    el.innerHTML = `<div class="r3-pbar"><button type="button" class="btn sec" data-p="0">⏮ Inicio</button><button type="button" class="btn sec" data-p="-1">◀ Anterior</button><button type="button" class="btn" data-p="1">Siguiente ▶</button><button type="button" class="btn sec" data-p="9">Todo</button><span class="r3-pk muted small"></span></div><p class="r3-narr" aria-live="polite"></p><figure class="r3-pfig"></figure>`;
+    const pintar = () => {
+      el.querySelector('.r3-pfig').innerHTML = arbolSVG(bits, { ...opts, hasta: k });
+      el.querySelector('.r3-narr').innerHTML = narrar(bits, k);
+      el.querySelector('.r3-pk').textContent = `paso ${k} de ${bits.length}`;
+      el.querySelector('[data-p="1"]').disabled = k >= bits.length;
+      el.querySelector('[data-p="-1"]').disabled = k <= 0;
+    };
+    el.querySelector('.r3-pbar').addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      const p = +b.dataset.p;
+      k = p === 0 ? 0 : p === 9 ? bits.length : Math.min(bits.length, Math.max(0, k + p));
+      pintar();
+    });
+    pintar();
   }
 
   function tablaCodificacion(bits) {
@@ -328,7 +363,12 @@
   }
 
   function pintarFiguras() {
-    $$('[data-arbol]').forEach(el => { el.innerHTML = arbolSVG(el.dataset.arbol, +el.dataset.niveles || 0); });
+    $$('[data-arbol]').forEach(el => {
+      const d = el.dataset, o = { niveles: +d.niveles || 0 };
+      if (d.mitad) o.mitad = +d.mitad;
+      if ('podado' in d) o.podado = true;
+      if ('pasos' in d) arbolPasos(el, d.arbol, o); else el.innerHTML = arbolSVG(d.arbol, o);
+    });
     $$('[data-arbtabla]').forEach(el => { el.innerHTML = tablaCodificacion(el.dataset.arbtabla); });
     $$('[data-ck]').forEach(el => { el.innerHTML = tablaChecksum(checksum(el.dataset.ck.split(/\s+/))); });
     $$('[data-crc]').forEach(el => {
@@ -349,7 +389,7 @@
       if (!okBits(v) || !soloBits(v)) throw new Error('Escribe solo 0 y 1.');
       if (soloBits(v).length > 16) throw new Error('Usa como máximo 16 bits.');
       const b = soloBits(v);
-      return tablaCodificacion(b) + `<figure>${arbolSVG(b)}<figcaption>${b.length <= 5 ? 'Árbol completo de ' + b.length + ' niveles' : 'Árbol podado (más de 5 bits): solo el camino y la rama alternativa de cada paso'}. En azul el camino de la entrada ${b}.</figcaption></figure>`;
+      return b;
     };
     // Checksum
     const ck = () => {
@@ -374,14 +414,24 @@
       if (hx) return tagHTML(leerTag(hx)) + '<p class="small muted">Decodificado desde el hex escrito.</p>';
       return tagHTML(tag8021q($('#tagPcp').value, $('#tagDei').value, $('#tagVid').value));
     };
-    $('#arbGo').addEventListener('click', () => run('#arbOut', arb));
+    // árbol del laboratorio: paso a paso + tabla (podado si la entrada pasa de 5 bits)
+    const arbLab = () => {
+      const out = $('#arbOut');
+      try {
+        const b = arb();
+        out.innerHTML = '<div class="r3-arblab"></div><div class="r3-arbtab"></div>';
+        arbolPasos(out.querySelector('.r3-arblab'), b, { podado: b.length > 5 });
+        out.querySelector('.r3-arbtab').innerHTML = tablaCodificacion(b);
+      } catch (e) { out.innerHTML = `<p class="errmsg">${esc(e.message)}</p>`; }
+    };
+    $('#arbGo').addEventListener('click', arbLab);
     $('#ckGo').addEventListener('click', () => run('#ckOut', ck));
     $('#crcGo').addEventListener('click', () => run('#crcOut', cr));
     $('#tagGo').addEventListener('click', () => run('#tagOut', tg));
-    $('#arbIn').addEventListener('keydown', e => { if (e.key === 'Enter') run('#arbOut', arb); });
+    $('#arbIn').addEventListener('keydown', e => { if (e.key === 'Enter') arbLab(); });
     ['#crcM', '#crcG', '#crcRx'].forEach(s => $(s).addEventListener('keydown', e => { if (e.key === 'Enter') run('#crcOut', cr); }));
     ['#tagVid', '#tagHex'].forEach(s => $(s).addEventListener('keydown', e => { if (e.key === 'Enter') run('#tagOut', tg); }));
-    run('#arbOut', arb); run('#ckOut', ck); run('#crcOut', cr); run('#tagOut', tg);
+    arbLab(); run('#ckOut', ck); run('#crcOut', cr); run('#tagOut', tg);
     simulador();
   }
 

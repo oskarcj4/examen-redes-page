@@ -737,20 +737,43 @@ pre.code.tpl{max-height:520px;overflow:auto}
 @media print{#labApp,#plantillaApp,#fetchApp,#matrizApp,#diagApp{display:none!important}}
 
 /* ===== Guía Redes I · Examen final ===== */
-/* Diagrama de árbol (lo genera js/redes3.js) */
-svg.arbol{display:block;max-width:none;margin:0 auto;font-size:12px}
+/* Diagrama de árbol (lo genera js/redes3.js) · azul = entrada 0 (arriba), rojo = entrada 1 (abajo), como la hoja */
+svg.arbol{display:block;max-width:none;margin:0 auto;font-size:13px}
 svg.arbol text{fill:var(--text)}
-svg.arbol .ar-e{fill:none;stroke:var(--text-2);stroke-width:1.3}
-svg.arbol .ar-e.one{stroke-dasharray:5 3}
-svg.arbol .ar-e.alt{opacity:.45}
-svg.arbol .ar-e.on{stroke:var(--accent);stroke-width:3;opacity:1}
-svg.arbol .ar-l{font-family:var(--mono);fill:var(--text-2)}
-svg.arbol .ar-l.on{fill:var(--accent);font-weight:700}
-svg.arbol .ar-s{font-weight:700;text-anchor:end;fill:var(--par);font-size:11px}
-svg.arbol .ar-s.on{fill:var(--accent)}
-svg.arbol .ar-t{font:600 11px var(--mono);fill:var(--text-2);text-anchor:middle}
-svg.arbol .ar-n{fill:var(--accent)}
-svg.arbol .ar-g text{fill:var(--text-2);font-size:11px}
+svg.arbol .ar-e{fill:none;stroke-width:1.6}
+svg.arbol .ar-e.zero{stroke:var(--accent)}
+svg.arbol .ar-e.one{stroke:var(--err);stroke-dasharray:6 3}
+svg.arbol .ar-e.dim{opacity:.32}
+svg.arbol .ar-e.on{stroke-width:3.4;opacity:1}
+svg.arbol .ar-m{font:700 11px var(--mono)}
+svg.arbol .ar-m.zero{fill:var(--accent)} svg.arbol .ar-m.one{fill:var(--err)}
+svg.arbol .ar-m.dim{opacity:.35}
+svg.arbol .ar-l{font:700 13px var(--mono);fill:var(--text)}
+svg.arbol .ar-l.dim{fill:var(--text-2);font-weight:500;opacity:.7}
+svg.arbol .ar-l.on{fill:var(--text)}
+svg.arbol .ar-pill{fill:var(--warn-soft);stroke:var(--par);stroke-width:1}
+svg.arbol .ar-s{font-weight:700;font-style:italic;fill:var(--par);font-size:12.5px}
+svg.arbol .ar-s.dim{opacity:.45}
+svg.arbol .ar-s.on{fill:var(--text)}
+svg.arbol .ar-r{font:500 10.5px var(--mono);font-style:normal;fill:var(--text-2)}
+svg.arbol .ar-t{font:600 11.5px var(--font);fill:var(--text-2)}
+svg.arbol .ar-t.on{fill:var(--accent);font-weight:800}
+svg.arbol .ar-n{fill:var(--text)}
+svg.arbol .ar-g{fill:var(--text-2);font-size:11px}
+svg.r3-anat .r3-call path{stroke:var(--text-2);stroke-width:1;fill:none;stroke-dasharray:3 3}
+svg.r3-anat .r3-call text{fill:var(--text-2);font-size:12.5px}
+.r3-pasos{margin:14px 0}
+.r3-pbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:10px}
+.r3-pbar .btn{min-height:40px;padding:8px 14px;font-size:14px}
+.r3-pbar .btn:disabled{opacity:.45;cursor:default}
+.r3-narr{background:var(--surface);border-left:4px solid var(--accent);border-radius:var(--r-s);padding:12px 16px;margin:0 0 10px;box-shadow:var(--shadow);min-height:72px}
+.r3-pfig{margin-top:0}
+.r3-cero{color:var(--accent)} .r3-uno{color:var(--err)}
+/* Enlaces a temas del parcial anterior */
+.r3-prev{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;font-size:14px;background:var(--surface-2);border-radius:var(--r-s);padding:10px 14px;margin:6px 0 16px}
+.r3-prev span{font:700 11.5px var(--font);letter-spacing:.04em;text-transform:uppercase;color:var(--text-2)}
+.r3-prev a{color:var(--accent);text-decoration:none;font-weight:600}
+.r3-prev a:hover{text-decoration:underline}
 /* Diagrama de estado estático */
 svg.r3-state{display:block;width:100%;max-width:640px;height:auto;margin:0 auto;font-size:14px}
 svg.r3-state text{fill:var(--text)}
