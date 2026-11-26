@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Arquitectura II · Examen final</title>
+<meta name="description" content="Guía del examen final de Arquitectura de Computadoras II: interfaz de E/S, DMA (8237), video en el computador, mouse con INT 33h y los Retos 1 y 2. Con laboratorio interactivo del mouse.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" type="image/svg+xml" href="../../img/logo.svg">
+<link rel="stylesheet" href="../../css/styles.css">
+</head>
+<body data-exam="arquitectura-2/final" data-store="arqui2-final-done">
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="Abrir índice" aria-expanded="false" aria-controls="side">
+    <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
+  <a class="back-btn" href="../../index.html" aria-label="Volver a todos los exámenes">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg><span>Exámenes</span>
+  </a>
+  <div class="brand">Arquitectura de Computadoras II <span>· Guía Examen final</span></div>
+  <div class="spacer"></div>
+  <div class="progress-pill" id="progress" aria-live="polite">0 de 0 repasados</div>
+</header>
+<div class="scrim" id="scrim"></div>
+<div class="layout">
+<nav class="side" id="side" aria-label="Índice">
+  <a class="side-back" href="../../index.html"><span class="n">←</span>Todos los exámenes</a>
+  <h4>Inicio</h4>
+  <a href="#inicio"><span class="n">00</span>Cómo usar esta guía</a>
+  <a href="#hoja"><span class="n">★</span>Hoja de referencia rápida</a>
+  <h4>Interfaz de E/S</h4>
+  <a href="#io-basica" data-sec="e1"><span class="n">E1</span>Interfaz básica y puertos<span class="done"></span></a>
+  <a href="#io-unidades" data-sec="e2"><span class="n">E2</span>Periféricos y unidades de E/S<span class="done"></span></a>
+  <a href="#io-prog" data-sec="e3"><span class="n">E3</span>Interfaces programables, PLD y PPI<span class="done"></span></a>
+  <h4>DMA</h4>
+  <a href="#dma-basico" data-sec="d1"><span class="n">D1</span>Operación básica del DMA<span class="done"></span></a>
+  <a href="#dma-8237" data-sec="d2"><span class="n">D2</span>El controlador 8237<span class="done"></span></a>
+  <a href="#dma-bus" data-sec="d3"><span class="n">D3</span>Bus compartido y árbitro 8289<span class="done"></span></a>
+  <a href="#dma-lab" data-sec="d4"><span class="n">D4</span>Laboratorio de DMA<span class="done"></span></a>
+  <h4>Video</h4>
+  <a href="#video-senal" data-sec="v1"><span class="n">V1</span>Señal y monitores<span class="done"></span></a>
+  <a href="#video-formatos" data-sec="v2"><span class="n">V2</span>Estándares, formatos y RAM<span class="done"></span></a>
+  <a href="#video-modos" data-sec="v3"><span class="n">V3</span>Modos de video (INT 10h)<span class="done"></span></a>
+  <h4>Mouse (INT 33h)</h4>
+  <a href="#mouse-int" data-sec="m1"><span class="n">M1</span>Funciones de INT 33h<span class="done"></span></a>
+  <a href="#mouse-coord" data-sec="m2"><span class="n">M2</span>Coordenadas<span class="done"></span></a>
+  <a href="#usomouse" data-sec="m3"><span class="n">M3</span>usomouse.asm<span class="done"></span></a>
+  <a href="#modografico" data-sec="m4"><span class="n">M4</span>modografico.asm<span class="done"></span></a>
+  <h4>Retos</h4>
+  <a href="#reto1" data-sec="r1"><span class="n">R1</span>Reto 1: botones<span class="done"></span></a>
+  <a href="#reto2" data-sec="r2"><span class="n">R2</span>Reto 2: zona caliente<span class="done"></span></a>
+  <a href="#laboratorio" data-sec="lb"><span class="n">L</span>Laboratorio del mouse<span class="done"></span></a>
+  <h4>Práctica</h4>
+  <a href="#errores" data-sec="er"><span class="n">E</span>Errores típicos<span class="done"></span></a>
+  <a href="#quiz" data-sec="qz"><span class="n">Q</span>Preguntas directas<span class="done"></span></a>
+  <a href="#abiertas" data-sec="ab"><span class="n">A</span>Preguntas abiertas<span class="done"></span></a>
+</nav>
+<main id="main">
+
+<section id="inicio" class="hero">
+  <p class="eyebrow">Universidad Mariano Gálvez · Arquitectura de Computadoras II · Examen final</p>
+  <h1>Hablar con el mundo:<br>E/S, DMA, video y mouse.</h1>
+  <p class="lede">La guía cubre solo el material entregado para el final: la presentación de Interfaz de E/S, el documento de DMA (Inga. Vallejo), la presentación de Video en el computador, la práctica de Uso del mouse (INT 33h) con <code>usomouse.asm</code>, <code>modografico.asm</code> y los Retos 1 y 2. Incluye un laboratorio donde haces clic y ves qué devolvería <code>INT 33h</code>.</p>
+  <div class="grid g3 toc-grid">
+    <a class="card" href="#io-basica"><span class="n">BLOQUE 1</span><h4>Interfaz de E/S</h4><p>Puertos, IN/OUT, handshaking, periféricos, PLD vs PPI.</p></a>
+    <a class="card" href="#dma-basico"><span class="n">BLOQUE 2</span><h4>DMA y el 8237</h4><p>HOLD/HLDA, registros, modos, programación y bus compartido.</p></a>
+    <a class="card" href="#video-senal"><span class="n">BLOQUE 3</span><h4>Video</h4><p>Señal compuesta, RGB, CGA/EGA/VGA, formatos y modos del 8086.</p></a>
+    <a class="card" href="#mouse-int"><span class="n">BLOQUE 4</span><h4>Mouse y retos</h4><p>INT 33h, los dos programas del profe, Reto 1 y Reto 2 línea por línea.</p></a>
+    <a class="card" href="#laboratorio"><span class="n">LABORATORIO</span><h4>Simulador del mouse</h4><p>Clic izquierdo, derecho o ambos sobre una pantalla 80x25 y zona caliente.</p></a>
+    <a class="card" href="#quiz"><span class="n">PRÁCTICA</span><h4>Cuestionario</h4><p>49 preguntas directas y 11 abiertas con respuesta modelo.</p></a>
+  </div>
+  <div class="key warn"><b>Honestidad con el material</b>
+    <ul class="small">
+      <li>Lo que <b>no</b> dijo el material pero se infiere va con la insignia <span class="badge ded">deducido</span>.</li>
+      <li>Muchas figuras del documento de DMA (registros del 8237, tablas de puertos) son imágenes y no vienen en el texto: lo que se sabe de ellas se marca como deducido.</li>
+      <li>La presentación de E/S <b>no</b> desarrolla E/S programada, por interrupciones ni DMA como métodos comparados: solo menciona interrupciones y DMA por separado. La comparación de esta guía es deducida.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="hoja" class="topic">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Para repasar 5 minutos antes</p><h2>Hoja de referencia rápida</h2></div></div>
+  <div class="grid g2">
+    <div class="card tile"><span class="tag">INT 33h (MOUSE)</span>
+      <ul class="small">
+        <li><b>AX=0000h</b> inicializa (AX=0: no hay mouse)</li>
+        <li><b>AX=0001h</b> muestra el puntero · <b>AX=0002h</b> lo oculta</li>
+        <li><b>AX=0003h</b> lee: <b>BX</b> botones (bit0 izq, bit1 der), <b>CX</b> = X, <b>DX</b> = Y</li>
+        <li>Coordenadas 0-639 x 0-199; modo 13h: x = CX/2 (<code>SHR CX,1</code>)</li>
+      </ul></div>
+    <div class="card tile"><span class="tag">RETOS</span>
+      <ul class="small">
+        <li><b>Reto 1:</b> <code>CMP BX,3</code> salir · <code>1</code> → I · <code>2</code> → D · anti-rebote</li>
+        <li><b>Reto 2:</b> clic izq. con <code>CX ≤ 40</code> y <code>DX ≤ 10</code> (JA) → salir; si no, I</li>
+        <li>Ocultar puntero → imprimir → mostrar puntero</li>
+      </ul></div>
+    <div class="card tile"><span class="tag">DMA</span>
+      <ul class="small">
+        <li><b>HOLD</b> solicita, <b>HLDA</b> reconoce; buses en alta impedancia</li>
+        <li>8237: 4 canales, 64 KB, reloj hasta 5 MHz, hasta 1.6 Mbps</li>
+        <li>CWCR = bytes − 1 · CAR dirección · BA/BWC recarga</li>
+        <li>Modos: demanda, dato sencillo, bloque, cascada</li>
+        <li>4 pasos: limpiar P/U, deshabilitar canal, dirección, cuenta</li>
+      </ul></div>
+    <div class="card tile"><span class="tag">VIDEO</span>
+      <ul class="small">
+        <li>Pulso de línea · pulso de trama · color burst</li>
+        <li>CGA/EGA: 8 colores + intensidad = 16 · VGA: 256 de 64 000</li>
+        <li>VGA 640x480 · SVGA 800x600 · XGA 1024x768 · HD 1920x1080</li>
+        <li>INT 10h: AX=0003h texto 80x25 · AX=0013h gráfico 320x200 · AH=0Ch píxel</li>
+      </ul></div>
+  </div>
+</section>
+
+<!-- ======================= E1 ======================= -->
+<section id="io-basica" class="topic" data-sec="e1">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Bloque 1 · Interfaz de E/S</p><h2>E1 · Interfaz básica y puertos</h2></div><button class="mark-btn" data-mark="e1" aria-pressed="false">Marcar como repasado</button></div>
+  <p>Un microprocesador se comunica con el mundo exterior mediante <b>entradas y salidas (E/S)</b>, los buses del sistema, los dispositivos periféricos, las interrupciones, el sistema operativo y los programas de aplicación.</p>
+  <figure>
+    <svg class="dg wide" viewBox="0 0 760 210" role="img" aria-label="Interfaz básica de E/S: microprocesador, buffer de E/S, línea de datos y dispositivo, con direcciones y control">
+      <rect class="nd-m" x="30" y="50" width="170" height="90" rx="8"/><text class="c b" x="115" y="90">Microprocesador</text><text class="c xs mut" x="115" y="110">IN / OUT</text>
+      <rect class="nd-r" x="300" y="50" width="150" height="90" rx="8"/><text class="c b" x="375" y="90">Buffer de E/S</text><text class="c xs mut" x="375" y="110">puerto con dirección</text>
+      <rect class="nd-v" x="550" y="50" width="180" height="90" rx="8"/><text class="c b" x="640" y="90">Dispositivo</text><text class="c xs mut" x="640" y="110">reconoce su dirección</text>
+      <line class="ar acc" x1="200" y1="80" x2="296" y2="80"/><polygon class="ah" points="300,80 290,75 290,85"/>
+      <line class="ar acc" x1="450" y1="80" x2="546" y2="80"/><polygon class="ah" points="550,80 540,75 540,85"/>
+      <text class="c xs mono" x="250" y="70">dirección</text><text class="c xs mono" x="500" y="70">línea de datos</text>
+      <line class="ar d" x1="200" y1="118" x2="296" y2="118"/><text class="c xs mono" x="250" y="136">control</text>
+      <line class="ar d" x1="450" y1="118" x2="546" y2="118"/><text class="c xs mono" x="500" y="136">control E/S</text>
+      <text class="c sm mut" x="380" y="185">Handshaking: confirmaciones para no perder, repetir ni corromper datos</text>
+    </svg>
+    <figcaption><b>Interfaz básica de E/S</b> según la presentación. La figura es un esquema propio del contenido textual.</figcaption>
+  </figure>
+  <div class="grid g2">
+    <div class="card tile"><span class="tag">PUERTOS</span><p class="small">Registros internos que leen/escriben datos de/hacia dispositivos externos. Cada uno tiene una <b>dirección única</b>; el micro accede escribiendo/leyendo esa dirección.</p></div>
+    <div class="card tile"><span class="tag">IN y OUT</span><p class="small">Instrucciones especiales de E/S: <code>IN</code> (entrada) y <code>OUT</code> (salida), indicando el puerto y los datos.</p></div>
+    <div class="card tile"><span class="tag">BUFFER Y LÍNEA DE DATOS</span><p class="small">Los datos pasan por un registro interno (<b>buffer de E/S</b>) y la <b>línea de datos</b> los lleva realmente al dispositivo.</p></div>
+    <div class="card tile"><span class="tag">CONTROL DE E/S</span><p class="small">Líneas de control indican si el dato es de entrada o salida, comandando el flujo en el sentido correcto.</p></div>
+  </div>
+  <div class="key"><b>Handshaking</b><p>Asegura que no haya pérdida, repetición ni corrupción de datos entre ambas partes. Es fundamental en interfaces síncronas y de baja capa.</p></div>
+  <h3>Decodificación de puertos</h3>
+  <p>Los dispositivos (memorias, timers, puertos paralelos) reconocen su dirección única y responden a la operación de E/S correspondiente. La presentación ilustra <b>puertos de 8 bits</b>, <b>puertos de 16 bits</b> y <b>puertos anchos</b> (<i>wide ports</i>) con figuras que no vienen en el texto.</p>
+  <h3>Mapeada vs aislada, programada vs interrupciones vs DMA <span class="badge ded">deducido</span></h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Idea</th><th>Qué dice el material</th><th>Qué se infiere</th></tr></thead>
+    <tbody>
+      <tr><td>Mapa de E/S</td><td>“Los puertos de interfaz se mapean a direcciones de memoria/E/S accesibles”.</td><td>Hay dos formas: puertos en espacio de E/S (IN/OUT) o mapeados en memoria (MOV).</td></tr>
+      <tr><td>Interrupciones</td><td>Algunas interfaces generan una interrupción al final de la transmisión para avisar al software.</td><td>La CPU no espera en un ciclo: atiende cuando el dispositivo avisa.</td></tr>
+      <tr><td>DMA</td><td>Tema aparte (documento de DMA).</td><td>Los datos pasan dispositivo ⇄ memoria sin que la CPU copie cada byte.</td></tr>
+    </tbody></table></div>
+</section>
+
+<!-- ======================= E2 ======================= -->
+<section id="io-unidades" class="topic" data-sec="e2">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Bloque 1 · Interfaz de E/S</p><h2>E2 · Periféricos y unidades de E/S</h2></div><button class="mark-btn" data-mark="e2" aria-pressed="false">Marcar como repasado</button></div>
+  <h3>Periféricos que se conectan al microprocesador</h3>
+  <div class="chips"><span class="chip">Pantallas</span><span class="chip">Audio</span><span class="chip">Teclados</span><span class="chip">USB</span><span class="chip">Mouse</span><span class="chip">Tarjetas de red</span><span class="chip">Almacenamiento</span><span class="chip">Unidades adicionales</span><span class="chip">Impresoras</span><span class="chip">Sensores</span><span class="chip">Escáneres</span><span class="chip">Actuadores</span><span class="chip">Cámaras</span></div>
+  <h3>Unidades de procesamiento de E/S</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Unidad</th><th>Función</th></tr></thead>
+    <tbody>
+      <tr><td><b>MMU</b></td><td>Traduce direcciones virtuales de memoria a físicas (segmentación y paginación).</td></tr>
+      <tr><td><b>IOMMU</b></td><td>Como la MMU pero para E/S; <b>aísla</b> los dispositivos del espacio de direcciones del sistema.</td></tr>
+      <tr><td><b>Caché</b></td><td>Cachés de instrucciones y datos en la propia CPU para acelerar el acceso a memoria.</td></tr>
+      <tr><td><b>GPU</b></td><td>Procesador dedicado a renderizado y cálculos 2D/3D, con caché y memoria gráfica.</td></tr>
+      <tr><td><b>NIC</b></td><td>Tarjeta de red: encapsulación, demultiplexado y procesamiento de paquetes; buffer de recepción.</td></tr>
+      <tr><td><b>Controlador de discos</b></td><td>Interfaz con discos: comandos de E/S, caché del controlador, interrupciones.</td></tr>
+      <tr><td><b>Controlador de audio / video</b></td><td>Audio: señales, compresión, efectos, volumen. Video: decodifica, escala y reproduce.</td></tr>
+      <tr><td><b>USB, GPIO, PCIe…</b></td><td>Controladores para otras interfaces programables.</td></tr>
+    </tbody></table></div>
+  <div class="key"><b>Ventajas de las unidades adicionales</b><p class="small">Mejoran el rendimiento, agregan funcionalidad avanzada, permiten múltiples tareas, escalabilidad, optimizan recursos, reducen cuellos de botella y dan compatibilidad futura: versatilidad y longevidad al sistema.</p></div>
+</section>
+
+<!-- ======================= E3 ======================= -->
+<section id="io-prog" class="topic" data-sec="e3">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Bloque 1 · Interfaz de E/S</p><h2>E3 · Interfaces programables, PLD y PPI</h2></div><button class="mark-btn" data-mark="e3" aria-pressed="false">Marcar como repasado</button></div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Interfaz</th><th>Qué es</th></tr></thead>
+    <tbody>
+      <tr><td>Puerto paralelo (LPT)</td><td>Todos los bits a la vez; impresoras. Ya casi no se usa.</td></tr>
+      <tr><td>Serial (COM / RS-232)</td><td>Una sola línea de datos; muy usado antes del USB.</td></tr>
+      <tr><td>USB</td><td>Estándar más popular, plug-and-play.</td></tr>
+      <tr><td>PS/2</td><td>Teclados y mouse antes del USB.</td></tr>
+      <tr><td>GPIO</td><td>Digital configurable como entrada o salida por programación (microcontroladores).</td></tr>
+      <tr><td>I2C</td><td>Bus síncrono de baja velocidad y baja complejidad; sensores.</td></tr>
+      <tr><td>SPI</td><td>Bus síncrono de alta velocidad entre microcontroladores y dispositivos.</td></tr>
+      <tr><td>Ethernet / WiFi</td><td>Red LAN (RJ45, TCP/IP) / inalámbrica (802.11).</td></tr>
+    </tbody></table></div>
+  <h3>¿Cómo se configuran?</h3>
+  <ul class="small"><li>Registros de propósito especial (p. ej. baudios de una UART).</li><li>Mapa de puertos de E/S/memoria.</li><li>Llamadas al sistema (API) que ocultan el hardware.</li><li>Programación de registros (SPI: reloj, datos, configuración).</li><li>Manejo de interrupciones al final de una transmisión.</li><li>Protocolos (I2C), control por software y <b>drivers</b>.</li></ul>
+  <div class="key"><b>API</b><p class="small">Conjunto de funciones y procedimientos que definen las interacciones entre componentes de software; da abstracción (oculta detalles internos) y facilita integración y reutilización. Existen a nivel de sistema operativo, bases de datos, lenguajes y sitios web.</p></div>
+  <h3>PLD vs PPI</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th></th><th>PLD (Programmable Logic Device)</th><th>PPI (Programmable Peripheral Interface)</th></tr></thead>
+    <tbody>
+      <tr><td>Qué es</td><td>Dispositivo lógico genérico; implementa cualquier diseño</td><td>Interfaz de E/S específica (UART, SPI, USB…)</td></tr>
+      <tr><td>Configuración</td><td>Requiere diseñar y programar circuitos lógicos</td><td>Solo se programan parámetros</td></tr>
+      <tr><td>Complejidad</td><td>Alta</td><td>Baja: ya trae la interfaz</td></tr>
+      <tr><td>Flexibilidad</td><td>Total, reconfigurable</td><td>Baja: limitada al chip</td></tr>
+      <tr><td>Producción</td><td>Útil para pequeñas cantidades</td><td>Más eficiente en grandes volúmenes</td></tr>
+      <tr><td>Documentación</td><td>Propia del diseño</td><td>Estándar del fabricante</td></tr>
+      <tr><td>Mejor cuando…</td><td>Interfaz personalizada, no estándar o cambiante; recursos restringidos</td><td>Interfaz estándar; rapidez de desarrollo y compatibilidad</td></tr>
+    </tbody></table></div>
+  <p class="small"><b>PLD como decodificador de puertos:</b> una matriz lógica programable mapea rangos de direcciones de E/S a puertos físicos, activa la salida del puerto cuando detecta la dirección, reduce cableado y se puede reprogramar sin cambiar hardware. <span class="badge ded">nota</span> La tabla del material trae columnas mezcladas; aquí se ordenó según el texto de las diapositivas anteriores.</p>
+</section>
+
+<!-- ======================= D1 ======================= -->
+<section id="dma-basico" class="topic" data-sec="d1">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Bloque 2 · DMA</p><h2>D1 · Operación básica del DMA</h2></div><button class="mark-btn" data-mark="d1" aria-pressed="false">Marcar como repasado</button></div>
+  <ul>
+    <li><b>HOLD</b> (entrada del micro) solicita una acción de DMA; <b>HLDA</b> (salida) la reconoce.</li>
+    <li>Con HOLD en alto el micro suspende el programa y deja los buses de direcciones, datos y control en <b>alta impedancia</b>: parece retirado, y los dispositivos de E/S u otros micros usan los buses y acceden directo a la memoria.</li>
+    <li>INTR y NMI actúan al <b>final</b> de una instrucción; HOLD tiene efecto a <b>media instrucción</b>. Solo <b>RESET</b> tiene prioridad sobre HOLD.</li>
+    <li><b>Lectura de DMA</b>: memoria → dispositivo de E/S. <b>Escritura de DMA</b>: dispositivo → memoria. Se necesitan señales de control de memoria y de E/S independientes porque ambas operan a la vez.</li>
+    <li>En lectura de DMA se activan al mismo tiempo <b>MEMR</b> e <b>IOW</b>; en escritura, <b>IOR</b> y <b>MEMW</b>. <span class="badge ded">deducido</span> (en el texto los nombres de las señales se perdieron como “????”).</li>
+    <li>La velocidad depende de la memoria o del controlador DMA; normalmente el DMA reduce la velocidad del sistema durante la transferencia.</li>
+  </ul>
+</section>
+
+<!-- ======================= D2 ======================= -->
+<section id="dma-8237" class="topic" data-sec="d2">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Bloque 2 · DMA</p><h2>D2 · El controlador 8237</h2></div><button class="mark-btn" data-mark="d2" aria-pressed="false">Marcar como repasado</button></div>
+  <p>Es en realidad un microprocesador de propósito específico: da las señales de control y direccionamiento durante la transferencia. Compatible con 8086/8088, <b>hasta 1.6 Mbps</b>, <b>cuatro canales</b> que direccionan secciones de <b>64 KB</b> con una sola programación.</p>
+  <h3>Terminales</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Terminal</th><th>Función</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">CLK</td><td>Reloj de hasta 5 MHz</td></tr>
+      <tr><td class="mono">CS</td><td>Selección de dispositivo (salida de un decodificador)</td></tr>
+      <tr><td class="mono">RESET</td><td>Inicializa registros de comando, estado, solicitud y temporales</td></tr>
+      <tr><td class="mono">READY</td><td>En 0 mete estados de espera (componentes lentos)</td></tr>
+      <tr><td class="mono">HRQ / HLDA</td><td>HRQ se conecta a HOLD del micro; HLDA es el reconocimiento</td></tr>
+      <tr><td class="mono">DREQ3-0</td><td>Solicitudes de DMA, una por canal</td></tr>
+      <tr><td class="mono">DACK3-0</td><td>Reconocimiento de canal (programables; van al dispositivo)</td></tr>
+      <tr><td class="mono">DB7-0</td><td>Bus de datos</td></tr>
+      <tr><td class="mono">IOR / IOW</td><td>Lectura / escritura de E/S (bidireccionales)</td></tr>
+      <tr><td class="mono">MEMR / MEMW</td><td>Lectura / escritura de memoria durante la transferencia</td></tr>
+      <tr><td class="mono">EOP</td><td>Fin de proceso (bidireccional): termina la transferencia</td></tr>
+      <tr><td class="mono">A3-A0 / A7-A4</td><td>Seleccionan registro al programar y dan la parte baja / alta de la dirección</td></tr>
+      <tr><td class="mono">AEN / ADSTB</td><td>AEN habilita el registro de dirección; ADSTB escribe A15-A8 en un registro</td></tr>
+    </tbody></table></div>
+  <h3>Registros internos</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Registro</th><th>Para qué</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">CAR</td><td>Dirección actual (16 bits), uno por canal</td></tr>
+      <tr><td class="mono">CWCR</td><td>Cuenta actual de palabras: para 8 bytes lleva <b>7</b></td></tr>
+      <tr><td class="mono">BA y BWC</td><td>Base de dirección y cuenta: recargan CAR y CWCR en la autoinicialización</td></tr>
+      <tr><td class="mono">CR (comando)</td><td>Bit 0 memoria-memoria (canales 0 y 1); bit 1 canal 0 mantiene dirección; bit 2 habilita/deshabilita; bit 3 sincronización normal/comprimida; bit 4 prioridad fija/rotatoria; bit 5 escritura extendida; bits 6-7 polaridades de DREQ y DACK</td></tr>
+      <tr><td class="mono">Modo</td><td>Por canal: bits 0-1 canal, 2-3 operación, 4 autoinicialización, 5 modo de dirección, 6-7 modo de operación</td></tr>
+      <tr><td class="mono">RR</td><td>Solicitud por software (útil en memoria-memoria)</td></tr>
+      <tr><td class="mono">MRSR / MSR</td><td>Máscara por canal / máscara de todos con un comando. Si la máscara está puesta, el canal está deshabilitado; RESET las pone todas</td></tr>
+      <tr><td class="mono">SR</td><td>Estado: bits TC (conteo terminal alcanzado) y bits de solicitud (DREQ activa)</td></tr>
+    </tbody></table></div>
+  <h3>Modos de operación (bits 6-7)</h3>
+  <div class="grid g2">
+    <div class="card tile"><span class="tag">DEMANDA</span><p class="small">Transfiere hasta que se aplique una señal externa o hasta que DREQ se inactive.</p></div>
+    <div class="card tile"><span class="tag">DATO SENCILLO</span><p class="small">Libera HOLD después de transferir un byte.</p></div>
+    <div class="card tile"><span class="tag">BLOQUE</span><p class="small">Transfiere automáticamente los bytes que indica el registro de cuenta.</p></div>
+    <div class="card tile"><span class="tag">CASCADA</span><p class="small">Cuando hay más de un 8237 en el sistema.</p></div>
+  </div>
+  <h3>Comandos de software y programación</h3>
+  <p>Tres comandos sin patrón de bits: basta una <b>salida al puerto correcto</b>. (1) <b>Limpiar el biestable primero/último (P/U)</b>: P/U=0 selecciona el byte bajo y P/U=1 el alto; cada acceso a dirección o cuenta lo invierte. (2) <b>Limpieza maestra</b>: igual que RESET, desactiva todos los canales. (3) <b>Limpiar el registro de máscara</b>: habilita los cuatro canales.</p>
+  <div class="key warn"><b>Cuatro pasos para programar el 8237</b>
+    <ol class="small"><li>Limpiar el biestable P/U.</li><li>Deshabilitar el canal.</li><li>Programar primero el LSB y luego el MSB de la <b>dirección</b>.</li><li>Programar el LSB y el MSB de la <b>cuenta</b>.</li></ol>
+    <p class="small">Después se programa el modo de operación y se activa el canal. Las direcciones de puerto vienen en las figuras 7 y 8 del documento (imágenes).</p></div>
+</section>
+
+<!-- ======================= D3 ======================= -->
+<section id="dma-bus" class="topic" data-sec="d3">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Bloque 2 · DMA</p><h2>D3 · Bus compartido y árbitro 8289</h2></div><button class="mark-btn" data-mark="d3" aria-pressed="false">Marcar como repasado</button></div>
+  <ul>
+    <li>En sistemas multiprocesador (distribuidos) cada micro accede a dos buses: el <b>local</b> (memoria y E/S propias, sin protocolo) y el <b>remoto o compartido</b> (accesible a todos).</li>
+    <li>El acceso al bus compartido lo controla un <b>árbitro</b> que da prioridad y deja pasar a uno a la vez. 8086/8088 usan el <b>8289</b>; el 80286 el 82289; 80386/80486 el 82389.</li>
+    <li><b>Maestro de bus</b>: cualquier dispositivo que pueda controlar un bus con memoria y E/S. El 8237 es un maestro de bus remoto; la diferencia con otro micro es que el micro ejecuta software variable y el DMA solo transfiere datos.</li>
+    <li>El 8289 tiene tres modos: <b>bus periférico de E/S</b>, <b>bus residente</b> y <b>bus único</b>.</li>
+    <li>Terminales mencionadas: BREQ (pide el bus), BUSY, BPRN/BPRO (prioridad), LOCK (con el prefijo LOCK nadie más accede), AEN (buses a alta impedancia), RESB y SYSB/RESB (compartido o local), S2-S0 (estado del 8288).</li>
+  </ul>
+</section>
+
+<!-- ======================= D4 ======================= -->
+<section id="dma-lab" class="topic" data-sec="d4">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Bloque 2 · Laboratorio</p><h2>D4 · Laboratorio de DMA</h2></div><button class="mark-btn" data-mark="d4" aria-pressed="false">Marcar como repasado</button></div>
+  <h3>Ciclo de una transferencia, paso a paso <span class="badge ded">deducido</span></h3>
+  <p class="small muted">El documento da las señales y su significado; el orden en que ocurren se arma a partir de ellas.</p>
+  <div id="dmaFig">
+    <figure>
+      <svg class="dg wide" viewBox="0 0 760 320" role="img" aria-label="Diagrama de DMA: microprocesador, 8237, dispositivo y memoria sobre un bus">
+        <rect class="nd-m" x="40" y="40" width="170" height="110" rx="8"/><text class="c b" x="125" y="88">Microprocesador</text><text class="c xs mono" x="125" y="110">HOLD · HLDA</text>
+        <rect class="nd-c" x="300" y="40" width="170" height="110" rx="8"/><text class="c b" x="385" y="88">8237</text><text class="c xs mono" x="385" y="110">HRQ · DREQ · DACK</text>
+        <rect class="nd-v" x="560" y="40" width="160" height="110" rx="8"/><text class="c b" x="640" y="88">Dispositivo E/S</text>
+        <rect class="nd-db" x="300" y="236" width="170" height="60" rx="8"/><text class="c b" x="385" y="272">Memoria</text>
+        <g class="sig" data-dsig="hrq"><line x1="300" y1="70" x2="216" y2="70"/><polygon points="210,70 220,65 220,75"/><text class="c xs mono" x="255" y="60">HRQ→HOLD</text></g>
+        <g class="sig" data-dsig="hlda"><line x1="210" y1="120" x2="294" y2="120"/><polygon points="300,120 290,115 290,125"/><text class="c xs mono" x="255" y="138">HLDA</text></g>
+        <g class="sig" data-dsig="dreq"><line x1="560" y1="70" x2="476" y2="70"/><polygon points="470,70 480,65 480,75"/><text class="c xs mono" x="515" y="60">DREQ</text></g>
+        <g class="sig" data-dsig="dack"><line x1="470" y1="120" x2="554" y2="120"/><polygon points="560,120 550,115 550,125"/><text class="c xs mono" x="515" y="138">DACK</text></g>
+        <g class="sig" data-dsig="eop"><text class="c xs mono" x="385" y="28">EOP / TC: cuenta terminal</text></g>
+        <g class="sig" data-dsig="bus"><rect x="40" y="196" width="680" height="8"/><line x1="125" y1="150" x2="125" y2="196"/><line x1="340" y1="150" x2="340" y2="196"/><text class="xs mono" x="50" y="188">bus de direcciones, datos y control</text></g>
+        <g class="sig" data-dsig="dato"><line x1="640" y1="150" x2="640" y2="196"/><line x1="430" y1="204" x2="430" y2="236"/><text class="c xs mono" x="560" y="224">datos: dispositivo ⇄ memoria</text></g>
+      </svg>
+      <figcaption>Se resalta lo que ocurre en cada paso.</figcaption>
+    </figure>
+    <div class="fin-ctrl"><button type="button" class="btn sec" data-dma="prev">← Anterior</button><button type="button" class="btn" data-dma="next">Siguiente →</button><span class="small mono" data-dma="n"></span></div>
+    <div class="key"><p data-dma="txt"></p></div>
+  </div>
+  <h3>Calculadora de cuenta (CWCR)</h3>
+  <div class="fin-calc" id="calcDma">
+    <label class="small">Bytes a transferir <input class="fin-in" type="number" min="1" max="65536" value="8" data-k="n"></label>
+    <p class="mono small" data-k="out"></p>
+  </div>
+  <h3>Armar el registro de modo <span class="badge ded">deducido</span></h3>
+  <p class="small muted">El documento dice qué bits son cada campo; los códigos binarios (lectura/escritura, modo) salen de la figura 5, que es una imagen, y se asumen los estándar del 8237A.</p>
+  <div class="fin-calc" id="modoDma">
+    <label class="small">Canal <select class="fin-in" data-m="canal"><option>0</option><option>1</option><option>2</option><option>3</option></select></label>
+    <label class="small">Operación <select class="fin-in" data-m="op"><option value="verificar">verificar</option><option value="escribir" selected>escritura (E/S → memoria)</option><option value="leer">lectura (memoria → E/S)</option></select></label>
+    <label class="small">Modo <select class="fin-in" data-m="modo"><option value="demanda">demanda</option><option value="sencillo" selected>dato sencillo</option><option value="bloque">bloque</option><option value="cascada">cascada</option></select></label>
+    <label class="small"><input type="checkbox" data-m="auto"> Autoinicialización</label>
+    <label class="small"><input type="checkbox" data-m="dec"> Decremento de dirección</label>
+    <p class="small">Bits 7-6 | 5 | 4 | 3-2 | 1-0 → <span data-m="bits"></span></p>
+    <p class="mono">Registro de modo = <b data-m="val"></b></p>
+  </div>
+</section>
+
+<!-- ======================= V1 ======================= -->
+<section id="video-senal" class="topic" data-sec="v1">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Bloque 3 · Video</p><h2>V1 · Señal de video y monitores</h2></div><button class="mark-btn" data-mark="v1" aria-pressed="false">Marcar como repasado</button></div>
+  <h3>Sincronización de la señal compuesta</h3>
+  <div class="grid g3">
+    <div class="card tile"><span class="tag">PULSO DE LÍNEA</span><p class="small">Inicio de cada línea de la imagen; sincroniza emisor y receptor a nivel de línea.</p></div>
+    <div class="card tile"><span class="tag">PULSO DE TRAMA</span><p class="small">Inicio de cada trama o campo; sincroniza a nivel de campo.</p></div>
+    <div class="card tile"><span class="tag">COLOR BURST</span><p class="small">Pulso estrecho de color de referencia al comienzo de cada línea con croma: sincroniza la fase del color e indica que la línea lleva croma (no solo luminancia).</p></div>
+  </div>
+  <p class="small"><b>Pedestal</b> (porche): tiempo en blanco entre el fin del pulso de sincronización horizontal y el primer píxel. Demasiado corto distorsiona la imagen; demasiado largo reduce la resolución horizontal efectiva.</p>
+  <h3>Tipos de monitor</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Tipo</th><th>Características</th></tr></thead>
+    <tbody>
+      <tr><td>Monocromo (CRT)</td><td>Cañón de electrones, pantalla fosforescente, circuito de deflexión y de sincronización. Solo luminancia. Entrada TTL; servía con CGA y EGA variando la sincronización horizontal.</td></tr>
+      <tr><td>Color RGB digital</td><td>Recibe R, G, B; cada primario encendido/apagado = 8 colores; con señal de intensidad 8 normales + 8 intensos. EGA recibe una segunda señal por color: 16 con más matices.</td></tr>
+      <tr><td>TV analógico RGB</td><td>Señales R, G, B separadas, 3 cañones independientes, sin circuitos de decodificación; imagen más pura, más caro, uso profesional.</td></tr>
+    </tbody></table></div>
+</section>
+
+<!-- ======================= V2 ======================= -->
+<section id="video-formatos" class="topic" data-sec="v2">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Bloque 3 · Video</p><h2>V2 · Estándares, formatos y RAM</h2></div><button class="mark-btn" data-mark="v2" aria-pressed="false">Marcar como repasado</button></div>
+  <div class="key"><b>VGA (Video Graphics Array)</b><p class="small">256 colores simultáneos en modo gráfico de una paleta de 64 000; resoluciones como 640x480; video analógico de mejor calidad que EGA; memoria gráfica dedicada separada de la RAM; compatible hacia atrás con CGA y EGA.</p></div>
+  <div class="tbl-wrap" id="tblFormatos"></div>
+  <div class="grid g2">
+    <div class="card tile"><span class="tag">FORMATOS DE VIDEO GENERAL</span><ul class="small"><li>NTSC (480i, América/Japón) · PAL/SECAM (576i)</li><li>720p, 1080i (entrelazado) / 1080p (progresivo)</li><li>2K 2048x1080 · 4K 3840x2160 · 8K 7680x4320</li><li>HDMI, DisplayPort, DVI</li></ul></div>
+    <div class="card tile"><span class="tag">HDMI</span><ul class="small"><li>Video y audio digitales en un cable; 4K y superiores; audio multicanal.</li><li>HDCP (protección) y control remoto de dispositivos.</li><li>DVI: predecesor digital de VGA, 1080p sin audio.</li></ul></div>
+  </div>
+  <div class="key warn"><b>Dos errores del material</b><ul class="small"><li>Dice que 4K tiene “el doble de píxeles que Full HD”, pero 3840x2160 es <b>cuatro veces</b> 1920x1080 (ver la columna de megapíxeles). 8K sí es cuatro veces 4K.</li><li>Dice que HDMI transmite “de manera inalámbrica”; HDMI es un conector y cable. En el examen conviene responder según la clase.</li></ul></div>
+  <h3>RAM y video</h3>
+  <p class="small">Más resolución = más datos en RAM; varios videos o edición, renderizado y transcodificación exigen más; HEVC pide más RAM que MPEG-2; con gráficos integrados la GPU comparte RAM; 8 GB mínimo recomendable, 16 GB o más en trabajo profesional. Adaptadores: HDMI→VGA pasivo (baja calidad, solo video), convertidor activo (audio y mayor calidad), tarjeta de video externa (más versátil).</p>
+</section>
+
+<!-- ======================= V3 ======================= -->
+<section id="video-modos" class="topic" data-sec="v3">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Bloque 3 · Video</p><h2>V3 · Modos de video del 8086 (INT 10h)</h2></div><button class="mark-btn" data-mark="v3" aria-pressed="false">Marcar como repasado</button></div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>INT 10h · AH =</th><th>Hace</th><th>Datos</th><th>Dónde sale</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">00h</td><td>Fija el modo de video</td><td>AL = 03h texto 80x25 (limpia); AL = 13h gráfico 320x200, 256 colores</td><td>modografico.asm, Reto 2</td></tr>
+      <tr><td class="mono">02h</td><td>Mueve el cursor de texto</td><td>DH = fila, DL = columna, BH = página</td><td>Reto 2</td></tr>
+      <tr><td class="mono">0Ch</td><td>Escribe un píxel gráfico</td><td>AL = color, BH = página, CX = columna, DX = fila</td><td>modografico.asm</td></tr>
+    </tbody></table></div>
+  <h3>Memoria de video <span class="badge ded">deducido</span></h3>
+  <p class="small">El material no da la fórmula, pero sale de la idea de “memoria gráfica dedicada”: bytes = ancho x alto x bits por píxel / 8. El modo 13h usa 8 bits por píxel (256 colores): 320 x 200 = 64 000 bytes. El modo texto 80x25 guarda 2 bytes por celda (carácter y atributo): 4 000 bytes.</p>
+  <div class="fin-calc" id="calcVideo">
+    <label class="small">Ancho <input class="fin-in" type="number" min="1" value="320" data-v="w"></label>
+    <label class="small">Alto <input class="fin-in" type="number" min="1" value="200" data-v="h"></label>
+    <label class="small">Bits/píxel <input class="fin-in" type="number" min="1" value="8" data-v="b"></label>
+    <div class="chips"><button type="button" class="chip" data-vp="320,200,8">Modo 13h</button><button type="button" class="chip" data-vp="640,480,8">VGA 256 colores</button><button type="button" class="chip" data-vp="1920,1080,32">Full HD 32 bits</button></div>
+    <p class="mono small" data-v="out"></p>
+  </div>
+</section>
+
+<!-- ======================= M1 ======================= -->
+<section id="mouse-int" class="topic" data-sec="m1">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Bloque 4 · Mouse</p><h2>M1 · Funciones de INT 33h</h2></div><button class="mark-btn" data-mark="m1" aria-pressed="false">Marcar como repasado</button></div>
+  <p>El número de función va en <b>AX</b> (no solo en AH).</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>AX =</th><th>Función</th><th>Devuelve</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">0000h</td><td>Inicializar / detectar el mouse</td><td>AX = 0 si no hay hardware (con mouse, FFFFh y BX = 2 <span class="badge ded">deducido</span>)</td></tr>
+      <tr><td class="mono">0001h</td><td>Mostrar el puntero</td><td>—</td></tr>
+      <tr><td class="mono">0002h</td><td>Ocultar el puntero</td><td>—</td></tr>
+      <tr><td class="mono">0003h</td><td>Leer estado y posición</td><td><b>BX</b> botones · <b>CX</b> X · <b>DX</b> Y</td></tr>
+    </tbody></table></div>
+  <figure>
+    <svg class="dg wide" viewBox="0 0 760 190" role="img" aria-label="Bits de BX: bit 0 izquierdo, bit 1 derecho, bit 2 central">
+      <rect class="nd" x="40" y="40" width="330" height="48"/><text class="c mono b" x="205" y="70">bits 15 … 3 = 0</text>
+      <rect class="nd-x" x="370" y="40" width="110" height="48"/><text class="c mono b" x="425" y="70">bit 2</text><text class="c xs mut" x="425" y="108">central <tspan class="mono">(deducido)</tspan></text>
+      <rect class="nd-v" x="480" y="40" width="110" height="48"/><text class="c mono b" x="535" y="70">bit 1</text><text class="c xs mut" x="535" y="108">derecho</text>
+      <rect class="nd-c" x="590" y="40" width="110" height="48"/><text class="c mono b" x="645" y="70">bit 0</text><text class="c xs mut" x="645" y="108">izquierdo</text>
+      <text class="mono sm" x="40" y="150">BX = 0 nada  ·  1 solo izq.  ·  2 solo der.  ·  3 ambos</text>
+      <text class="mono sm" x="40" y="172">TEST BX,1 → bit 0 (aunque haya otros)  ·  CMP BX,1 → exactamente 1</text>
+    </svg>
+    <figcaption><b>Estado de botones en BX.</b></figcaption>
+  </figure>
+  <div class="key"><b>Patrón de uso</b><p class="small">Inicializar (0000h) → mostrar (0001h) → ciclo de lectura (0003h) → ocultar (0002h) → terminar. El estado es una foto del instante: se sondea en un ciclo. Antes de imprimir o dibujar se oculta el puntero y después se vuelve a mostrar.</p></div>
+  <div class="grid g2"><div class="card tile"><span class="tag">CALCULADORA DE LECTURA</span>
+    <div class="fin-calc" id="calcCoord"><label class="small">CX <input class="fin-in" type="number" min="0" max="639" value="32" data-c="cx"></label> <label class="small">DX <input class="fin-in" type="number" min="0" max="199" value="8" data-c="dx"></label><ul class="small" data-c="out"></ul></div></div></div>
+</section>
+
+<!-- ======================= M2 ======================= -->
+<section id="mouse-coord" class="topic" data-sec="m2">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Bloque 4 · Mouse</p><h2>M2 · Coordenadas</h2></div><button class="mark-btn" data-mark="m2" aria-pressed="false">Marcar como repasado</button></div>
+  <p>El material dice que CX va de <b>0 a 639</b> y DX de <b>0 a 199</b> (comentario de <code>modografico.asm</code>), y por eso en modo 13h (320 columnas) se divide CX entre 2.</p>
+  <div class="key warn"><b>Detalle del Reto 2 <span class="badge ded">deducido</span></b><p class="small">El material <b>no</b> dice cómo se comportan las coordenadas en modo texto. Lo habitual en los drivers: en modo texto 80x25 las coordenadas también son <b>píxeles virtuales 640x200</b>, con celdas de 8x8 (columna = CX/8, fila = DX/8), entregadas en múltiplos de 8. Entonces la zona <code>CX ≤ 40, DX ≤ 10</code> cubre aproximadamente las <b>columnas 0-5 y filas 0-1</b>, no solo los tres caracteres de “[X]” (columnas 0-2, fila 0). Compruébalo en el laboratorio. Si el profe dice otra cosa, manda el profe.</p></div>
+  <figure>
+    <svg class="dg wide" viewBox="0 0 760 250" role="img" aria-label="Pantalla virtual 640x200 con la zona caliente y ampliación de la esquina">
+      <rect class="cls" x="20" y="30" width="320" height="100"/>
+      <rect class="nd-m" x="20" y="30" width="21" height="6"/>
+      <text class="xs mut" x="20" y="22">pantalla virtual 640 x 200 (escala 1:2)</text>
+      <text class="xs mono" x="20" y="150">80 columnas x 25 filas, celda 8x8</text>
+      <text class="xs mono" x="20" y="168">columna = CX / 8 · fila = DX / 8</text>
+      <text class="xs mono" x="20" y="186">modo 13h: x = CX / 2 (0-319)</text>
+      <line class="ll" x1="41" y1="36" x2="390" y2="40"/><line class="ll" x1="20" y1="36" x2="390" y2="208"/>
+      <g class="mono">
+        <rect class="nd-m" x="390" y="40" width="280" height="112"/>
+        <rect class="cls" x="670" y="40" width="56" height="112"/>
+        <rect class="cls" x="390" y="152" width="336" height="56"/>
+      </g>
+      <g stroke="currentColor" opacity=".25"><line x1="446" y1="40" x2="446" y2="208"/><line x1="502" y1="40" x2="502" y2="208"/><line x1="558" y1="40" x2="558" y2="208"/><line x1="614" y1="40" x2="614" y2="208"/><line x1="670" y1="40" x2="670" y2="208"/><line x1="390" y1="96" x2="726" y2="96"/><line x1="390" y1="152" x2="726" y2="152"/></g>
+      <text class="mono b" x="400" y="76">[X]</text>
+      <text class="xs mono c" x="418" y="226">col 0</text><text class="xs mono c" x="698" y="226">col 5</text>
+      <text class="xs mono" x="732" y="72">fila 0</text><text class="xs mono" x="732" y="128">fila 1</text>
+      <text class="xs mut" x="390" y="244">ampliado: azul = celdas que tocan CX ≤ 40, DX ≤ 10 (columnas 0-5, filas 0-1)</text>
+    </svg>
+    <figcaption><b>Cuadrícula de coordenadas.</b> Esquina superior izquierda ampliada.</figcaption>
+  </figure>
+</section>
+
+<!-- ======================= M3 ======================= -->
+<section id="usomouse" class="topic" data-sec="m3">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Bloque 4 · Mouse</p><h2>M3 · usomouse.asm</h2></div><button class="mark-btn" data-mark="m3" aria-pressed="false">Marcar como repasado</button></div>
+  <div data-prog="usomouse"></div>
+</section>
+
+<!-- ======================= M4 ======================= -->
+<section id="modografico" class="topic" data-sec="m4">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Bloque 4 · Mouse</p><h2>M4 · modografico.asm</h2></div><button class="mark-btn" data-mark="m4" aria-pressed="false">Marcar como repasado</button></div>
+  <div data-prog="modografico"></div>
+</section>
+
+<!-- ======================= R1 ======================= -->
+<section id="reto1" class="topic" data-sec="r1">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Retos del laboratorio</p><h2>R1 · Reto 1: identificación de botones</h2></div><button class="mark-btn" data-mark="r1" aria-pressed="false">Marcar como repasado</button></div>
+  <div class="key"><b>Enunciado</b><p class="small">Distinguir clic izquierdo y derecho: derecho imprime “D”, izquierdo “I”. El programa termina <b>únicamente</b> al presionar ambos botones al mismo tiempo.</p></div>
+  <div data-prog="reto1"></div>
+</section>
+
+<!-- ======================= R2 ======================= -->
+<section id="reto2" class="topic" data-sec="r2">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Retos del laboratorio</p><h2>R2 · Reto 2: el botón de cierre</h2></div><button class="mark-btn" data-mark="r2" aria-pressed="false">Marcar como repasado</button></div>
+  <div class="key"><b>Enunciado</b><p class="small">Cambiar la condición de salida: solo cerrar si el usuario hace clic izquierdo dentro de una “zona caliente” (ejemplo: esquina superior izquierda, X entre 0 y 40, Y entre 0 y 10).</p></div>
+  <div data-prog="reto2"></div>
+  <div class="key warn"><b>Diferencias con el Reto 1</b><ul class="small"><li>Se limpia la pantalla y se dibuja “[X]” (INT 10h).</li><li>Ya no se sale con ambos botones: BX=3 se ignora.</li><li>El anti-rebote no vigila ninguna salida.</li><li>Las letras salen donde está el cursor de texto, no donde se hizo clic.</li></ul></div>
+</section>
+
+<!-- ======================= LAB ======================= -->
+<section id="laboratorio" class="topic" data-sec="lb">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Laboratorio</p><h2>Laboratorio del mouse</h2></div><button class="mark-btn" data-mark="lb" aria-pressed="false">Marcar como repasado</button></div>
+  <p class="muted">Esto <b>ejecuta de verdad</b> los programas en el simulador 8086 de la guía, con un mouse simulado: lo que ves es lo que devolvería <code>INT 33h / AX=0003h</code>. Prueba el Reto 2: haz clic izquierdo en la columna 5 y en la 6, en la fila 1 y en la 2.</p>
+  <div class="fin-lab" id="labMouse"></div>
+</section>
+
+<!-- ======================= ERRORES ======================= -->
+<section id="errores" class="topic" data-sec="er">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Práctica</p><h2>Errores típicos</h2></div><button class="mark-btn" data-mark="er" aria-pressed="false">Marcar como repasado</button></div>
+  <ul>
+    <li>Olvidar <code>MOV AX,@DATA / MOV DS,AX</code> en un .EXE con datos (en .COM con <code>org 100h</code> no hace falta).</li>
+    <li>Confundir <code>CMP BX,1</code> con <code>TEST BX,1</code>: con ambos botones, CMP falla y TEST no.</li>
+    <li>No poner el anti-rebote: un clic imprime cientos de letras.</li>
+    <li>Imprimir o dibujar sin ocultar el puntero.</li>
+    <li>Usar <code>JG</code> en lugar de <code>JA</code> con coordenadas.</li>
+    <li>No dividir CX entre 2 en modo 13h.</li>
+    <li>Terminar en modo gráfico sin restaurar <code>AX=0003h</code>.</li>
+    <li>Programar el 8237 sin limpiar el biestable P/U, o poner en CWCR el número de bytes en lugar de bytes − 1.</li>
+  </ul>
+</section>
+
+<section id="quiz" class="topic" data-sec="qz">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Práctica</p><h2>Preguntas directas</h2></div><button class="mark-btn" data-mark="qz" aria-pressed="false">Marcar como repasado</button></div>
+  <p class="muted">Elige una opción: se marca al instante y aparece la explicación.</p>
+  <div id="quizApp"></div>
+</section>
+
+<section id="abiertas" class="topic" data-sec="ab">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Práctica</p><h2>Preguntas abiertas</h2></div><button class="mark-btn" data-mark="ab" aria-pressed="false">Marcar como repasado</button></div>
+  <p class="muted">Escribe tu respuesta (se guarda en este navegador), luego abre la respuesta modelo.</p>
+  <div id="abiertasApp"></div>
+</section>
+
+<footer>
+  <p>Fuentes: AC2 · Interfaz IO (cap. 11) · Acceso Directo a Memoria y E/S Controlado por DMA (Inga. Tatiana Vallejo) · AC2 · 15 Video en el computador (cap. 13) · Uso del mouse · usomouse.asm · modografico.asm · Reto 1 y Reto 2.</p>
+  <p>Insignias: <span class="badge ded">deducido</span> inferido del material, no dicho por el profesor.</p>
+  <p class="credit">Desarrollado por Oskar · <span>@migit</span></p>
+</footer>
+</main>
+</div>
+
+<div class="fab-dock">
+  <button class="board-fab" id="inkFab" type="button" aria-controls="inkBar" aria-expanded="false" title="Anotar sobre la página (el stylus siempre dibuja)">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></svg><span>Anotar</span>
+  </button>
+  <button class="board-fab" id="boardFab" type="button" aria-controls="board" aria-expanded="false" title="Mostrar u ocultar la pizarra">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span>Pizarra</span>
+  </button>
+</div>
+<section class="board" id="board" hidden aria-label="Pizarra de borrador">
+  <div class="board-bar" id="boardBar">
+    <span class="board-title"><span class="grip" aria-hidden="true">⋮⋮</span>Pizarra</span>
+    <span class="spacer"></span>
+    <label class="sr-only" for="boardBg">Fondo</label>
+    <select id="boardBg" title="Fondo">
+      <option value="plain">Liso</option>
+      <option value="grid">Cuadrícula</option>
+    </select>
+    <button class="bd-btn" id="boardHide" type="button" title="Ocultar (se conserva el dibujo)" aria-label="Ocultar pizarra"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg></button>
+  </div>
+  <div class="board-tools" role="toolbar" aria-label="Herramientas de la pizarra">
+    <button class="bd-btn" type="button" data-tool="pen" aria-pressed="true" title="Lápiz (P)" aria-label="Lápiz"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>
+    <button class="bd-btn" type="button" data-tool="eraser" aria-pressed="false" title="Borrador (E)" aria-label="Borrador"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 21-4.3-4.3a1 1 0 0 1 0-1.4l10-10a1 1 0 0 1 1.4 0l5.6 5.6a1 1 0 0 1 0 1.4L11 21"/><path d="M22 21H7"/><path d="m5 11 9 9"/></svg></button>
+    <span class="board-sep"></span>
+    <button class="bd-btn" type="button" data-color="--text" aria-pressed="true" title="Tinta" aria-label="Color tinta"><span class="bd-sw" style="--sw:var(--text)"></span></button>
+    <button class="bd-btn" type="button" data-color="--accent" aria-pressed="false" title="Azul" aria-label="Color azul"><span class="bd-sw" style="--sw:var(--accent)"></span></button>
+    <button class="bd-btn" type="button" data-color="--err" aria-pressed="false" title="Rojo" aria-label="Color rojo"><span class="bd-sw" style="--sw:var(--err)"></span></button>
+    <button class="bd-btn" type="button" data-color="--ok" aria-pressed="false" title="Verde" aria-label="Color verde"><span class="bd-sw" style="--sw:var(--ok)"></span></button>
+    <span class="board-sep"></span>
+    <button class="bd-btn" type="button" data-size="5" aria-pressed="false" title="Fino" aria-label="Trazo fino"><span class="bd-dot" style="width:4px;height:4px"></span></button>
+    <button class="bd-btn" type="button" data-size="8" aria-pressed="true" title="Medio" aria-label="Trazo medio"><span class="bd-dot" style="width:7px;height:7px"></span></button>
+    <button class="bd-btn" type="button" data-size="14" aria-pressed="false" title="Grueso" aria-label="Trazo grueso"><span class="bd-dot" style="width:11px;height:11px"></span></button>
+    <span class="bd-group">
+      <button class="bd-btn" type="button" id="boardUndo" title="Deshacer (Ctrl+Z)" aria-label="Deshacer" disabled><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg></button>
+      <button class="bd-btn" type="button" id="boardRedo" title="Rehacer (Ctrl+Y)" aria-label="Rehacer" disabled><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 14 5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/></svg></button>
+      <button class="bd-btn danger" type="button" id="boardClear" title="Borrar todo" aria-label="Borrar todo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+    </span>
+  </div>
+  <div class="board-area" id="boardArea">
+    <canvas id="boardBase"></canvas>
+    <canvas id="boardLive"></canvas>
+    <div class="board-eraser" id="boardEraser"></div>
+  </div>
+  <div class="board-resize" id="boardResize" title="Redimensionar" aria-hidden="true"></div>
+</section>
+
+
+<script src="../../js/asm8086.js"></script>
+<script src="../../js/main.js"></script>
+<script src="../../js/comunes.js"></script>
+<script src="../../js/arqui2-final.js"></script>
+</body>
+</html>

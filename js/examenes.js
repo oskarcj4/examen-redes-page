@@ -83,9 +83,8 @@ window.CURSOS = [
       {
         id: 'arquitectura-2/final',
         titulo: 'Examen final',
-        etiqueta: 'TERCERA PARTE',
-        descripcion: 'Guía del examen final.',
-        proximamente: true
+        etiqueta: 'E/S · DMA · VIDEO · MOUSE',
+        descripcion: 'Interfaz de E/S, DMA y el 8237, video en el computador, mouse con INT 33h, usomouse.asm, modografico.asm y los Retos 1 y 2 línea por línea. Incluye laboratorio del mouse, ciclo de DMA, cuestionario y preguntas abiertas.'
       }
     ]
   },

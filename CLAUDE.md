@@ -25,6 +25,8 @@ C:.
 |           index.html              Análisis de Sistemas II (ERP, MVC, componentes)   · usa js/analisis2.js
 +---arquitectura-2\parcial-2
 |           index.html              Arquitectura II (ensamblador 8086)                · usa asm8086.js, arqui2-datos.js, arqui2.js
++---arquitectura-2\final
+|           index.html              Arquitectura II examen final (E/S, DMA, video, mouse INT 33h, Retos 1 y 2) · usa asm8086.js, arqui2-final.js
 +---redes-1\parcial-2
 |           index.html              Redes I (TCP/IP, Hamming, Viterbi)                · todo en main.js
 +---redes-1inal
@@ -48,6 +50,7 @@ C:.
         web2-api.js                 Servidor simulado del caso integral (modo original/corregido) + 14 pruebas. Sirve en Node
         web2-datos.js               Desarrollo Web: 8 ejercicios de fetch (con pruebas), diagnóstico, quiz, abiertas. Sirve en Node
         redes3.js                   Redes I · Examen final: árbol, checksum, CRC (división mód. 2), 802.1Q, simulador de switch (window.R3). Sirve en Node
+        arqui2-final.js             Arquitectura II · Final: programas del profe explicados, decisiones de los retos, mouse, video, DMA, quiz y laboratorio (window.ARQF). Sirve en Node
         web2.js                     UI de Desarrollo Web: laboratorio, matriz de pruebas, demo de escape, ejercicios en Worker
 ```
 
@@ -103,3 +106,9 @@ Foco pedido: **consumir APIs (fetch) y plantillas**; práctico.
 - Servidor simulado en el navegador (`js/web2-api.js`, sin red): mismas reglas que el PHP del profe en modo *original* y modo *corregido*; contraseñas de prueba inventadas (el SQL del profe no trae texto plano).
 - Laboratorio de peticiones + matriz de 14 pruebas manuales (pista 8), 8 ejercicios de `fetch` corregidos por comportamiento (Worker con timeout), demo de plantilla → HTML con/sin escape, diagnóstico de 14 hallazgos, quiz, abiertas y repaso de las clases 1–8.
 - Hechos verificados del repo del profe: `recurso.php` **no lee** `rol`/`acceso` de la URL (el fallo real es que todo cliente ve cualquier recurso publicado y visible); `cambiar_password.php` no exige sesión (con `user_id` ajeno y la contraseña de esa cuenta funciona sin iniciar sesión).
+
+## Arquitectura II · Examen final (implementada)
+Fuentes: presentación Interfaz de E/S (cap. 11), documento de DMA de la Inga. Vallejo, presentación Video en el computador (cap. 13), práctica Uso del mouse (usomouse.asm, modografico.asm) y los Retos 1 y 2 (INT 33h). Los .md/.asm vienen en cp1252: leer con `TextDecoder('windows-1252')`.
+- `js/asm8086.js` ahora simula **INT 33h** (0000h-0003h, mouse con estado vivo o `mouseScript`), **INT 10h** AX=0013h/AH=0Ch (píxeles en `m.gfx`), INT 15h/86h y `proc` como etiqueta (`end main`). El banco del parcial 2 sigue pasando (21 ejercicios, 56 pruebas).
+- El laboratorio ejecuta los programas reales con un mouse simulado. **Deducido** (marcado en la guía): en modo texto las coordenadas son píxeles virtuales 640x200 en múltiplos de 8, así que la zona del Reto 2 (CX <= 40, DX <= 10) cubre columnas 0-5 y filas 0-1; los códigos binarios del registro de modo del 8237 y el orden del ciclo DMA (las figuras del documento son imágenes).
+- Errores del material señalados en la guía: 4K "el doble" que Full HD (son cuatro veces) y HDMI "inalámbrico".

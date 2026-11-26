@@ -119,6 +119,7 @@
           return;
         }
         if (b === 'SEGMENT') { mode = 'exe'; sec = a === 'CODE' || a === 'CSEG' ? 'CODE' : a === 'STACK' || a === 'SSEG' ? 'STACK' : a === 'DATA' || a === 'DSEG' ? 'DATA' : a; recs.push({ t: 'sec', name: sec, ln, segName: a }); return; }
+        if (b === 'PROC') recs.push({ t: 'label', name: a, ln, sec });  // main proc ... END main
         if (b === 'ENDS' || b === 'PROC' || b === 'ENDP') return;
         recs.push({ t: 'data', name: a, size: b === 'DB' ? 1 : 2, args: splitArgs(toks.slice(2)), ln, sec });
         return;
@@ -372,6 +373,9 @@
       this.f = { CF: 0, PF: 0, AF: 0, ZF: 0, SF: 0, TF: 0, IF: 1, DF: 0, OF: 0 };
       this.scr = new Uint8Array(2000).fill(32); this.att = new Uint8Array(2000).fill(7);
       this.row = 0; this.col = 0; this.out = '';
+      /* Ratón (INT 33h) y video gráfico (INT 10h modo 13h): usados por la guía de Arquitectura II · Final */
+      this.mouse = { present: opt.mouse !== false, visible: 0, btn: 0, x: 0, y: 0, polls: 0, script: opt.mouseScript || null };
+      this.vmode = 3; this.gfx = null; this.pixels = 0;
       this.input = []; this.inPos = 0;
       this.addInput(opt.input || '');
       this.steps = 0; this.state = 'run'; this.error = null; this.errLine = 0; this.exitCode = null;
@@ -515,7 +519,17 @@
     int10() {
       const ah = this.get('AH');
       switch (ah) {
-        case 0x00: this.cls(); return;
+        case 0x00: {
+          const md = this.get('AL') & 0x7F;
+          if (md === 0x13) { this.vmode = 0x13; this.gfx = new Uint8Array(320 * 200); this.pixels = 0; this.out += '\n[modo gráfico 13h: 320x200, 256 colores]\n'; return; }
+          this.vmode = md; this.gfx = null; this.cls(); return;
+        }
+        case 0x0C: {
+          if (this.vmode !== 0x13) throw new Error('INT 10h AH=0Ch (escribir píxel) solo funciona en modo gráfico: falta MOV AX,0013h / INT 10h al inicio');
+          const x = this.get('CX'), y = this.get('DX');
+          if (x < 320 && y < 200) { this.gfx[y * 320 + x] = this.get('AL'); this.pixels++; }
+          return;
+        }
         case 0x02: this.row = Math.min(24, this.get('DH')); this.col = Math.min(79, this.get('DL')); return;
         case 0x03: this.set('DH', this.row); this.set('DL', this.col); this.set('CX', 0x0607); return;
         case 0x06: if (this.get('AL') === 0) { this.scr.fill(32); this.att.fill(this.get('BH') || 7); } return;
@@ -527,6 +541,21 @@
         }
         case 0x0E: this.putc(this.get('AL')); return;
         default: throw new Error(`INT 10h con AH=${hex(ah, 2)}h: función no incluida en este simulador`);
+      }
+    }
+    /* INT 33h simulada. En modo texto 80x25 y en modo 13h el driver usa coordenadas virtuales 640x200. */
+    int33() {
+      const ax = this.get('AX'), m = this.mouse;
+      switch (ax) {
+        case 0x0000: if (m.present) { this.set('AX', 0xFFFF); this.set('BX', 2); } else { this.set('AX', 0); this.set('BX', 0); } return;
+        case 0x0001: m.visible++; return;
+        case 0x0002: m.visible--; return;
+        case 0x0003: {
+          if (m.script && m.script.length) { const e = m.script[Math.min(m.polls, m.script.length - 1)]; m.btn = e.b || 0; m.x = e.x || 0; m.y = e.y || 0; }
+          m.polls++;
+          this.set('BX', m.btn & 7); this.set('CX', m.x & 0xFFFF); this.set('DX', m.y & 0xFFFF); return;
+        }
+        default: throw new Error('INT 33h con AX=' + hex(ax, 4) + 'h: función no incluida en este simulador (el curso usa 0000h, 0001h, 0002h y 0003h)');
       }
     }
     exec(ins) {
@@ -606,6 +635,8 @@
           if (n === 0x21) return void this.int21();
           if (n === 0x10) return void this.int10();
           if (n === 0x20) { this.state = 'exit'; this.exitCode = 0; return; }
+          if (n === 0x33) return void this.int33();
+          if (n === 0x15 && this.get('AH') === 0x86) { this.f.CF = 0; return; }  // pausa: el simulador no espera
           if (n === 0x16) { this.set('AL', this.key()); this.set('AH', 0); return; }
           throw new Error(`INT ${hex(n, 2)}h no está incluida en este simulador`);
         }

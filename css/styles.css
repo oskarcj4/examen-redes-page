@@ -846,3 +846,40 @@ svg.r3-vlan .v10t{fill:var(--l2);font-weight:700} svg.r3-vlan .v20t{fill:var(--l
   .r3-frame .f{flex-basis:calc(33% - 4px)}
 }
 @media print{#lab-sw,#swApp{display:none!important}}
+
+/* ===== Guía Arquitectura II · Final ===== */
+.fin-prog-head{display:flex;flex-direction:column;gap:2px;margin:6px 0 12px}
+.fin-part{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:14px;align-items:start;margin:12px 0}
+.fin-part .codebox{margin:0}
+.fin-part pre.code{margin:0;overflow-x:auto}
+.fin-exp{display:flex;gap:10px;align-items:flex-start}
+.fin-exp p{margin:0}
+.fin-n{flex:none;display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font:700 13px var(--mono)}
+@media (max-width:760px){.fin-part{grid-template-columns:minmax(0,1fr)}}
+.fin-ctrl{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin:10px 0}
+.fin-ctrl .btn{min-height:40px;padding:8px 14px;font-size:14px}
+.fin-in{font:600 15px var(--mono);color:var(--text);background:var(--surface);border:1px solid var(--sep);border-radius:var(--r-s);padding:8px 10px;min-height:40px;max-width:100%}
+.fin-calc{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;background:var(--surface);border-radius:var(--r);padding:14px;box-shadow:var(--shadow);margin:10px 0}
+.fin-calc > p,.fin-calc > ul{flex-basis:100%;margin:0}
+.fin-calc .chips{flex-basis:100%;margin:0}
+.fin-bits{font-weight:700}
+.fin-bits i{font-style:normal;color:var(--text-2);padding:0 4px}
+.fin-seg{display:inline-flex;flex-wrap:wrap;gap:6px 14px;font-size:14px}
+.fin-lab{background:var(--surface);border-radius:var(--r);padding:14px;box-shadow:var(--shadow);margin:14px 0}
+.fin-stage{width:100%;border-radius:var(--r-s);overflow:hidden;border:1px solid var(--sep);line-height:0}
+.fin-stage canvas{display:block;width:100%;height:auto;aspect-ratio:16/5;cursor:crosshair;touch-action:none;background:var(--text)}
+.fin-hint{margin:8px 0}
+.fin-read{margin-top:12px}
+.fin-regs{width:100%;border-collapse:collapse}
+.fin-regs th{text-align:left;width:3em;font:700 14px var(--mono)}
+.fin-regs td{padding:3px 8px 3px 0;vertical-align:top}
+.fin-dec{font-weight:600;margin:6px 0}
+.fin-dec[data-a="salir"]{color:var(--err)}
+.fin-dec[data-a="I"],.fin-dec[data-a="D"],.fin-dec[data-a="pixel"]{color:var(--ok)}
+.fin-scr{font:500 13px/1.25 var(--mono);background:var(--surface-2);color:var(--text);border-radius:var(--r-s);padding:10px;margin:0;overflow-x:auto;min-height:3em;white-space:pre}
+svg.dg .sig line,svg.dg .sig rect{stroke:var(--text-2);stroke-width:1.5;fill:var(--text-2);opacity:.45}
+svg.dg .sig polygon{fill:var(--text-2);opacity:.45}
+svg.dg .sig text{opacity:.55}
+svg.dg .sig.on line,svg.dg .sig.on polygon,svg.dg .sig.on rect{stroke:var(--accent);fill:var(--accent);opacity:1}
+svg.dg .sig.on line{stroke-width:3}
+svg.dg .sig.on text{fill:var(--accent);font-weight:700;opacity:1}
