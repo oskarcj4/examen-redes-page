@@ -26,7 +26,7 @@ C:.
 +---arquitectura-2\parcial-2
 |           index.html              Arquitectura II (ensamblador 8086)                · usa asm8086.js, arqui2-datos.js, arqui2.js
 +---arquitectura-2\final
-|           index.html              Arquitectura II examen final (E/S, DMA, video, mouse INT 33h, Retos 1 y 2) · usa asm8086.js, arqui2-final.js
+|           index.html              Arquitectura II examen final (E/S, DMA, video, mouse INT 33h, Retos 1 y 2) · usa asm8086.js, arqui2-final.js, arqui2-labs.js, arqui2-cuestionario.js, arqui2-reels.js
 +---redes-1\parcial-2
 |           index.html              Redes I (TCP/IP, Hamming, Viterbi)                · todo en main.js
 +---redes-1inal
@@ -51,6 +51,9 @@ C:.
         web2-datos.js               Desarrollo Web: 8 ejercicios de fetch (con pruebas), diagnóstico, quiz, abiertas. Sirve en Node
         redes3.js                   Redes I · Examen final: árbol, checksum, CRC (división mód. 2), 802.1Q, simulador de switch (window.R3). Sirve en Node
         arqui2-final.js             Arquitectura II · Final: programas del profe explicados, decisiones de los retos, mouse, video, DMA, quiz y laboratorio (window.ARQF). Sirve en Node
+        arqui2-labs.js              Arquitectura II · Final: laboratorios extra (retos propuestos con corrector por mouse guionizado) (window.ARQL). Sirve en Node
+        arqui2-cuestionario.js      Arquitectura II · Final: las 79 preguntas del profe en tarjetas con repaso tipo Leitner + lista (window.ARQC). Sirve en Node
+        arqui2-reels.js             Arquitectura II · Final: 12 reels animados (9:16, narración opcional, XP/racha, quiz por reel) (window.REELS). Sirve en Node
         web2.js                     UI de Desarrollo Web: laboratorio, matriz de pruebas, demo de escape, ejercicios en Worker
 ```
 

@@ -28,6 +28,7 @@
   <h4>Inicio</h4>
   <a href="#inicio"><span class="n">00</span>Cómo usar esta guía</a>
   <a href="#hoja"><span class="n">★</span>Hoja de referencia rápida</a>
+  <a href="#reels" data-sec="rl"><span class="n">RL</span>Reels: el final en 12 videos<span class="done"></span></a>
   <h4>Interfaz de E/S</h4>
   <a href="#io-basica" data-sec="e1"><span class="n">E1</span>Interfaz básica y puertos<span class="done"></span></a>
   <a href="#io-unidades" data-sec="e2"><span class="n">E2</span>Periféricos y unidades de E/S<span class="done"></span></a>
@@ -36,6 +37,7 @@
   <a href="#dma-basico" data-sec="d1"><span class="n">D1</span>Operación básica del DMA<span class="done"></span></a>
   <a href="#dma-8237" data-sec="d2"><span class="n">D2</span>El controlador 8237<span class="done"></span></a>
   <a href="#dma-bus" data-sec="d3"><span class="n">D3</span>Bus compartido y árbitro 8289<span class="done"></span></a>
+  <a href="#ciclos-bus" data-sec="d5"><span class="n">D5</span>Ciclos de bus y diagramas de tiempo<span class="done"></span></a>
   <a href="#dma-lab" data-sec="d4"><span class="n">D4</span>Laboratorio de DMA<span class="done"></span></a>
   <h4>Video</h4>
   <a href="#video-senal" data-sec="v1"><span class="n">V1</span>Señal y monitores<span class="done"></span></a>
@@ -50,8 +52,10 @@
   <a href="#reto1" data-sec="r1"><span class="n">R1</span>Reto 1: botones<span class="done"></span></a>
   <a href="#reto2" data-sec="r2"><span class="n">R2</span>Reto 2: zona caliente<span class="done"></span></a>
   <a href="#laboratorio" data-sec="lb"><span class="n">L</span>Laboratorio del mouse<span class="done"></span></a>
+  <a href="#retos-lab" data-sec="lp"><span class="n">LP</span>Retos propuestos (se corrigen solos)<span class="done"></span></a>
   <h4>Práctica</h4>
   <a href="#errores" data-sec="er"><span class="n">E</span>Errores típicos<span class="done"></span></a>
+  <a href="#cuestionario" data-sec="cq"><span class="n">CP</span>Cuestionario del profe (79)<span class="done"></span></a>
   <a href="#quiz" data-sec="qz"><span class="n">Q</span>Preguntas directas<span class="done"></span></a>
   <a href="#abiertas" data-sec="ab"><span class="n">A</span>Preguntas abiertas<span class="done"></span></a>
 </nav>
@@ -67,7 +71,7 @@
     <a class="card" href="#video-senal"><span class="n">BLOQUE 3</span><h4>Video</h4><p>Señal compuesta, RGB, CGA/EGA/VGA, formatos y modos del 8086.</p></a>
     <a class="card" href="#mouse-int"><span class="n">BLOQUE 4</span><h4>Mouse y retos</h4><p>INT 33h, los dos programas del profe, Reto 1 y Reto 2 línea por línea.</p></a>
     <a class="card" href="#laboratorio"><span class="n">LABORATORIO</span><h4>Simulador del mouse</h4><p>Clic izquierdo, derecho o ambos sobre una pantalla 80x25 y zona caliente.</p></a>
-    <a class="card" href="#quiz"><span class="n">PRÁCTICA</span><h4>Cuestionario</h4><p>49 preguntas directas y 11 abiertas con respuesta modelo.</p></a>
+    <a class="card" href="#cuestionario"><span class="n">PRÁCTICA</span><h4>Cuestionario</h4><p>Las 79 preguntas del profe, 75 directas y 11 abiertas con respuesta modelo.</p></a>
   </div>
   <div class="key warn"><b>Honestidad con el material</b>
     <ul class="small">
@@ -106,10 +110,17 @@
       <ul class="small">
         <li>Pulso de línea · pulso de trama · color burst</li>
         <li>CGA/EGA: 8 colores + intensidad = 16 · VGA: 256 de 64 000</li>
-        <li>VGA 640x480 · SVGA 800x600 · XGA 1024x768 · HD 1920x1080</li>
+        <li>VGA 640x480 · SVGA 800x600 · XGA 1024x768 · HD 1280x720, 1366x768 y 1920x1080</li>
         <li>INT 10h: AX=0003h texto 80x25 · AX=0013h gráfico 320x200 · AH=0Ch píxel</li>
       </ul></div>
   </div>
+</section>
+
+<!-- ======================= REELS ======================= -->
+<section id="reels" class="topic" data-sec="rl">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Para empezar</p><h2>Reels: aprende el final en 12 videos</h2></div><button class="mark-btn" data-mark="rl" aria-pressed="false">Marcar como repasado</button></div>
+  <p class="muted">Doce videos cortos, uno por idea clave del final. Míralos de corrido para tener el panorama y luego baja a cada sección para el detalle.</p>
+  <div id="reelsApp"></div>
 </section>
 
 <!-- ======================= E1 ======================= -->
@@ -138,7 +149,13 @@
   </div>
   <div class="key"><b>Handshaking</b><p>Asegura que no haya pérdida, repetición ni corrupción de datos entre ambas partes. Es fundamental en interfaces síncronas y de baja capa.</p></div>
   <h3>Decodificación de puertos</h3>
-  <p>Los dispositivos (memorias, timers, puertos paralelos) reconocen su dirección única y responden a la operación de E/S correspondiente. La presentación ilustra <b>puertos de 8 bits</b>, <b>puertos de 16 bits</b> y <b>puertos anchos</b> (<i>wide ports</i>) con figuras que no vienen en el texto.</p>
+  <p>Los dispositivos (memorias, timers, puertos paralelos) reconocen su dirección única y responden a la operación de E/S correspondiente. Según el cuestionario del profe, la <b>decodificación de puertos</b> es el circuito que recibe la dirección que pone el microprocesador y <b>activa solo el puerto</b> correspondiente a esa dirección. El <b>mapeo de puertos</b> es asignar a cada puerto de E/S una dirección única para que el micro pueda identificarlo y leer o escribir en él.</p>
+  <div class="grid g3">
+    <div class="card tile"><span class="tag">PUERTO DE 8 BITS</span><p class="small">Transfiere <b>1 byte</b> (8 bits) por operación.</p></div>
+    <div class="card tile"><span class="tag">PUERTO DE 16 BITS</span><p class="small">Transfiere una <b>palabra</b> (16 bits, dos bytes) por operación.</p></div>
+    <div class="card tile"><span class="tag">WIDE PORT (PUERTO ANCHO)</span><p class="small">Puerto de E/S de 16 bits que transfiere una palabra completa (dos bytes) en una sola operación, formado por <b>dos puertos de 8 bits contiguos</b>.</p></div>
+  </div>
+  <p class="small muted">Las figuras de la presentación para los tres tipos no vienen en el texto; las definiciones son las del cuestionario del profe.</p>
   <h3>Mapeada vs aislada, programada vs interrupciones vs DMA <span class="badge ded">deducido</span></h3>
   <div class="tbl-wrap"><table>
     <thead><tr><th>Idea</th><th>Qué dice el material</th><th>Qué se infiere</th></tr></thead>
@@ -187,7 +204,7 @@
     </tbody></table></div>
   <h3>¿Cómo se configuran?</h3>
   <ul class="small"><li>Registros de propósito especial (p. ej. baudios de una UART).</li><li>Mapa de puertos de E/S/memoria.</li><li>Llamadas al sistema (API) que ocultan el hardware.</li><li>Programación de registros (SPI: reloj, datos, configuración).</li><li>Manejo de interrupciones al final de una transmisión.</li><li>Protocolos (I2C), control por software y <b>drivers</b>.</li></ul>
-  <div class="key"><b>API</b><p class="small">Conjunto de funciones y procedimientos que definen las interacciones entre componentes de software; da abstracción (oculta detalles internos) y facilita integración y reutilización. Existen a nivel de sistema operativo, bases de datos, lenguajes y sitios web.</p></div>
+  <div class="key"><b>API</b><p class="small">Conjunto de funciones que definen cómo se comunican distintas aplicaciones <b>de forma estandarizada, sin importar su lenguaje o plataforma</b>. Características clave: facilitan la integración y reutilización, ocultan los detalles internos (abstracción) y <b>funcionan en red</b>. Existen a nivel de sistema operativo, bases de datos, lenguajes y sitios web.</p></div>
   <h3>PLD vs PPI</h3>
   <div class="tbl-wrap"><table>
     <thead><tr><th></th><th>PLD (Programmable Logic Device)</th><th>PPI (Programmable Peripheral Interface)</th></tr></thead>
@@ -195,11 +212,17 @@
       <tr><td>Qué es</td><td>Dispositivo lógico genérico; implementa cualquier diseño</td><td>Interfaz de E/S específica (UART, SPI, USB…)</td></tr>
       <tr><td>Configuración</td><td>Requiere diseñar y programar circuitos lógicos</td><td>Solo se programan parámetros</td></tr>
       <tr><td>Complejidad</td><td>Alta</td><td>Baja: ya trae la interfaz</td></tr>
-      <tr><td>Flexibilidad</td><td>Total, reconfigurable</td><td>Baja: limitada al chip</td></tr>
+      <tr><td>Flexibilidad</td><td>Total, reconfigurable</td><td>Baja: limitada al chip (funcionalidad fija)</td></tr>
       <tr><td>Producción</td><td>Útil para pequeñas cantidades</td><td>Más eficiente en grandes volúmenes</td></tr>
       <tr><td>Documentación</td><td>Propia del diseño</td><td>Estándar del fabricante</td></tr>
       <tr><td>Mejor cuando…</td><td>Interfaz personalizada, no estándar o cambiante; recursos restringidos</td><td>Interfaz estándar; rapidez de desarrollo y compatibilidad</td></tr>
     </tbody></table></div>
+  <div class="grid g2">
+    <div class="card tile"><span class="tag">FUNCIONES CLAVE DEL PLD EN LA DECODIFICACIÓN</span><ul class="small"><li>Decodificación de direcciones</li><li>Activación de puertos</li><li><b>Multipuertos</b> (el PDF dice “multipuestos”)</li><li>Reducción de cableado y mayor flexibilidad</li></ul></div>
+    <div class="card tile"><span class="tag">VENTAJAS DE LOS PPI</span><ul class="small"><li>Funcionalidad predefinida</li><li><b>Rendimiento optimizado</b></li><li>Menor complejidad: traen la interfaz ya hecha</li></ul><p class="small">Protocolos que se implementan con PPI: UART, I2C, SPI, USB, Ethernet, GPIO.</p></div>
+    <div class="card tile"><span class="tag">APLICACIONES QUE USAN PLD</span><ul class="small"><li><b>Sistemas de control industrial</b></li><li>Interfaces personalizadas</li><li>Decodificación de direcciones de E/S</li><li><b>Electrónica automotriz</b></li><li><b>Sistemas embebidos</b></li></ul></div>
+    <div class="card tile"><span class="tag">DEFINICIONES DEL PROFE</span><p class="small"><b>PLD</b>: dispositivo lógico programable <b>por el usuario</b> que implementa funciones lógicas y de E/S, y se usa como decodificador de puertos. <b>PPI</b>: interfaz de E/S programable <b>específica</b>, que implementa en hardware un protocolo de comunicación concreto.</p></div>
+  </div>
   <p class="small"><b>PLD como decodificador de puertos:</b> una matriz lógica programable mapea rangos de direcciones de E/S a puertos físicos, activa la salida del puerto cuando detecta la dirección, reduce cableado y se puede reprogramar sin cambiar hardware. <span class="badge ded">nota</span> La tabla del material trae columnas mezcladas; aquí se ordenó según el texto de las diapositivas anteriores.</p>
 </section>
 
@@ -211,9 +234,15 @@
     <li>Con HOLD en alto el micro suspende el programa y deja los buses de direcciones, datos y control en <b>alta impedancia</b>: parece retirado, y los dispositivos de E/S u otros micros usan los buses y acceden directo a la memoria.</li>
     <li>INTR y NMI actúan al <b>final</b> de una instrucción; HOLD tiene efecto a <b>media instrucción</b>. Solo <b>RESET</b> tiene prioridad sobre HOLD.</li>
     <li><b>Lectura de DMA</b>: memoria → dispositivo de E/S. <b>Escritura de DMA</b>: dispositivo → memoria. Se necesitan señales de control de memoria y de E/S independientes porque ambas operan a la vez.</li>
-    <li>En lectura de DMA se activan al mismo tiempo <b>MEMR</b> e <b>IOW</b>; en escritura, <b>IOR</b> y <b>MEMW</b>. <span class="badge ded">deducido</span> (en el texto los nombres de las señales se perdieron como “????”).</li>
+    <li>Nombres que usa el profe en su cuestionario: <b>lectura de memoria a E/S = MRDC + IOWC</b>; <b>escritura de E/S a memoria = MWTC + IORC</b>. Equivalen a los nombres anteriores de la guía <span class="badge ded">deducido</span> (en el documento se perdieron como “????”): MRDC = MEMR, MWTC = MEMW, IORC = IOR, IOWC = IOW.</li>
     <li>La velocidad depende de la memoria o del controlador DMA; normalmente el DMA reduce la velocidad del sistema durante la transferencia.</li>
   </ul>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Transferencia</th><th>Terminales</th><th>Papel de cada una</th></tr></thead>
+    <tbody>
+      <tr><td><b>Lectura de memoria a E/S</b></td><td class="mono">MRDC + IOWC</td><td><b>MRDC</b>: orden de lectura de memoria, la memoria entrega el dato al bus. <b>IOWC</b>: orden de escritura de E/S, el dispositivo recibe el dato del bus.</td></tr>
+      <tr><td><b>Escritura de E/S a memoria</b></td><td class="mono">MWTC + IORC</td><td><b>MWTC</b>: orden de escritura de memoria, la memoria recibe el dato del bus. <b>IORC</b>: orden de lectura de E/S, el dispositivo entrega el dato al bus.</td></tr>
+    </tbody></table></div>
 </section>
 
 <!-- ======================= D2 ======================= -->
@@ -232,8 +261,8 @@
       <tr><td class="mono">DREQ3-0</td><td>Solicitudes de DMA, una por canal</td></tr>
       <tr><td class="mono">DACK3-0</td><td>Reconocimiento de canal (programables; van al dispositivo)</td></tr>
       <tr><td class="mono">DB7-0</td><td>Bus de datos</td></tr>
-      <tr><td class="mono">IOR / IOW</td><td>Lectura / escritura de E/S (bidireccionales)</td></tr>
-      <tr><td class="mono">MEMR / MEMW</td><td>Lectura / escritura de memoria durante la transferencia</td></tr>
+      <tr><td class="mono">IOR / IOW</td><td>Lectura / escritura de E/S (bidireccionales); en el cuestionario del profe: IORC / IOWC</td></tr>
+      <tr><td class="mono">MEMR / MEMW</td><td>Lectura / escritura de memoria durante la transferencia; en el cuestionario del profe: MRDC / MWTC</td></tr>
       <tr><td class="mono">EOP</td><td>Fin de proceso (bidireccional): termina la transferencia</td></tr>
       <tr><td class="mono">A3-A0 / A7-A4</td><td>Seleccionan registro al programar y dan la parte baja / alta de la dirección</td></tr>
       <tr><td class="mono">AEN / ADSTB</td><td>AEN habilita el registro de dirección; ADSTB escribe A15-A8 en un registro</td></tr>
@@ -272,9 +301,106 @@
     <li>En sistemas multiprocesador (distribuidos) cada micro accede a dos buses: el <b>local</b> (memoria y E/S propias, sin protocolo) y el <b>remoto o compartido</b> (accesible a todos).</li>
     <li>El acceso al bus compartido lo controla un <b>árbitro</b> que da prioridad y deja pasar a uno a la vez. 8086/8088 usan el <b>8289</b>; el 80286 el 82289; 80386/80486 el 82389.</li>
     <li><b>Maestro de bus</b>: cualquier dispositivo que pueda controlar un bus con memoria y E/S. El 8237 es un maestro de bus remoto; la diferencia con otro micro es que el micro ejecuta software variable y el DMA solo transfiere datos.</li>
-    <li>El 8289 tiene tres modos: <b>bus periférico de E/S</b>, <b>bus residente</b> y <b>bus único</b>.</li>
+    <li>Un <b>bus compartido</b> está conectado a todos los microprocesadores del sistema: sirve para <b>intercambiar datos entre ellos</b> y puede contener memoria y E/S accesibles para todos. El <b>bus local</b> es el residente del micro, conectado directamente a su memoria y E/S locales, sin protocolos especiales de acceso.</li>
+    <li>Se accede al bus compartido con el pin <b>HOLD</b> (en el controlador DMA) y un árbitro de bus que decide la prioridad entre los maestros y deja que solo uno acceda a la vez.</li>
+    <li>Modos del 8289, según el profe: <b>bus periférico de E/S</b>; <b>bus residente</b>, que permite acceso a memoria y E/S, como bus local o compartido; y <b>bus único</b>, que conecta un microprocesador al bus compartido, sin memoria ni E/S local.</li>
+    <li><b>Cómo opera el sistema con el 8289:</b> el maestro del bus compartido controla el sistema, y los demás microprocesadores ejecutan tareas independientes y las reportan por el bus compartido.</li>
     <li>Terminales mencionadas: BREQ (pide el bus), BUSY, BPRN/BPRO (prioridad), LOCK (con el prefijo LOCK nadie más accede), AEN (buses a alta impedancia), RESB y SYSB/RESB (compartido o local), S2-S0 (estado del 8288).</li>
   </ul>
+</section>
+
+<!-- ======================= D5 ======================= -->
+<section id="ciclos-bus" class="topic" data-sec="d5">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Bloque 2 · DMA y buses</p><h2>D5 · Ciclos de bus y diagramas de tiempo</h2></div><button class="mark-btn" data-mark="d5" aria-pressed="false">Marcar como repasado</button></div>
+  <p>Un <b>diagrama de tiempo</b> muestra cómo cambian las señales del bus a lo largo del reloj. Antes de leerlo hay que conocer su <b>anatomía</b>: los elementos con los que se representa una señal.</p>
+
+  <h3>Anatomía de la señal</h3>
+  <div class="grid g2">
+    <div class="card tile"><span class="tag">LÍNEA BAJA</span><p class="small">Nivel lógico <b>0</b>.</p></div>
+    <div class="card tile"><span class="tag">LÍNEA ALTA</span><p class="small">Nivel lógico <b>1</b>.</p></div>
+    <div class="card tile"><span class="tag">LÍNEAS CRUZADAS (HEXÁGONO / BUS)</span><p class="small">Varios bits cambian a la vez (direcciones o datos). Dentro se escribe qué valen.</p></div>
+    <div class="card tile"><span class="tag">LÍNEA MEDIA RAYADA</span><p class="small"><b>Alta impedancia</b> (tri-state): ni 0 ni 1; el bus está desconectado.</p></div>
+  </div>
+
+  <h3>Símbolos clave</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Símbolo</th><th>Qué indica</th></tr></thead>
+    <tbody>
+      <tr><td><b>Flancos de reloj</b></td><td>Cambio de bajo a alto (<b>subida</b>) o de alto a bajo (<b>bajada</b>).</td></tr>
+      <tr><td><b>Flechas de dependencia</b></td><td>Un evento causa o condiciona a otro.</td></tr>
+      <tr><td><b>Líneas de acotación</b></td><td>El intervalo de tiempo entre dos eventos.</td></tr>
+    </tbody></table></div>
+
+  <h3>Ciclo de escritura</h3>
+  <p>Es la secuencia en la que el procesador <b>escribe un dato en memoria</b>, dividida en <b>cuatro estados de reloj (T1 a T4)</b>.</p>
+  <figure>
+    <svg class="dg wide" viewBox="0 0 760 300" role="img" aria-label="Diagrama de tiempo del ciclo de escritura: CLK, ADDRESS, ADDRESS/DATA y WR a lo largo de los estados T1 a T4">
+      <g stroke="currentColor" opacity=".25" stroke-dasharray="4 4"><line x1="130" y1="22" x2="130" y2="272"/><line x1="280" y1="22" x2="280" y2="272"/><line x1="430" y1="22" x2="430" y2="272"/><line x1="580" y1="22" x2="580" y2="272"/><line x1="730" y1="22" x2="730" y2="272"/></g>
+      <text class="c b mono" x="205" y="18">T1</text><text class="c b mono" x="355" y="18">T2</text><text class="c b mono" x="505" y="18">T3</text><text class="c b mono" x="655" y="18">T4</text>
+      <text class="mono b sm" x="14" y="66">CLK</text>
+      <path fill="none" stroke="currentColor" stroke-width="2" d="M130 75 L130 45 L205 45 L205 75 L280 75 L280 45 L355 45 L355 75 L430 75 L430 45 L505 45 L505 75 L580 75 L580 45 L655 45 L655 75 L730 75"/>
+      <text class="mono b sm" x="14" y="120">ADDRESS</text>
+      <polygon class="nd-m" points="136,115 146,98 574,98 584,115 574,132 146,132"/>
+      <text class="c mono xs" x="360" y="119">dirección válida</text>
+      <line stroke="currentColor" stroke-width="2" x1="584" y1="115" x2="730" y2="115"/>
+      <text class="mono b sm" x="14" y="180">AD</text><text class="mono xs mut" x="14" y="196">ADDRESS/DATA</text>
+      <polygon class="nd-c" points="136,175 146,158 274,158 284,175 274,192 146,192"/>
+      <text class="c mono xs" x="210" y="179">dirección</text>
+      <polygon class="nd-v" points="286,175 296,158 574,158 584,175 574,192 296,192"/>
+      <text class="c mono xs" x="435" y="179">dato</text>
+      <line stroke="currentColor" stroke-width="2" stroke-dasharray="6 5" x1="584" y1="175" x2="730" y2="175"/>
+      <text class="c mono xs mut" x="655" y="206">alta impedancia</text>
+      <text class="mono b sm" x="14" y="246">WR</text>
+      <path fill="none" stroke="currentColor" stroke-width="2" d="M130 232 L280 232 L280 262 L580 262 L580 232 L730 232"/>
+      <text class="c mono xs" x="430" y="252" fill="currentColor">activa en 0 (T2-T3)</text>
+      <text class="xs mut" x="14" y="292">Figura propia, armada con lo que dice el profe. La posición exacta de los flancos es <tspan class="mono">deducida</tspan>.</text>
+    </svg>
+    <figcaption><b>Ciclo de escritura.</b> La dirección sale en T1, el dato la reemplaza en el bus y WR baja durante T2 y T3.</figcaption>
+  </figure>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Estado</th><th>Qué ocurre</th></tr></thead>
+    <tbody>
+      <tr><td class="mono"><b>T1</b></td><td>El procesador coloca la <b>dirección</b> en el bus.</td></tr>
+      <tr><td class="mono"><b>T2 y T3</b></td><td>La dirección sigue válida, se <b>activa la escritura (WR)</b> y el <b>dato</b> se pone en el bus.</td></tr>
+      <tr><td class="mono"><b>T4</b></td><td>Termina el ciclo, la escritura se <b>desactiva</b> y el bus queda libre.</td></tr>
+    </tbody></table></div>
+
+  <h3>Señales que intervienen</h3>
+  <div class="grid g2">
+    <div class="card tile"><span class="tag">CLK</span><p class="small">Reloj: marca los estados T1 a T4.</p></div>
+    <div class="card tile"><span class="tag">ADDRESS</span><p class="small">Dirección válida.</p></div>
+    <div class="card tile"><span class="tag">ADDRESS/DATA</span><p class="small">Bus multiplexado: lleva <b>primero la dirección y luego el dato</b>. <span class="badge ded">deducido</span> Por eso hace falta ALE: un latch retiene la dirección mientras el bus pasa a llevar el dato.</p></div>
+    <div class="card tile"><span class="tag">WR</span><p class="small">Escritura, <b>activa en 0</b>.</p></div>
+  </div>
+
+  <h3>Ciclo de lectura</h3>
+  <p>Ciclo de bus en el que el procesador <b>lee un dato de memoria</b>: coloca la dirección, <b>activa RD (en 0)</b> y el dato llega por <b>ADDRESS/DATA</b>. Es el mismo esquema que la escritura, pero con RD en lugar de WR y el dato viajando hacia el procesador.</p>
+
+  <h3>Ciclos de espera</h3>
+  <div class="key"><b>READY = 0</b><p class="small">Son <b>estados adicionales</b> que se insertan en el ciclo cuando <b>READY está en 0</b>, para adaptarse a memorias o dispositivos lentos. <span class="badge ded">deducido</span> Se insertan entre T3 y T4, de modo que el ciclo dura más de cuatro estados.</p></div>
+
+  <h3>Siglas de las señales de control</h3>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Sigla</th><th>Significado y función</th></tr></thead>
+    <tbody>
+      <tr><td class="mono"><b>ALE</b></td><td>Habilita el <b>latch de dirección</b>.</td></tr>
+      <tr><td class="mono"><b>IO/M</b></td><td>Distingue <b>E/S</b> de <b>memoria</b>.</td></tr>
+      <tr><td class="mono"><b>S</b></td><td>Selección.</td></tr>
+      <tr><td class="mono"><b>G</b> (Gate)</td><td>Habilitación.</td></tr>
+      <tr><td class="mono"><b>CS</b> (Chip Select)</td><td>Selecciona el chip.</td></tr>
+      <tr><td class="mono"><b>OE</b> (Output Enable)</td><td>Habilita la salida.</td></tr>
+    </tbody></table></div>
+
+  <h3>Los tres tipos de ciclo de máquina</h3>
+  <p class="small">Se identifican con los bits <b>(IO/M, S1, S0)</b>.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Ciclo</th><th>IO/M</th><th>S1</th><th>S0</th><th>Qué hace</th></tr></thead>
+    <tbody>
+      <tr><td><b>Opcode fetch</b></td><td class="mono">0</td><td class="mono">1</td><td class="mono">1</td><td>Lee el <b>código de la instrucción</b>.</td></tr>
+      <tr><td><b>Memory read</b></td><td class="mono">0</td><td class="mono">1</td><td class="mono">0</td><td>Lee un <b>dato de memoria</b>.</td></tr>
+      <tr><td><b>Memory write</b></td><td class="mono">0</td><td class="mono">0</td><td class="mono">1</td><td><b>Escribe</b> un dato en memoria.</td></tr>
+    </tbody></table></div>
+  <div class="key warn"><b>Para recordarlos <span class="badge ded">deducido</span></b><p class="small">Los tres llevan IO/M = 0 (memoria). Lo que cambia es el par S1,S0: <code>11</code> = fetch, <code>10</code> = lectura, <code>01</code> = escritura. Es una regla mnemotécnica de la guía, no del profe.</p></div>
 </section>
 
 <!-- ======================= D4 ======================= -->
@@ -323,6 +449,10 @@
 <!-- ======================= V1 ======================= -->
 <section id="video-senal" class="topic" data-sec="v1">
   <div class="sec-head"><div class="meta"><p class="eyebrow">Bloque 3 · Video</p><h2>V1 · Señal de video y monitores</h2></div><button class="mark-btn" data-mark="v1" aria-pressed="false">Marcar como repasado</button></div>
+  <div class="grid g2">
+    <div class="card tile"><span class="tag">SEÑAL DE VIDEO</span><p class="small">Señal eléctrica que transporta la <b>imagen y su sincronización</b> para que el monitor la reconstruya.</p></div>
+    <div class="card tile"><span class="tag">VIDEO COMPUESTO</span><p class="small">Señal <b>analógica</b> que transporta en <b>un solo cable</b> la luminancia, la crominancia y los pulsos de sincronización.</p></div>
+  </div>
   <h3>Sincronización de la señal compuesta</h3>
   <div class="grid g3">
     <div class="card tile"><span class="tag">PULSO DE LÍNEA</span><p class="small">Inicio de cada línea de la imagen; sincroniza emisor y receptor a nivel de línea.</p></div>
@@ -334,10 +464,11 @@
   <div class="tbl-wrap"><table>
     <thead><tr><th>Tipo</th><th>Características</th></tr></thead>
     <tbody>
-      <tr><td>Monocromo (CRT)</td><td>Cañón de electrones, pantalla fosforescente, circuito de deflexión y de sincronización. Solo luminancia. Entrada TTL; servía con CGA y EGA variando la sincronización horizontal.</td></tr>
-      <tr><td>Color RGB digital</td><td>Recibe R, G, B; cada primario encendido/apagado = 8 colores; con señal de intensidad 8 normales + 8 intensos. EGA recibe una segunda señal por color: 16 con más matices.</td></tr>
-      <tr><td>TV analógico RGB</td><td>Señales R, G, B separadas, 3 cañones independientes, sin circuitos de decodificación; imagen más pura, más caro, uso profesional.</td></tr>
+      <tr><td>Monocromo (CRT)</td><td>Solo transmite <b>luminancia</b> (escala de grises). Componentes: CRT (dispara electrones), pantalla fosforescente (emite luz), deflexión (dibuja las líneas), sincronización (alinea el haz con la señal) y señal monocroma (solo luminancia, regula la intensidad).</td></tr>
+      <tr><td>Monitor TTL RGB</td><td><b>TTL</b> = lógica transistor-transistor. Recibe las señales de rojo, verde y azul en forma <b>digital</b>, cada color solo encendido o apagado: <b>8 colores</b>, o <b>16</b> al agregar intensidad. Los tonos distintos salen del cañón de electrones, que lanza partículas cargadas contra la pantalla con <b>intensidad variable</b>. Podía trabajar con tarjetas <b>CGA y EGA</b>, ajustando solo la sincronización horizontal a cada resolución. <b>EGA logró 16 colores</b> porque, en vez de la señal de intensidad, recibía una segunda señal por cada color primario: más matices.</td></tr>
+      <tr><td>Monitor RGB analógico (televisor análogo)</td><td>Recibe las señales analógicas de rojo, verde y azul <b>por separado</b>, no compuestas; tiene <b>3 cañones independientes</b>, uno por color; <b>no necesita decodificación</b>. Imagen más pura, más caro, uso profesional.</td></tr>
     </tbody></table></div>
+  <div class="key"><b>RGB vs RCA</b><p class="small"><b>RGB</b> envía los colores en señales separadas y da mejor calidad. <b>RCA</b> envía el video compuesto en una sola señal, con el audio en cables aparte.</p></div>
 </section>
 
 <!-- ======================= V2 ======================= -->
@@ -345,8 +476,10 @@
   <div class="sec-head"><div class="meta"><p class="eyebrow">Bloque 3 · Video</p><h2>V2 · Estándares, formatos y RAM</h2></div><button class="mark-btn" data-mark="v2" aria-pressed="false">Marcar como repasado</button></div>
   <div class="key"><b>VGA (Video Graphics Array)</b><p class="small">256 colores simultáneos en modo gráfico de una paleta de 64 000; resoluciones como 640x480; video analógico de mejor calidad que EGA; memoria gráfica dedicada separada de la RAM; compatible hacia atrás con CGA y EGA.</p></div>
   <div class="tbl-wrap" id="tblFormatos"></div>
+  <p class="small"><b>Formatos de computador, según el profe:</b> VGA 640x480, SVGA 800x600, XGA 1024x768, SXGA 1280x1024, UXGA 1600x1200, WUXGA 1920x1200, QXGA 2048x1536 y HD 1280x720, 1366x768 y 1920x1080. <b>Los más comunes hoy:</b> HD (720p, 1080p), Full HD 1080p, WQHD 1440p (2560x1440) y 4K 2160p.</p>
   <div class="grid g2">
-    <div class="card tile"><span class="tag">FORMATOS DE VIDEO GENERAL</span><ul class="small"><li>NTSC (480i, América/Japón) · PAL/SECAM (576i)</li><li>720p, 1080i (entrelazado) / 1080p (progresivo)</li><li>2K 2048x1080 · 4K 3840x2160 · 8K 7680x4320</li><li>HDMI, DisplayPort, DVI</li></ul></div>
+    <div class="card tile"><span class="tag">FORMATOS DE VIDEO GENERAL</span><ul class="small"><li>Analógicos: NTSC (480i, América/Japón) · PAL/SECAM (576i, Europa)</li><li>720p, 1080i (entrelazado) / 1080p (progresivo)</li><li>2K 2048x1080 · 4K 3840x2160 · 8K 7680x4320</li><li>Interfaces: HDMI, DisplayPort, DVI</li></ul></div>
+    <div class="card tile"><span class="tag">DISPLAYPORT</span><p class="small">Interfaz para <b>pantallas digitales</b>, compatible con <b>4K</b> y futuros <b>8K</b>.</p></div>
     <div class="card tile"><span class="tag">HDMI</span><ul class="small"><li>Video y audio digitales en un cable; 4K y superiores; audio multicanal.</li><li>HDCP (protección) y control remoto de dispositivos.</li><li>DVI: predecesor digital de VGA, 1080p sin audio.</li></ul></div>
   </div>
   <div class="key warn"><b>Dos errores del material</b><ul class="small"><li>Dice que 4K tiene “el doble de píxeles que Full HD”, pero 3840x2160 es <b>cuatro veces</b> 1920x1080 (ver la columna de megapíxeles). 8K sí es cuatro veces 4K.</li><li>Dice que HDMI transmite “de manera inalámbrica”; HDMI es un conector y cable. En el examen conviene responder según la clase.</li></ul></div>
@@ -466,6 +599,13 @@
   <div class="fin-lab" id="labMouse"></div>
 </section>
 
+<section id="retos-lab" class="topic" data-sec="lp">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Laboratorio</p><h2>Retos propuestos que se corrigen solos</h2></div><button class="mark-btn" data-mark="lp" aria-pressed="false">Marcar como repasado</button></div>
+  <p class="muted">Variantes de los Retos 1 y 2 y de modografico.asm para practicar como en el examen práctico: modificas el programa del profe y el corrector lo ejecuta con un mouse guionizado (clics en coordenadas fijas). <span class="badge ded">deducido</span> Son ejercicios propuestos por esta guía, no del profesor.</p>
+  <div class="key"><b>Cómo se corrige</b><p class="small">Cada prueba arma una secuencia de lecturas de <code>INT 33h / AX=0003h</code> (botones, CX, DX), ejecuta tu programa en el simulador 8086 y revisa lo que imprimió (o los píxeles, en modo 13h). Con <b>Abrir en el laboratorio del mouse</b> lo pruebas a mano con tu propio puntero.</p></div>
+  <div id="retosApp"></div>
+</section>
+
 <!-- ======================= ERRORES ======================= -->
 <section id="errores" class="topic" data-sec="er">
   <div class="sec-head"><div class="meta"><p class="eyebrow">Práctica</p><h2>Errores típicos</h2></div><button class="mark-btn" data-mark="er" aria-pressed="false">Marcar como repasado</button></div>
@@ -479,6 +619,12 @@
     <li>Terminar en modo gráfico sin restaurar <code>AX=0003h</code>.</li>
     <li>Programar el 8237 sin limpiar el biestable P/U, o poner en CWCR el número de bytes en lugar de bytes − 1.</li>
   </ul>
+</section>
+
+<section id="cuestionario" class="topic" data-sec="cq">
+  <div class="sec-head"><div class="meta"><p class="eyebrow">Práctica</p><h2>Cuestionario del profe (79 preguntas)</h2></div><button class="mark-btn" data-mark="cq" aria-pressed="false">Marcar como repasado</button></div>
+  <p class="muted">Las 79 preguntas del cuestionario del profesor con su respuesta textual: el examen se califica con ellas. En <b>Tarjetas</b> repasas con repetición espaciada (lo que fallas vuelve antes); en <b>Lista completa</b> las ves todas, ideal para imprimir. Tu avance se guarda en este navegador.</p>
+  <div id="cuestionarioApp"></div>
 </section>
 
 <section id="quiz" class="topic" data-sec="qz">
@@ -551,5 +697,8 @@
 <script src="../../js/main.js"></script>
 <script src="../../js/comunes.js"></script>
 <script src="../../js/arqui2-final.js"></script>
+<script src="../../js/arqui2-labs.js"></script>
+<script src="../../js/arqui2-cuestionario.js"></script>
+<script src="../../js/arqui2-reels.js"></script>
 </body>
 </html>

@@ -156,6 +156,7 @@
       if (bx & 1) return { accion: 'pixel', texto: `bit 0 = 1 → dibuja el píxel (${cx >> 1}, ${dx}) en cian claro (CX/2 = ${cx >> 1})` };
       return { accion: null, texto: 'ningún botón → vuelve a leer' };
     }
+    if (prog === 'propio') return { accion: null, texto: 'Programa propio: la decisión la toma tu código; mira la pantalla del programa.' };
     return { accion: null, texto: '' };
   }
 
@@ -163,8 +164,8 @@
   const bytesVideo = (ancho, alto, bitsPorPixel) => Math.ceil(ancho * alto * bitsPorPixel / 8);
   const FORMATOS = [
     ['VGA', 640, 480], ['SVGA', 800, 600], ['XGA', 1024, 768], ['SXGA', 1280, 1024], ['UXGA', 1600, 1200],
-    ['HD 720p', 1280, 720], ['Full HD 1080p', 1920, 1080], ['WUXGA', 1920, 1200], ['QXGA', 2048, 1536],
-    ['2K', 2048, 1080], ['4K', 3840, 2160], ['8K', 7680, 4320]
+    ['HD 720p', 1280, 720], ['HD 1366x768', 1366, 768], ['Full HD 1080p', 1920, 1080], ['WUXGA', 1920, 1200], ['QXGA', 2048, 1536],
+    ['2K', 2048, 1080], ['WQHD 1440p', 2560, 1440], ['4K', 3840, 2160], ['8K', 7680, 4320]
   ];
   const mpx = (a, h) => a * h / 1e6;
 
@@ -187,7 +188,7 @@
     { t: 'El 8237 pide los buses', d: 'El 8237 activa <b>HRQ</b>, que va a la terminal <b>HOLD</b> del microprocesador: “quiero los buses”.', act: ['hrq'] },
     { t: 'La CPU cede los buses', d: 'El microprocesador suspende el programa y deja los buses de direcciones, datos y control en <b>alta impedancia</b> (como si lo hubieran retirado). Contesta con <b>HLDA</b>. A diferencia de INTR/NMI, HOLD actúa a media instrucción; solo RESET tiene más prioridad.', act: ['hlda'] },
     { t: 'El 8237 confirma al dispositivo', d: 'El 8237 responde al dispositivo con <b>DACK</b> y con <b>AEN</b> habilita su registro de dirección. Ahora él es el dueño de los buses.', act: ['dack', 'bus'] },
-    { t: 'Transferencia directa', d: 'El 8237 pone la dirección (CAR) y genera las señales de control: en una <b>lectura de DMA</b> (memoria → E/S) se activan MEMR e IOW al mismo tiempo; en una <b>escritura de DMA</b> (E/S → memoria), IOR y MEMW. Cada byte descuenta la cuenta (CWCR).', act: ['dato', 'bus'] },
+    { t: 'Transferencia directa', d: 'El 8237 pone la dirección (CAR) y genera las señales de control: en una <b>lectura de DMA</b> (memoria → E/S) se activan MRDC e IOWC al mismo tiempo; en una <b>escritura de DMA</b> (E/S → memoria), MWTC e IORC (nombres del profe; equivalen a MEMR/IOW y MEMW/IOR). Cada byte descuenta la cuenta (CWCR).', act: ['dato', 'bus'] },
     { t: 'Fin: cuenta terminal', d: 'Cuando la cuenta llega a su fin (bit TC del registro de estado, o la señal <b>EOP</b>) el 8237 baja HRQ, la CPU baja HLDA y <b>recupera los buses</b>. Con autoinicialización, BA y BWC recargan CAR y CWCR.', act: ['eop'] }
   ];
 
@@ -241,7 +242,34 @@
     ['Retos', 'Reto 2: clic derecho dentro de la zona caliente…', ['Cierra el programa', 'Imprime D y no cierra', 'No hace nada', 'Imprime I'], 1, 'La zona solo se evalúa en ClicIzquierdo.'],
     ['Retos', 'Reto 2: ¿qué pasa con ambos botones presionados (BX = 3)?', ['Sale', 'No hace nada: el sondeo solo compara con 1 y 2', 'Imprime I', 'Imprime D'], 1, 'A diferencia del Reto 1, aquí la salida es por coordenadas, no por ambos botones.'],
     ['Retos', '¿Por qué JA (y no JG) en la comparación de coordenadas?', ['Porque JA es más rápido', 'Porque las coordenadas son números sin signo y JA es el salto sin signo', 'Porque JG no existe', 'Da igual'], 1, 'El curso usa JB/JBE/JA/JAE/JE/JNE; los saltos con signo (JG, JL…) no se usan.'],
-    ['Retos', 'En el Reto 2, ¿dónde aparecen las letras I y D?', ['Donde se hizo clic', 'En la posición del cursor de texto (después del título), no en la del mouse', 'En la esquina superior', 'No aparecen'], 1, 'INT 21h/02h escribe en la posición del cursor de texto.']
+    ['Retos', 'En el Reto 2, ¿dónde aparecen las letras I y D?', ['Donde se hizo clic', 'En la posición del cursor de texto (después del título), no en la del mouse', 'En la esquina superior', 'No aparecen'], 1, 'INT 21h/02h escribe en la posición del cursor de texto.'],
+    /* ----- Añadidas a partir del cuestionario del profe ----- */
+    ['E/S', '¿Qué es la decodificación de puertos?', ['Convertir datos seriales en paralelos', 'Un circuito que recibe la dirección del microprocesador y activa solo el puerto correspondiente', 'Cifrar los datos de un periférico', 'Dividir el reloj entre varios puertos'], 1, 'Cuestionario del profe: el decodificador recibe la dirección que pone el micro y activa únicamente el puerto que le corresponde.'],
+    ['E/S', '¿Qué es un wide port (puerto ancho)?', ['Un puerto de 8 bits con más cables', 'Un puerto de 16 bits que transfiere una palabra completa en una sola operación, formado por dos puertos de 8 bits contiguos', 'Un puerto de red inalámbrico', 'Un puerto de 32 bits exclusivo del 80386'], 1, 'Un puerto de 8 bits transfiere 1 byte por operación; uno de 16 bits, una palabra (dos bytes). El wide port junta dos puertos de 8 bits contiguos.'],
+    ['E/S', 'Según el profe, ¿qué es una API?', ['Un chip que sustituye al PLD', 'Un conjunto de funciones que define cómo se comunican las aplicaciones de forma estandarizada, sin importar su lenguaje o plataforma', 'Un bus de datos de 16 bits', 'Un tipo de interrupción de hardware'], 1, 'Características clave: facilitan la integración y reutilización, ocultan los detalles internos y funcionan en red.'],
+    ['E/S', '¿Cuál es una ventaja de los PPI frente a los PLD?', ['Son totalmente reconfigurables', 'Funcionalidad predefinida, rendimiento optimizado y menor complejidad: traen la interfaz ya hecha', 'Sirven para cualquier lógica personalizada', 'Son mejores en producciones pequeñas'], 1, 'El PLD es el flexible y reconfigurable; el PPI es específico, simple, estándar y conviene para grandes volúmenes.'],
+    ['E/S', '¿Cuál de estas es una aplicación de los PLD según el profe?', ['Solo impresoras', 'Control industrial, electrónica automotriz y sistemas embebidos', 'Únicamente video compuesto', 'Ninguna: solo se usan en PCs'], 1, 'También se usan en interfaces personalizadas y en la decodificación de direcciones de E/S.'],
+    ['DMA', 'En una lectura de DMA (memoria a E/S), ¿qué terminales se activan según el profe?', ['MWTC e IORC', 'MRDC e IOWC', 'MRDC e IORC', 'MWTC e IOWC'], 1, 'MRDC: la memoria entrega el dato al bus. IOWC: el dispositivo de E/S recibe el dato del bus.'],
+    ['DMA', 'En una escritura de DMA (E/S a memoria), ¿qué terminales se activan según el profe?', ['MRDC e IOWC', 'MWTC e IORC', 'MRDC e IORC', 'MWTC e IOWC'], 1, 'MWTC: la memoria recibe el dato del bus. IORC: el dispositivo de E/S entrega el dato al bus.'],
+    ['DMA', '¿Para qué sirve un bus compartido?', ['Solo para el reloj', 'Para intercambiar datos entre los microprocesadores del sistema; puede tener memoria y E/S accesibles para todos', 'Para conectar un solo micro con su memoria local', 'Para alimentar a los periféricos'], 1, 'El bus local, en cambio, es el residente del micro, conectado a su memoria y E/S locales sin protocolos especiales.'],
+    ['DMA', 'Modo del 8289 que conecta un microprocesador al bus compartido, sin memoria ni E/S local:', ['Bus residente', 'Bus único', 'Bus periférico de E/S', 'Bus local'], 1, 'Bus residente: permite acceso a memoria y E/S, como bus local o compartido. Bus periférico de E/S es el tercer modo.'],
+    ['DMA', '¿Cómo opera un sistema con el 8289?', ['Todos los micros controlan el bus a la vez', 'El maestro del bus compartido controla el sistema; los demás micros ejecutan tareas independientes y las reportan por el bus compartido', 'Solo el 8237 puede usar el bus', 'No hay maestro: cada micro tiene su bus'], 1, 'El 8289 es el árbitro: decide la prioridad entre los maestros y deja que solo uno acceda a la vez.'],
+    ['Video', '¿Qué es la señal de video compuesta?', ['Una señal digital de tres cables', 'Una señal analógica que transporta en un solo cable luminancia, crominancia y pulsos de sincronización', 'Solo el audio de un televisor', 'La señal que sale por HDMI'], 1, 'La señal de video, en general, transporta la imagen y su sincronización para que el monitor la reconstruya.'],
+    ['Video', 'TTL significa…', ['Transmisión de tono lineal', 'Lógica transistor-transistor', 'Tubo de televisión lineal', 'Tarjeta de transferencia lenta'], 1, 'El monitor TTL RGB recibe las señales de rojo, verde y azul en forma digital (encendido/apagado).'],
+    ['Video', '¿Con qué podía trabajar el monitor TTL RGB y qué ajustaba?', ['Con VGA, ajustando la paleta', 'Con tarjetas CGA y EGA, ajustando solo la sincronización horizontal a cada resolución', 'Solo con CGA, sin ajustes', 'Con HDMI, ajustando el audio'], 1, 'Esa frase NO pertenece al monitor monocromo, sino al TTL RGB: 8 colores, o 16 con intensidad.'],
+    ['Video', '¿Cómo logró EGA los 16 colores?', ['Con una paleta de 64 000 colores', 'En vez de la señal de intensidad, recibía una segunda señal por cada color primario, con más matices', 'Duplicando la resolución', 'Usando video compuesto'], 1, 'CGA usaba una sola señal de intensidad (8 + 8 intensos); EGA una segunda señal por primario.'],
+    ['Video', '¿Qué diferencia hay entre RGB y RCA?', ['RGB es compuesto y RCA separado', 'RGB envía los colores en señales separadas (mejor calidad); RCA envía el video compuesto en una sola señal, con el audio en cables aparte', 'Son iguales', 'RCA es digital y RGB analógico'], 1, 'El monitor RGB analógico tiene 3 cañones independientes y no necesita decodificación.'],
+    ['Video', '¿Qué es DisplayPort?', ['Un puerto serial antiguo', 'Una interfaz para pantallas digitales, compatible con 4K y futuros 8K', 'Un adaptador pasivo HDMI a VGA', 'Un formato de video analógico'], 1, 'Junto con HDMI y DVI, es una de las interfaces de video mencionadas.'],
+    ['Video', 'Además de 1280x720 y 1920x1080, ¿qué resolución HD menciona el profe entre los formatos de computador?', ['1366x768', '800x600', '2048x1536', '3840x2160'], 0, 'Lista del profe: VGA, SVGA, XGA, SXGA, UXGA, WUXGA, QXGA y HD (1280x720, 1366x768 y 1920x1080). Entre los comunes hoy: WQHD 1440p.'],
+    ['Ciclos de bus', 'En un diagrama de tiempo, la línea media rayada representa…', ['Nivel lógico 0', 'Alta impedancia (tri-state): ni 0 ni 1', 'Nivel lógico 1', 'Un flanco de subida'], 1, 'Línea baja = 0; línea alta = 1; hexágono/líneas cruzadas = varios bits cambian a la vez (bus).'],
+    ['Ciclos de bus', 'Las líneas cruzadas (hexágono) en un diagrama de tiempo indican…', ['Un reloj a doble velocidad', 'Que varios bits cambian a la vez (bus de direcciones o datos)', 'Una señal en alta impedancia', 'Un ciclo de espera'], 1, 'Dentro del hexágono se anota el valor, por ejemplo dirección o dato.'],
+    ['Ciclos de bus', '¿Qué indican las flechas de dependencia?', ['El intervalo de tiempo entre dos eventos', 'Que un evento causa o condiciona a otro', 'La subida del reloj', 'Que la señal está en alta impedancia'], 1, 'El intervalo entre dos eventos lo marcan las líneas de acotación; los flancos son la subida y la bajada del reloj.'],
+    ['Ciclos de bus', '¿En cuántos estados de reloj se divide el ciclo de escritura y qué ocurre en T1?', ['Dos; el dato se escribe', 'Cuatro (T1 a T4); el procesador coloca la dirección en el bus', 'Tres; se activa WR', 'Cuatro; se libera el bus'], 1, 'T2 y T3: la dirección sigue válida, se activa la escritura y el dato se pone en el bus. T4: termina, se desactiva la escritura y el bus queda libre.'],
+    ['Ciclos de bus', 'En el ciclo de escritura, la señal WR es…', ['Activa en 1 durante T1', 'Activa en 0 (bajo)', 'Siempre en alta impedancia', 'Igual que el reloj'], 1, 'WR (escritura) y RD (lectura) son activas en 0. ADDRESS/DATA lleva primero la dirección y luego el dato.'],
+    ['Ciclos de bus', '¿Cuándo se insertan ciclos de espera?', ['Cuando READY está en 0, para adaptarse a memorias o dispositivos lentos', 'Cuando ALE está en 1', 'Al terminar T4 siempre', 'Cuando IO/M vale 1'], 0, 'Son estados adicionales dentro del ciclo.'],
+    ['Ciclos de bus', '¿Qué hace la señal ALE?', ['Distingue E/S de memoria', 'Habilita el latch de dirección', 'Selecciona el chip', 'Habilita la salida'], 1, 'IO/M distingue E/S de memoria; CS selecciona el chip; OE (Output Enable) habilita la salida; G (Gate) es habilitación.'],
+    ['Ciclos de bus', 'Los bits (IO/M, S1, S0) = (0,1,1) corresponden al ciclo de…', ['Memory read', 'Memory write', 'Opcode fetch', 'Espera'], 2, 'Opcode fetch (0,1,1): lee el código de la instrucción. Memory read (0,1,0). Memory write (0,0,1).'],
+    ['Ciclos de bus', '¿Qué ciclo de máquina es (IO/M, S1, S0) = (0,0,1)?', ['Opcode fetch', 'Memory read', 'Memory write', 'Lectura de E/S'], 2, 'Memory write escribe un dato en memoria; memory read (0,1,0) lee un dato de memoria.']
   ];
 
   /* La respuesta correcta no debe caer casi siempre en la misma posición: se rota cada lista de opciones de forma fija. */
@@ -254,7 +282,7 @@
   /* ---------- Preguntas abiertas ---------- */
   const ABIERTAS = [
     { q: 'Explica cómo funciona una transferencia por DMA con el 8237, desde que el dispositivo la pide hasta que la CPU recupera los buses.',
-      a: 'El dispositivo activa <b>DREQ</b>; el 8237 activa <b>HRQ</b>, conectado a la terminal <b>HOLD</b> del microprocesador. La CPU suspende el programa, deja los buses en <b>alta impedancia</b> y responde con <b>HLDA</b>. El 8237 confirma con <b>DACK</b>, habilita su registro de dirección (<b>AEN</b>) y genera las señales de control: lectura de DMA (memoria → E/S) activa MEMR e IOW; escritura de DMA (E/S → memoria) activa IOR y MEMW. Cada byte descuenta la cuenta; al llegar a la cuenta terminal (TC/EOP) baja HRQ, la CPU baja HLDA y recupera los buses.',
+      a: 'El dispositivo activa <b>DREQ</b>; el 8237 activa <b>HRQ</b>, conectado a la terminal <b>HOLD</b> del microprocesador. La CPU suspende el programa, deja los buses en <b>alta impedancia</b> y responde con <b>HLDA</b>. El 8237 confirma con <b>DACK</b>, habilita su registro de dirección (<b>AEN</b>) y genera las señales de control: lectura de DMA (memoria → E/S) activa MRDC e IOWC; escritura de DMA (E/S → memoria) activa MWTC e IORC. Cada byte descuenta la cuenta; al llegar a la cuenta terminal (TC/EOP) baja HRQ, la CPU baja HLDA y recupera los buses.',
       puntos: ['DREQ → HRQ/HOLD → HLDA', 'Alta impedancia de los buses', 'DACK y AEN', 'Lectura vs escritura de DMA', 'Cuenta terminal / EOP y devolución de buses'] },
     { q: 'Describe los cuatro pasos para programar un canal del 8237 y por qué el orden importa.',
       a: '(1) Limpiar el biestable primero/último (P/U) con un comando de software (una simple salida al puerto); (2) deshabilitar (enmascarar) el canal; (3) programar el byte bajo (LSB) y luego el alto (MSB) de la dirección; (4) programar LSB y MSB de la cuenta (n − 1). El P/U se invierte con cada acceso, así que si no se limpia primero, cuenta y dirección pueden quedar mal. Después se programa el modo de operación y se activa el canal.',
@@ -389,6 +417,13 @@
       this.reiniciar();
       const tick = () => { this.paso(); requestAnimationFrame(tick); };
       requestAnimationFrame(tick);
+    }
+    /* Carga un programa escrito por el estudiante (lo usa la sección de retos propuestos) */
+    cargar(src, modo) {
+      PROGRAMAS.propio = { id: 'propio', nombre: 'Mi programa (retos propuestos)', modo: modo || 'texto', resumen: '', partes: [], src };
+      const sel = $('#mlProg', this.el);
+      if (!sel.querySelector('option[value="propio"]')) { const o = document.createElement('option'); o.value = 'propio'; o.textContent = PROGRAMAS.propio.nombre; sel.append(o); }
+      sel.value = 'propio'; this.prog = 'propio'; this.reiniciar();
     }
     reiniciar() {
       const p = PROGRAMAS[this.prog];
@@ -528,7 +563,7 @@
 
   function init() {
     $$('[data-prog]').forEach(pintaPrograma);
-    const lab = $('#labMouse'); if (lab && window.ASM) new MouseLab(lab);
+    const lab = $('#labMouse'); if (lab && window.ASM) API.lab = new MouseLab(lab);
     const d = $('#dmaFig'); if (d) iniciaDma(d);
     const m = $('#modoDma'); if (m) iniciaModo(m);
     const c = $('#calcCoord'); if (c) iniciaCoord(c);
