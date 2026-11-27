@@ -184,6 +184,60 @@
       <tr><td><b>Controlador de audio / video</b></td><td>Audio: señales, compresión, efectos, volumen. Video: decodifica, escala y reproduce.</td></tr>
       <tr><td><b>USB, GPIO, PCIe…</b></td><td>Controladores para otras interfaces programables.</td></tr>
     </tbody></table></div>
+  <figure>
+    <svg class="dg wide" viewBox="0 0 760 440" role="img" aria-label="Mapa de la CPU rodeada de las unidades de procesamiento de E/S: MMU, IOMMU y caché a la izquierda; GPU, NIC y controlador de discos a la derecha; controladores de audio, video y USB/GPIO/PCIe abajo. Debajo, cinco interfaces programables: USB plug-and-play, serial bit por bit en una línea, paralelo con ocho líneas a la vez, GPIO e I2C.">
+      <!-- columna izquierda -->
+      <rect class="nd-m" x="20" y="15" width="230" height="52" rx="8"/><text class="b" x="34" y="36">MMU</text><text class="xs mut" x="34" y="55">direcciones virtuales → físicas</text>
+      <rect class="nd-m" x="20" y="80" width="230" height="52" rx="8"/><text class="b" x="34" y="101">IOMMU</text><text class="xs mut" x="34" y="120">E/S virtual → física · aísla</text>
+      <rect class="nd-m" x="20" y="145" width="230" height="52" rx="8"/><text class="b" x="34" y="166">Caché</text><text class="xs mut" x="34" y="185">instrucciones y datos, acelera la memoria</text>
+      <!-- columna derecha -->
+      <rect class="nd-v" x="510" y="15" width="230" height="52" rx="8"/><text class="b" x="524" y="36">GPU</text><text class="xs mut" x="524" y="55">procesa gráficos 2D/3D</text>
+      <rect class="nd-v" x="510" y="80" width="230" height="52" rx="8"/><text class="b" x="524" y="101">NIC</text><text class="xs mut" x="524" y="120">procesa los paquetes de red</text>
+      <rect class="nd-v" x="510" y="145" width="230" height="52" rx="8"/><text class="b" x="524" y="166">Controlador de discos</text><text class="xs mut" x="524" y="185">comunicación con los discos</text>
+      <!-- CPU -->
+      <rect class="nd-x" x="300" y="75" width="160" height="70" rx="10"/><text class="c b" x="380" y="105">CPU</text><text class="c xs mut" x="380" y="124">microprocesador</text>
+      <line class="ar" x1="250" y1="41" x2="300" y2="92"/><line class="ar" x1="250" y1="106" x2="300" y2="108"/><line class="ar" x1="250" y1="171" x2="300" y2="128"/>
+      <line class="ar" x1="510" y1="41" x2="460" y2="92"/><line class="ar" x1="510" y1="106" x2="460" y2="108"/><line class="ar" x1="510" y1="171" x2="460" y2="128"/>
+      <!-- fila inferior -->
+      <line class="ar" x1="380" y1="145" x2="380" y2="212"/><line class="ar" x1="135" y1="212" x2="625" y2="212"/>
+      <line class="ar" x1="135" y1="212" x2="135" y2="225"/><line class="ar" x1="625" y1="212" x2="625" y2="225"/>
+      <rect class="nd-c" x="20" y="225" width="230" height="52" rx="8"/><text class="b" x="34" y="246">Controlador de audio</text><text class="xs mut" x="34" y="265">procesa y reproduce audio</text>
+      <rect class="nd-c" x="265" y="225" width="230" height="52" rx="8"/><text class="b" x="279" y="246">Controlador de video</text><text class="xs mut" x="279" y="265">procesa y reproduce video</text>
+      <rect class="nd-c" x="510" y="225" width="230" height="52" rx="8"/><text class="b" x="524" y="246">USB · GPIO · PCIe</text><text class="xs mut" x="524" y="265">otras interfaces programables</text>
+      <line class="ar" x1="380" y1="212" x2="380" y2="225"/>
+      <!-- interfaces -->
+      <text class="sm b" x="10" y="306">Interfaces periféricas programables</text>
+      <!-- USB -->
+      <rect class="cls" x="10" y="315" width="136" height="112" rx="8"/>
+      <text class="c b" x="78" y="336">USB</text><text class="c xs mut" x="78" y="352">plug-and-play</text>
+      <rect class="nd-x" x="46" y="368" width="64" height="30" rx="3"/><rect class="nd" x="54" y="377" width="14" height="12"/><rect class="nd" x="88" y="377" width="14" height="12"/>
+      <!-- Serial -->
+      <rect class="cls" x="161" y="315" width="136" height="112" rx="8"/>
+      <text class="c b" x="229" y="336">Serial</text><text class="c xs mut" x="229" y="352">bit por bit, una línea</text>
+      <g class="mono xs c"><rect class="nd-m" x="173" y="366" width="13" height="18"/><text x="179.5" y="379">1</text><rect class="nd" x="187" y="366" width="13" height="18"/><text x="193.5" y="379">0</text><rect class="nd-m" x="201" y="366" width="13" height="18"/><text x="207.5" y="379">1</text><rect class="nd-m" x="215" y="366" width="13" height="18"/><text x="221.5" y="379">1</text><rect class="nd" x="229" y="366" width="13" height="18"/><text x="235.5" y="379">0</text><rect class="nd-m" x="243" y="366" width="13" height="18"/><text x="249.5" y="379">1</text><rect class="nd" x="257" y="366" width="13" height="18"/><text x="263.5" y="379">0</text><rect class="nd" x="271" y="366" width="13" height="18"/><text x="277.5" y="379">0</text></g>
+      <line class="ar acc" x1="173" y1="402" x2="278" y2="402"/><polygon class="ah" points="284,402 274,397 274,407"/>
+      <text class="c xs mut" x="229" y="420">uno tras otro</text>
+      <!-- Paralelo -->
+      <rect class="cls" x="312" y="315" width="136" height="112" rx="8"/>
+      <text class="c b" x="380" y="336">Paralelo</text><text class="c xs mut" x="380" y="352">todos los bits a la vez</text>
+      <g><line class="ar" x1="326" y1="362" x2="434" y2="362"/><line class="ar" x1="326" y1="368" x2="434" y2="368"/><line class="ar" x1="326" y1="374" x2="434" y2="374"/><line class="ar" x1="326" y1="380" x2="434" y2="380"/><line class="ar" x1="326" y1="386" x2="434" y2="386"/><line class="ar" x1="326" y1="392" x2="434" y2="392"/><line class="ar" x1="326" y1="398" x2="434" y2="398"/><line class="ar" x1="326" y1="404" x2="434" y2="404"/></g>
+      <rect class="nd-m" x="368" y="360" width="24" height="46"/>
+      <text class="c xs mut" x="380" y="420">8 líneas</text>
+      <!-- GPIO -->
+      <rect class="cls" x="463" y="315" width="136" height="112" rx="8"/>
+      <text class="c b" x="531" y="336">GPIO</text><text class="c xs mut" x="531" y="352">pines programables</text>
+      <g class="mono xs c"><rect class="nd-c" x="473" y="368" width="26" height="28"/><text x="486" y="386">IN</text><rect class="nd-v" x="503" y="368" width="26" height="28"/><text x="516" y="386">OUT</text><rect class="nd-c" x="533" y="368" width="26" height="28"/><text x="546" y="386">IN</text><rect class="nd-v" x="563" y="368" width="26" height="28"/><text x="576" y="386">OUT</text></g>
+      <text class="c xs mut" x="531" y="420">entrada o salida</text>
+      <!-- I2C -->
+      <rect class="cls" x="614" y="315" width="136" height="112" rx="8"/>
+      <text class="c b" x="682" y="336">I2C</text><text class="c xs mut" x="682" y="352">bus síncrono simple</text>
+      <line class="ar" x1="626" y1="396" x2="738" y2="396"/>
+      <line class="ar" x1="641" y1="384" x2="641" y2="396"/><line class="ar" x1="682" y1="384" x2="682" y2="396"/><line class="ar" x1="723" y1="384" x2="723" y2="396"/>
+      <g class="xs c"><rect class="nd-m" x="626" y="366" width="30" height="18"/><text x="641" y="379">µC</text><rect class="nd-v" x="667" y="366" width="30" height="18"/><text x="682" y="379">S</text><rect class="nd-v" x="708" y="366" width="30" height="18"/><text x="723" y="379">S</text></g>
+      <text class="c xs mut" x="682" y="420">para sensores</text>
+    </svg>
+    <figcaption><b>Unidades de E/S alrededor de la CPU e interfaces programables.</b> Las funciones son las del cuestionario del profesor; la disposición, los colores por grupo y los dibujos de bits, pines y sensores (µC = microcontrolador, S = sensor) son un <span class="badge ded">deducido</span> esquema propio.</figcaption>
+  </figure>
   <div class="key"><b>Ventajas de las unidades adicionales</b><p class="small">Mejoran el rendimiento, agregan funcionalidad avanzada, permiten múltiples tareas, escalabilidad, optimizan recursos, reducen cuellos de botella y dan compatibilidad futura: versatilidad y longevidad al sistema.</p></div>
 </section>
 
@@ -224,6 +278,44 @@
     <div class="card tile"><span class="tag">DEFINICIONES DEL PROFE</span><p class="small"><b>PLD</b>: dispositivo lógico programable <b>por el usuario</b> que implementa funciones lógicas y de E/S, y se usa como decodificador de puertos. <b>PPI</b>: interfaz de E/S programable <b>específica</b>, que implementa en hardware un protocolo de comunicación concreto.</p></div>
   </div>
   <p class="small"><b>PLD como decodificador de puertos:</b> una matriz lógica programable mapea rangos de direcciones de E/S a puertos físicos, activa la salida del puerto cuando detecta la dirección, reduce cableado y se puede reprogramar sin cambiar hardware. <span class="badge ded">nota</span> La tabla del material trae columnas mezcladas; aquí se ordenó según el texto de las diapositivas anteriores.</p>
+  <figure>
+    <svg class="dg wide" viewBox="0 0 760 410" role="img" aria-label="Comparación PLD contra PPI y esquema del PLD como decodificador de puertos. PLD: rejilla de compuertas genérica y reprogramable donde el usuario diseña la lógica. PPI: interfaz predefinida con UART, I2C, SPI, USB, Ethernet y GPIO, funcionalidad fija. Abajo: bus de direcciones entra al PLD, que activa solo una de tres señales CS hacia los puertos 1, 2 y 3.">
+      <!-- PLD -->
+      <rect class="frame" x="10" y="10" width="360" height="215" rx="10"/>
+      <text class="c b" x="190" y="32">PLD · dispositivo genérico</text>
+      <rect class="nd-m" x="100" y="46" width="180" height="96" rx="6"/>
+      <g class="sep"><line x1="130" y1="46" x2="130" y2="142"/><line x1="160" y1="46" x2="160" y2="142"/><line x1="190" y1="46" x2="190" y2="142"/><line x1="220" y1="46" x2="220" y2="142"/><line x1="250" y1="46" x2="250" y2="142"/><line x1="100" y1="70" x2="280" y2="70"/><line x1="100" y1="94" x2="280" y2="94"/><line x1="100" y1="118" x2="280" y2="118"/></g>
+      <g class="ah"><circle cx="130" cy="70" r="3.5"/><circle cx="190" cy="70" r="3.5"/><circle cx="160" cy="94" r="3.5"/><circle cx="250" cy="94" r="3.5"/><circle cx="130" cy="118" r="3.5"/><circle cx="220" cy="118" r="3.5"/><circle cx="250" cy="70" r="3.5"/></g>
+      <text class="c sm" x="190" y="164">el usuario diseña la lógica</text>
+      <text class="c xs mut" x="190" y="182">reprogramable · muy flexible, pero complejo</text>
+      <text class="c xs mut" x="190" y="200">útil para interfaces personalizadas o pocas unidades</text>
+      <!-- PPI -->
+      <rect class="frame" x="390" y="10" width="360" height="215" rx="10"/>
+      <text class="c b" x="570" y="32">PPI · interfaz predefinida</text>
+      <rect class="nd-v" x="480" y="46" width="180" height="96" rx="6"/>
+      <text class="c xs mut" x="570" y="63">la interfaz ya viene hecha</text>
+      <g class="xs c"><rect class="nd" x="488" y="72" width="52" height="24" rx="3"/><text x="514" y="88">UART</text><rect class="nd" x="544" y="72" width="52" height="24" rx="3"/><text x="570" y="88">I2C</text><rect class="nd" x="600" y="72" width="52" height="24" rx="3"/><text x="626" y="88">SPI</text><rect class="nd" x="488" y="104" width="52" height="24" rx="3"/><text x="514" y="120">USB</text><rect class="nd" x="544" y="104" width="52" height="24" rx="3"/><text x="570" y="120">Ethernet</text><rect class="nd" x="600" y="104" width="52" height="24" rx="3"/><text x="626" y="120">GPIO</text></g>
+      <text class="c sm" x="570" y="164">funcionalidad fija</text>
+      <text class="c xs mut" x="570" y="182">optimizado y estándar</text>
+      <text class="c xs mut" x="570" y="200">ideal para grandes volúmenes</text>
+      <!-- decodificador -->
+      <text class="b" x="10" y="250">PLD como decodificador de puertos</text>
+      <rect class="nd-c" x="10" y="275" width="140" height="64" rx="8"/><text class="c b" x="80" y="304">Bus de</text><text class="c b" x="80" y="322">direcciones</text>
+      <line class="ar acc" x1="150" y1="307" x2="246" y2="307"/><polygon class="ah" points="250,307 240,302 240,312"/>
+      <text class="c xs mono" x="200" y="298">dirección</text>
+      <rect class="nd-m" x="250" y="262" width="150" height="90" rx="8"/><text class="c b" x="325" y="300">PLD</text><text class="c xs mut" x="325" y="320">decodifica la dirección</text>
+      <line class="ar d" x1="400" y1="280" x2="516" y2="280"/><polygon class="ah" points="520,280 510,275 510,285"/>
+      <line class="ar acc" x1="400" y1="307" x2="516" y2="307"/><polygon class="ah" points="520,307 510,302 510,312"/>
+      <line class="ar d" x1="400" y1="334" x2="516" y2="334"/><polygon class="ah" points="520,334 510,329 510,339"/>
+      <text class="c xs mono" x="458" y="274">CS1</text><text class="c xs mono" x="458" y="301">CS2</text><text class="c xs mono" x="458" y="328">CS3</text>
+      <rect class="nd" x="520" y="266" width="110" height="28" rx="5"/><text class="c sm" x="575" y="285">Puerto 1</text>
+      <rect class="nd-r" x="520" y="293" width="110" height="28" rx="5"/><text class="c sm b" x="575" y="312">Puerto 2</text>
+      <rect class="nd" x="520" y="320" width="110" height="28" rx="5"/><text class="c sm" x="575" y="339">Puerto 3</text>
+      <text class="xs mut" x="640" y="285">inactivo</text><text class="xs b" x="640" y="312">activo</text><text class="xs mut" x="640" y="339">inactivo</text>
+      <text class="c sm mut" x="380" y="378">solo se activa el puerto que corresponde a la dirección; el resto queda inactivo</text>
+    </svg>
+    <figcaption><b>PLD vs PPI, y el PLD como decodificador de puertos.</b> Las diferencias y funciones son las del cuestionario del profesor. La rejilla de compuertas, el ejemplo con el puerto 2 activo y los nombres CS1-CS3 son un <span class="badge ded">deducido</span> esquema propio.</figcaption>
+  </figure>
 </section>
 
 <!-- ======================= D1 ======================= -->
@@ -237,6 +329,36 @@
     <li>Nombres que usa el profe en su cuestionario: <b>lectura de memoria a E/S = MRDC + IOWC</b>; <b>escritura de E/S a memoria = MWTC + IORC</b>. Equivalen a los nombres anteriores de la guía <span class="badge ded">deducido</span> (en el documento se perdieron como “????”): MRDC = MEMR, MWTC = MEMW, IORC = IOR, IOWC = IOW.</li>
     <li>La velocidad depende de la memoria o del controlador DMA; normalmente el DMA reduce la velocidad del sistema durante la transferencia.</li>
   </ul>
+  <figure>
+    <svg class="dg wide" viewBox="0 0 760 400" role="img" aria-label="Secuencia del DMA. Paso 1: el controlador DMA sube HOLD a la CPU. Paso 2: la CPU responde HLDA y pone sus buses en alta impedancia, desconectada del bus. Paso 3: los datos pasan directo entre memoria y E/S. Lectura de DMA, de memoria a E/S, usa MRDC más IOWC. Escritura de DMA, de E/S a memoria, usa MWTC más IORC.">
+      <rect class="nd-m" x="30" y="30" width="170" height="90" rx="8"/><text class="c b" x="115" y="70">CPU</text><text class="c xs mut" x="115" y="90">micro suspendido</text>
+      <rect class="nd-x" x="300" y="30" width="170" height="90" rx="8"/><text class="c b" x="385" y="70">Controlador DMA</text><text class="c xs mut" x="385" y="90">pide y toma el bus</text>
+      <!-- HOLD / HLDA -->
+      <line class="ar acc" x1="298" y1="56" x2="206" y2="56"/><polygon class="ah" points="202,56 212,51 212,61"/>
+      <text class="c sm b" x="250" y="48">① HOLD</text>
+      <line class="ar acc" x1="204" y1="94" x2="296" y2="94"/><polygon class="ah" points="300,94 290,89 290,99"/>
+      <text class="c sm b" x="250" y="115">② HLDA</text>
+      <!-- bus -->
+      <rect class="nd" x="20" y="192" width="720" height="18" rx="4"/><text class="c xs mut" x="640" y="205">buses: dir · datos · control</text>
+      <!-- CPU desconectada -->
+      <line class="ar d" x1="115" y1="120" x2="115" y2="192"/>
+      <line class="cut" x1="105" y1="148" x2="125" y2="168"/><line class="cut" x1="125" y1="148" x2="105" y2="168"/>
+      <text class="xs" x="136" y="152">② buses de la CPU</text><text class="xs" x="136" y="168">en alta impedancia</text>
+      <!-- DMA al bus -->
+      <line class="ar acc" x1="385" y1="120" x2="385" y2="192"/>
+      <!-- memoria y E/S -->
+      <rect class="nd-db" x="100" y="270" width="160" height="80" rx="8"/><text class="c b" x="180" y="305">Memoria</text>
+      <rect class="nd-v" x="500" y="270" width="160" height="80" rx="8"/><text class="c b" x="580" y="305">Dispositivo de E/S</text>
+      <line class="ar" x1="180" y1="210" x2="180" y2="270"/><line class="ar" x1="580" y1="210" x2="580" y2="270"/>
+      <line class="ar acc" x1="262" y1="296" x2="494" y2="296"/><polygon class="ah" points="498,296 488,291 488,301"/>
+      <text class="c xs mono" x="380" y="289">③ lectura DMA: MRDC + IOWC</text>
+      <line class="ar acc" x1="498" y1="330" x2="266" y2="330"/><polygon class="ah" points="262,330 272,325 272,335"/>
+      <text class="c xs mono" x="380" y="323">③ escritura DMA: MWTC + IORC</text>
+      <text class="c xs mut" x="380" y="345">memoria → E/S arriba · E/S → memoria abajo</text>
+      <text class="c sm mut" x="380" y="382">HOLD actúa a media instrucción · solo RESET tiene más prioridad</text>
+    </svg>
+    <figcaption><b>Secuencia HOLD / HLDA y transferencia directa.</b> Pasos, señales y prioridad según el cuestionario del profesor. La posición de los bloques y la X que marca la CPU desconectada del bus son un <span class="badge ded">deducido</span> esquema propio.</figcaption>
+  </figure>
   <div class="tbl-wrap"><table>
     <thead><tr><th>Transferencia</th><th>Terminales</th><th>Papel de cada una</th></tr></thead>
     <tbody>
@@ -292,6 +414,39 @@
   <div class="key warn"><b>Cuatro pasos para programar el 8237</b>
     <ol class="small"><li>Limpiar el biestable P/U.</li><li>Deshabilitar el canal.</li><li>Programar primero el LSB y luego el MSB de la <b>dirección</b>.</li><li>Programar el LSB y el MSB de la <b>cuenta</b>.</li></ol>
     <p class="small">Después se programa el modo de operación y se activa el canal. Las direcciones de puerto vienen en las figuras 7 y 8 del documento (imágenes).</p></div>
+  <figure>
+    <svg class="dg wide" viewBox="0 0 760 460" role="img" aria-label="Bloque del controlador 8237 con cuatro canales de 64 KB y sus registros internos CAR, CWCR, CR, registro de modo y SR. A la derecha, diagrama de flujo de cuatro pasos para programarlo: limpiar el flip-flop P/U, deshabilitar el canal, cargar la dirección primero LSB y luego MSB, y cargar la cuenta primero LSB y luego MSB. Abajo, los tres comandos de software.">
+      <rect class="nd-m" x="20" y="14" width="380" height="336" rx="10"/>
+      <text class="c b" x="210" y="36">8237 · controlador DMA</text>
+      <text class="c xs mut" x="210" y="52">hasta 1.6 Mbps · compatible con 8086/8088</text>
+      <g class="c"><rect class="nd-x" x="36" y="62" width="80" height="52" rx="6"/><text class="b" x="76" y="84">Canal 0</text><text class="xs mut" x="76" y="102">64 KB</text><rect class="nd-x" x="124" y="62" width="80" height="52" rx="6"/><text class="b" x="164" y="84">Canal 1</text><text class="xs mut" x="164" y="102">64 KB</text><rect class="nd-x" x="212" y="62" width="80" height="52" rx="6"/><text class="b" x="252" y="84">Canal 2</text><text class="xs mut" x="252" y="102">64 KB</text><rect class="nd-x" x="300" y="62" width="80" height="52" rx="6"/><text class="b" x="340" y="84">Canal 3</text><text class="xs mut" x="340" y="102">64 KB</text></g>
+      <text class="xs mut" x="36" y="140">Registros internos</text>
+      <rect class="nd-c" x="36" y="148" width="344" height="32" rx="5"/><text class="mono b" x="48" y="169">CAR</text><text class="sm" x="118" y="169">dirección actual de memoria</text>
+      <rect class="nd-c" x="36" y="186" width="344" height="32" rx="5"/><text class="mono b" x="48" y="207">CWCR</text><text class="sm" x="118" y="207">cuenta actual: cuántos bytes</text>
+      <rect class="nd-c" x="36" y="224" width="344" height="32" rx="5"/><text class="mono b" x="48" y="245">CR</text><text class="sm" x="118" y="245">comandos: opera el controlador</text>
+      <rect class="nd-c" x="36" y="262" width="344" height="32" rx="5"/><text class="mono b" x="48" y="283">Modo</text><text class="sm" x="118" y="283">modo de operación de cada canal</text>
+      <rect class="nd-c" x="36" y="300" width="344" height="32" rx="5"/><text class="mono b" x="48" y="321">SR</text><text class="sm" x="118" y="321">estado de cada canal</text>
+      <!-- flujo -->
+      <text class="c b" x="600" y="26">Programar el 8237</text>
+      <g>
+        <rect class="nd-v" x="466" y="40" width="268" height="48" rx="8"/><circle class="nd-x" cx="490" cy="64" r="11"/><text class="c b sm" x="490" y="68">1</text><text class="c b" x="616" y="69">Limpiar el flip-flop P/U</text>
+        <line class="ar acc" x1="600" y1="88" x2="600" y2="112"/><polygon class="ah" points="600,118 595,108 605,108"/>
+        <rect class="nd-v" x="466" y="120" width="268" height="48" rx="8"/><circle class="nd-x" cx="490" cy="144" r="11"/><text class="c b sm" x="490" y="148">2</text><text class="c b" x="616" y="149">Deshabilitar el canal</text>
+        <line class="ar acc" x1="600" y1="168" x2="600" y2="192"/><polygon class="ah" points="600,198 595,188 605,188"/>
+        <rect class="nd-v" x="466" y="200" width="268" height="52" rx="8"/><circle class="nd-x" cx="490" cy="226" r="11"/><text class="c b sm" x="490" y="230">3</text><text class="c b" x="616" y="222">Cargar la dirección</text><text class="c xs mut" x="616" y="240">primero LSB, luego MSB</text>
+        <line class="ar acc" x1="600" y1="252" x2="600" y2="276"/><polygon class="ah" points="600,282 595,272 605,272"/>
+        <rect class="nd-v" x="466" y="284" width="268" height="52" rx="8"/><circle class="nd-x" cx="490" cy="310" r="11"/><text class="c b sm" x="490" y="314">4</text><text class="c b" x="616" y="306">Cargar la cuenta</text><text class="c xs mut" x="616" y="324">primero LSB, luego MSB</text>
+        <line class="ar d" x1="600" y1="336" x2="600" y2="352"/>
+        <text class="c xs mut" x="600" y="366">después: modo de operación y activar el canal</text>
+      </g>
+      <!-- comandos -->
+      <text class="xs mut" x="20" y="396">Comandos de software: basta una salida al puerto correcto, sin patrón de bits</text>
+      <rect class="nd-r" x="20" y="406" width="225" height="42" rx="6"/><text class="c b sm" x="132" y="423">Limpiar el biestable P/U</text><text class="c xs mut" x="132" y="440">elige byte bajo o alto</text>
+      <rect class="nd-r" x="270" y="406" width="225" height="42" rx="6"/><text class="c b sm" x="382" y="423">Limpieza maestra</text><text class="c xs mut" x="382" y="440">como RESET, desactiva canales</text>
+      <rect class="nd-r" x="520" y="406" width="225" height="42" rx="6"/><text class="c b sm" x="632" y="423">Limpiar registro de máscara</text><text class="c xs mut" x="632" y="440">habilita los cuatro canales</text>
+    </svg>
+    <figcaption><b>8237: canales, registros y pasos de programación.</b> Los canales, registros, pasos y comandos son los del cuestionario del profesor; la disposición de los bloques es un <span class="badge ded">deducido</span> esquema propio.</figcaption>
+  </figure>
 </section>
 
 <!-- ======================= D3 ======================= -->
@@ -307,6 +462,48 @@
     <li><b>Cómo opera el sistema con el 8289:</b> el maestro del bus compartido controla el sistema, y los demás microprocesadores ejecutan tareas independientes y las reportan por el bus compartido.</li>
     <li>Terminales mencionadas: BREQ (pide el bus), BUSY, BPRN/BPRO (prioridad), LOCK (con el prefijo LOCK nadie más accede), AEN (buses a alta impedancia), RESB y SYSB/RESB (compartido o local), S2-S0 (estado del 8288).</li>
   </ul>
+  <figure>
+    <svg class="dg wide" viewBox="0 0 760 430" role="img" aria-label="Sistema multiprocesador con tres nodos. Cada nodo tiene un microprocesador, memoria local y E/S local sobre su bus local, y se conecta mediante un árbitro 8289 al bus compartido, que tiene memoria y E/S compartidas y un controlador DMA 8237 también maestro de bus. El árbitro deja pasar a un solo maestro a la vez.">
+      <!-- nodo 1 -->
+      <rect class="frame" x="20" y="12" width="220" height="176" rx="8"/><text class="xs mut" x="30" y="28">Nodo 1 · micro = maestro de bus</text>
+      <rect class="nd-m" x="32" y="40" width="196" height="34" rx="6"/><text class="c b" x="130" y="62">Microprocesador</text>
+      <line class="ar" x1="130" y1="74" x2="130" y2="104"/><line class="ar" x1="32" y1="104" x2="228" y2="104"/><text class="xs mut" x="34" y="98">bus local</text>
+      <line class="ar" x1="78" y1="104" x2="78" y2="126"/><line class="ar" x1="182" y1="104" x2="182" y2="126"/>
+      <rect class="nd-db" x="32" y="126" width="92" height="40" rx="6"/><text class="c sm" x="78" y="150">Memoria local</text>
+      <rect class="nd-v" x="136" y="126" width="92" height="40" rx="6"/><text class="c sm" x="182" y="150">E/S local</text>
+      <!-- nodo 2 -->
+      <rect class="frame" x="270" y="12" width="220" height="176" rx="8"/><text class="xs mut" x="280" y="28">Nodo 2 · micro = maestro de bus</text>
+      <rect class="nd-m" x="282" y="40" width="196" height="34" rx="6"/><text class="c b" x="380" y="62">Microprocesador</text>
+      <line class="ar" x1="380" y1="74" x2="380" y2="104"/><line class="ar" x1="282" y1="104" x2="478" y2="104"/><text class="xs mut" x="284" y="98">bus local</text>
+      <line class="ar" x1="328" y1="104" x2="328" y2="126"/><line class="ar" x1="432" y1="104" x2="432" y2="126"/>
+      <rect class="nd-db" x="282" y="126" width="92" height="40" rx="6"/><text class="c sm" x="328" y="150">Memoria local</text>
+      <rect class="nd-v" x="386" y="126" width="92" height="40" rx="6"/><text class="c sm" x="432" y="150">E/S local</text>
+      <!-- nodo 3 -->
+      <rect class="frame" x="520" y="12" width="220" height="176" rx="8"/><text class="xs mut" x="530" y="28">Nodo 3 · micro = maestro de bus</text>
+      <rect class="nd-m" x="532" y="40" width="196" height="34" rx="6"/><text class="c b" x="630" y="62">Microprocesador</text>
+      <line class="ar" x1="630" y1="74" x2="630" y2="104"/><line class="ar" x1="532" y1="104" x2="728" y2="104"/><text class="xs mut" x="534" y="98">bus local</text>
+      <line class="ar" x1="578" y1="104" x2="578" y2="126"/><line class="ar" x1="682" y1="104" x2="682" y2="126"/>
+      <rect class="nd-db" x="532" y="126" width="92" height="40" rx="6"/><text class="c sm" x="578" y="150">Memoria local</text>
+      <rect class="nd-v" x="636" y="126" width="92" height="40" rx="6"/><text class="c sm" x="682" y="150">E/S local</text>
+      <!-- árbitros -->
+      <line class="ar d" x1="130" y1="104" x2="130" y2="214"/>
+      <line class="ar acc" x1="380" y1="104" x2="380" y2="214"/>
+      <line class="ar d" x1="630" y1="104" x2="630" y2="214"/>
+      <rect class="nd-c" x="70" y="214" width="120" height="40" rx="6"/><text class="c b sm" x="130" y="238">Árbitro 8289</text>
+      <rect class="nd-c" x="320" y="214" width="120" height="40" rx="6"/><text class="c b sm" x="380" y="238">Árbitro 8289</text>
+      <rect class="nd-c" x="570" y="214" width="120" height="40" rx="6"/><text class="c b sm" x="630" y="238">Árbitro 8289</text>
+      <line class="ar d" x1="130" y1="254" x2="130" y2="284"/><line class="ar acc" x1="380" y1="254" x2="380" y2="284"/><line class="ar d" x1="630" y1="254" x2="630" y2="284"/>
+      <text class="xs mut" x="138" y="274">espera</text><text class="xs b" x="388" y="274">pasa</text><text class="xs mut" x="638" y="274">espera</text>
+      <!-- bus compartido -->
+      <rect class="nd" x="20" y="284" width="720" height="20" rx="4"/><text class="c xs mut" x="380" y="298">bus compartido · memoria y E/S accesibles para todos</text>
+      <line class="ar" x1="120" y1="304" x2="120" y2="334"/><line class="ar" x1="330" y1="304" x2="330" y2="334"/><line class="ar" x1="560" y1="304" x2="560" y2="334"/>
+      <rect class="nd-db" x="40" y="334" width="160" height="42" rx="6"/><text class="c b sm" x="120" y="360">Memoria compartida</text>
+      <rect class="nd-v" x="250" y="334" width="160" height="42" rx="6"/><text class="c b sm" x="330" y="360">E/S compartida</text>
+      <rect class="nd-x" x="470" y="334" width="180" height="42" rx="6"/><text class="c b sm" x="560" y="352">Controlador DMA 8237</text><text class="c xs mut" x="560" y="368">también maestro de bus</text>
+      <text class="c sm mut" x="380" y="406">El árbitro decide la prioridad y deja pasar a un solo maestro a la vez</text>
+    </svg>
+    <figcaption><b>Buses local y compartido con árbitro 8289.</b> Los conceptos son los del cuestionario del profesor. Mostrar tres nodos, cuál tiene el bus en el dibujo (nodo 2, «pasa») y la ubicación del 8237 en el bus compartido son un <span class="badge ded">deducido</span> esquema propio.</figcaption>
+  </figure>
 </section>
 
 <!-- ======================= D5 ======================= -->
@@ -460,6 +657,22 @@
     <div class="card tile"><span class="tag">COLOR BURST</span><p class="small">Pulso estrecho de color de referencia al comienzo de cada línea con croma: sincroniza la fase del color e indica que la línea lleva croma (no solo luminancia).</p></div>
   </div>
   <p class="small"><b>Pedestal</b> (porche): tiempo en blanco entre el fin del pulso de sincronización horizontal y el primer píxel. Demasiado corto distorsiona la imagen; demasiado largo reduce la resolución horizontal efectiva.</p>
+  <figure>
+    <svg class="dg wide" viewBox="0 0 760 320" role="img" aria-label="Esquema de una línea de video compuesta como forma de onda: pulso de sincronía horizontal en nivel bajo, pedestal en blanco, color burst como oscilación corta sobre el pedestal, luego la luminancia de la imagen en escalones, y la señal se repite en la línea siguiente. Con líneas de acotación para pulso de línea, pedestal, color burst e imagen.">
+      <line class="ll" x1="10" y1="150" x2="750" y2="150"/><text class="xs mut e" x="750" y="168">nivel de blanking</text>
+      <line class="ll" x1="10" y1="215" x2="750" y2="215"/><text class="xs mut e" x="750" y="232">nivel de sincronía (bajo)</text>
+      <path class="wf" d="M10,110 H40 V215 H100 V150 L112,150 L118,136 L124,164 L130,136 L136,164 L142,136 L148,164 L154,136 L160,164 L166,136 L172,150 H190 V120 H230 V85 H280 V60 H330 V105 H380 V75 H430 V130 H470 V215 H530 V150 L542,150 L548,136 L554,164 L560,136 L566,164 L572,136 L578,164 L584,136 L590,164 L596,136 L602,150 H620 V110 H660 V80 H700 V105 H750"/>
+      <text class="c xs mut" x="330" y="40">luminancia de la imagen (escalones de brillo)</text>
+      <!-- extensiones -->
+      <g class="ll"><line x1="40" y1="215" x2="40" y2="252"/><line x1="100" y1="215" x2="100" y2="252"/><line x1="190" y1="150" x2="190" y2="252"/><line x1="470" y1="215" x2="470" y2="252"/><line x1="530" y1="215" x2="530" y2="252"/><line x1="620" y1="150" x2="620" y2="252"/></g>
+      <!-- acotaciones -->
+      <g class="sep"><line x1="40" y1="246" x2="100" y2="246"/><line x1="100" y1="246" x2="190" y2="246"/><line x1="190" y1="246" x2="470" y2="246"/><line x1="470" y1="246" x2="530" y2="246"/><line x1="530" y1="246" x2="620" y2="246"/><line x1="620" y1="246" x2="750" y2="246"/><line x1="112" y1="124" x2="172" y2="124"/><line x1="112" y1="119" x2="112" y2="129"/><line x1="172" y1="119" x2="172" y2="129"/></g>
+      <g class="sep"><line x1="40" y1="241" x2="40" y2="251"/><line x1="100" y1="241" x2="100" y2="251"/><line x1="190" y1="241" x2="190" y2="251"/><line x1="470" y1="241" x2="470" y2="251"/><line x1="530" y1="241" x2="530" y2="251"/><line x1="620" y1="241" x2="620" y2="251"/><line x1="750" y1="241" x2="750" y2="251"/></g>
+      <g class="c xs"><text x="70" y="268">pulso de línea</text><text x="145" y="268">pedestal</text><text x="330" y="268">imagen</text><text x="500" y="268">pulso de línea</text><text x="575" y="268">pedestal</text><text x="685" y="268">imagen</text><text x="142" y="114">color burst</text></g>
+      <text class="c sm mut" x="380" y="302">la señal se repite en cada línea de la imagen</text>
+    </svg>
+    <figcaption><b>Una línea de video compuesta.</b> Los elementos (pulso de línea, pedestal, color burst, imagen) son los del cuestionario del profesor; la forma de onda, sus niveles y proporciones son un <span class="badge ded">deducido</span> esquema propio, no a escala.</figcaption>
+  </figure>
   <h3>Tipos de monitor</h3>
   <div class="tbl-wrap"><table>
     <thead><tr><th>Tipo</th><th>Características</th></tr></thead>
@@ -468,6 +681,75 @@
       <tr><td>Monitor TTL RGB</td><td><b>TTL</b> = lógica transistor-transistor. Recibe las señales de rojo, verde y azul en forma <b>digital</b>, cada color solo encendido o apagado: <b>8 colores</b>, o <b>16</b> al agregar intensidad. Los tonos distintos salen del cañón de electrones, que lanza partículas cargadas contra la pantalla con <b>intensidad variable</b>. Podía trabajar con tarjetas <b>CGA y EGA</b>, ajustando solo la sincronización horizontal a cada resolución. <b>EGA logró 16 colores</b> porque, en vez de la señal de intensidad, recibía una segunda señal por cada color primario: más matices.</td></tr>
       <tr><td>Monitor RGB analógico (televisor análogo)</td><td>Recibe las señales analógicas de rojo, verde y azul <b>por separado</b>, no compuestas; tiene <b>3 cañones independientes</b>, uno por color; <b>no necesita decodificación</b>. Imagen más pura, más caro, uso profesional.</td></tr>
     </tbody></table></div>
+  <figure>
+    <svg class="dg wide" viewBox="0 0 760 462" role="img" aria-label="Evolución de los monitores: monocromo con solo luminancia; TTL RGB con señales R, G, B digitales (8 colores, 16 con intensidad); EGA con una segunda señal por cada color primario (16 colores); RGB analógico con R, G, B separadas, tres cañones y sin decodificación; y VGA analógico de 640 por 480 con 256 colores. Debajo de cada uno, las líneas de señal de su conector. Al final, comparación RGB, con tres cables de color separados, contra RCA, con un solo cable de video compuesto y el audio aparte.">
+      <rect class="nd" x="9" y="15" width="126" height="150" rx="8"/><text class="c b" x="72" y="38">Monocromo</text>
+      <text class="c xs mut" x="72" y="58">solo luminancia</text>
+      <text class="c xs mut" x="72" y="74">escala de grises</text>
+      <text class="c xs mut" x="72" y="90">regula la intensidad</text>
+      <line class="ar acc" x1="138" y1="90" x2="157" y2="90"/><polygon class="ah" points="162,90 152,85 152,95"/>
+      <text class="mono xs" x="17" y="201">lum.</text><path class="wf" d="M43,198 q10.5,-9 21,0 t21,0 t21,0 t21,0"/>
+      <text class="c xs mut" x="72" y="305">1 línea</text>
+      <rect class="nd-x" x="163" y="15" width="126" height="150" rx="8"/><text class="c b" x="226" y="38">TTL RGB</text>
+      <text class="c xs mut" x="226" y="58">R, G, B digitales</text>
+      <text class="c xs mut" x="226" y="74">cada color on / off</text>
+      <text class="c xs mut" x="226" y="90">8 colores</text>
+      <text class="c xs mut" x="226" y="106">+ intensidad: 16</text>
+      <line class="ar acc" x1="292" y1="90" x2="311" y2="90"/><polygon class="ah" points="316,90 306,85 306,95"/>
+      <text class="mono xs" x="171" y="201">R</text><path class="wf" d="M197,198 H211 V191 H225 V198 H239 V191 H253 V198 H283"/>
+      <text class="mono xs" x="171" y="218">G</text><path class="wf" d="M197,215 H211 V208 H225 V215 H239 V208 H253 V215 H283"/>
+      <text class="mono xs" x="171" y="235">B</text><path class="wf" d="M197,232 H211 V225 H225 V232 H239 V225 H253 V232 H283"/>
+      <text class="mono xs" x="171" y="252">I</text><path class="wf" d="M197,249 H211 V242 H225 V249 H239 V242 H253 V249 H283"/>
+      <text class="c xs mut" x="226" y="305">4 líneas</text>
+      <rect class="nd-c" x="317" y="15" width="126" height="150" rx="8"/><text class="c b" x="380" y="38">EGA</text>
+      <text class="c xs mut" x="380" y="58">2.ª señal por color</text>
+      <text class="c xs mut" x="380" y="74">primario, en vez de</text>
+      <text class="c xs mut" x="380" y="90">intensidad</text>
+      <text class="c xs mut" x="380" y="106">16 colores</text>
+      <line class="ar acc" x1="446" y1="90" x2="465" y2="90"/><polygon class="ah" points="470,90 460,85 460,95"/>
+      <text class="mono xs" x="325" y="201">R</text><path class="wf" d="M351,198 H365 V191 H379 V198 H393 V191 H407 V198 H437"/>
+      <text class="mono xs" x="325" y="218">r</text><path class="wf" d="M351,215 H365 V208 H379 V215 H393 V208 H407 V215 H437"/>
+      <text class="mono xs" x="325" y="235">G</text><path class="wf" d="M351,232 H365 V225 H379 V232 H393 V225 H407 V232 H437"/>
+      <text class="mono xs" x="325" y="252">g</text><path class="wf" d="M351,249 H365 V242 H379 V249 H393 V242 H407 V249 H437"/>
+      <text class="mono xs" x="325" y="269">B</text><path class="wf" d="M351,266 H365 V259 H379 V266 H393 V259 H407 V266 H437"/>
+      <text class="mono xs" x="325" y="286">b</text><path class="wf" d="M351,283 H365 V276 H379 V283 H393 V276 H407 V283 H437"/>
+      <text class="c xs mut" x="380" y="305">6 líneas</text>
+      <rect class="nd-v" x="471" y="15" width="126" height="150" rx="8"/><text class="c b" x="534" y="38">RGB analógico</text>
+      <text class="c xs mut" x="534" y="58">R, G, B analógicas</text>
+      <text class="c xs mut" x="534" y="74">por separado</text>
+      <text class="c xs mut" x="534" y="90">3 cañones</text>
+      <text class="c xs mut" x="534" y="106">sin decodificación</text>
+      <line class="ar acc" x1="600" y1="90" x2="619" y2="90"/><polygon class="ah" points="624,90 614,85 614,95"/>
+      <text class="mono xs" x="479" y="201">R</text><path class="wf" d="M505,198 q10.5,-9 21,0 t21,0 t21,0 t21,0"/>
+      <text class="mono xs" x="479" y="218">G</text><path class="wf" d="M505,215 q10.5,-9 21,0 t21,0 t21,0 t21,0"/>
+      <text class="mono xs" x="479" y="235">B</text><path class="wf" d="M505,232 q10.5,-9 21,0 t21,0 t21,0 t21,0"/>
+      <text class="c xs mut" x="534" y="305">3 líneas analógicas</text>
+      <rect class="nd-m" x="625" y="15" width="126" height="150" rx="8"/><text class="c b" x="688" y="38">VGA</text>
+      <text class="c xs mut" x="688" y="58">analógico</text>
+      <text class="c xs mut" x="688" y="74">640×480</text>
+      <text class="c xs mut" x="688" y="90">256 colores</text>
+      <text class="c xs mut" x="688" y="106">mejor que EGA</text>
+      <text class="mono xs" x="633" y="201">R</text><path class="wf" d="M659,198 q10.5,-9 21,0 t21,0 t21,0 t21,0"/>
+      <text class="mono xs" x="633" y="218">G</text><path class="wf" d="M659,215 q10.5,-9 21,0 t21,0 t21,0 t21,0"/>
+      <text class="mono xs" x="633" y="235">B</text><path class="wf" d="M659,232 q10.5,-9 21,0 t21,0 t21,0 t21,0"/>
+      <text class="c xs mut" x="688" y="305">3 líneas analógicas</text>
+      <text class="xs mut" x="9" y="182">Líneas de señal en el conector</text>
+      <!-- RGB vs RCA -->
+      <rect class="frame" x="5" y="318" width="365" height="134" rx="10"/><text class="c b" x="187" y="340">RGB: colores en señales separadas</text>
+      <rect class="nd-m" x="20" y="352" width="70" height="60" rx="6"/><text class="c sm" x="55" y="386">Fuente</text>
+      <rect class="nd-v" x="290" y="352" width="70" height="60" rx="6"/><text class="c sm" x="325" y="386">Monitor</text>
+      <line class="ar" x1="90" y1="364" x2="290" y2="364"/><line class="ar" x1="90" y1="382" x2="290" y2="382"/><line class="ar" x1="90" y1="400" x2="290" y2="400"/>
+      <text class="c xs mono lbl" x="190" y="360">R</text><text class="c xs mono lbl" x="190" y="378">G</text><text class="c xs mono lbl" x="190" y="396">B</text>
+      <text class="c xs mut" x="187" y="436">mejor calidad · tres cables de color</text>
+      <rect class="frame" x="390" y="318" width="365" height="134" rx="10"/><text class="c b" x="572" y="340">RCA: video compuesto en una sola señal</text>
+      <rect class="nd-m" x="405" y="352" width="70" height="60" rx="6"/><text class="c sm" x="440" y="386">Fuente</text>
+      <rect class="nd-v" x="675" y="352" width="70" height="60" rx="6"/><text class="c sm" x="710" y="386">Monitor</text>
+      <line class="ar acc" x1="475" y1="364" x2="675" y2="364"/><text class="c xs lbl" x="575" y="359">video compuesto (1 cable)</text>
+      <line class="ar d" x1="475" y1="394" x2="675" y2="394"/><line class="ar d" x1="475" y1="406" x2="675" y2="406"/><text class="c xs mut lbl" x="575" y="388">audio en cables aparte</text>
+      <text class="c xs mut" x="572" y="436">una sola señal de video · audio aparte</text>
+    </svg>
+    <figcaption><b>Evolución de los monitores y RGB vs RCA.</b> Los tipos, colores, cañones y la diferencia RGB/RCA son los del cuestionario del profesor. Los nombres de las líneas (R r G g B b, I), los dibujos de las señales y la cantidad de cables son un <span class="badge ded">deducido</span> esquema propio.</figcaption>
+  </figure>
   <div class="key"><b>RGB vs RCA</b><p class="small"><b>RGB</b> envía los colores en señales separadas y da mejor calidad. <b>RCA</b> envía el video compuesto en una sola señal, con el audio en cables aparte.</p></div>
 </section>
 
@@ -477,6 +759,44 @@
   <div class="key"><b>VGA (Video Graphics Array)</b><p class="small">256 colores simultáneos en modo gráfico de una paleta de 64 000; resoluciones como 640x480; video analógico de mejor calidad que EGA; memoria gráfica dedicada separada de la RAM; compatible hacia atrás con CGA y EGA.</p></div>
   <div class="tbl-wrap" id="tblFormatos"></div>
   <p class="small"><b>Formatos de computador, según el profe:</b> VGA 640x480, SVGA 800x600, XGA 1024x768, SXGA 1280x1024, UXGA 1600x1200, WUXGA 1920x1200, QXGA 2048x1536 y HD 1280x720, 1366x768 y 1920x1080. <b>Los más comunes hoy:</b> HD (720p, 1080p), Full HD 1080p, WQHD 1440p (2560x1440) y 4K 2160p.</p>
+  <figure>
+    <svg class="dg wide" viewBox="0 0 760 372" role="img" aria-label="Formatos de video dibujados a escala desde una esquina común, de menor a mayor: VGA 640x480, SVGA 800x600, XGA 1024x768, HD 1280x720, SXGA 1280x1024, Full HD 1920x1080, WQHD 2560x1440 y 4K 3840x2160. El rectángulo 4K se divide en cuatro rectángulos del tamaño de Full HD, es decir, 4K tiene cuatro veces los píxeles de Full HD.">
+      <rect class="nd-s" x="20" y="20" width="576" height="324"/>
+      <rect class="nd-r" x="20" y="20" width="384" height="216"/>
+      <rect class="nd-v" x="20" y="20" width="288" height="162"/>
+      <rect class="nd-c" x="20" y="20" width="192" height="153.6"/>
+      <rect class="nd-x" x="20" y="20" width="192" height="108"/>
+      <rect class="nd-m" x="20" y="20" width="153.6" height="115.2"/>
+      <rect class="nd" x="20" y="20" width="120" height="90"/>
+      <rect class="nd-s" x="20" y="20" width="96" height="72"/>
+      <g class="ll"><line x1="308" y1="20" x2="308" y2="344"/><line x1="20" y1="182" x2="596" y2="182"/></g>
+      <g class="xs mut c"><text x="452" y="104">Full HD n.º 2</text><text x="164" y="268">Full HD n.º 3</text><text x="452" y="268">Full HD n.º 4</text></g>
+      <g class="c xs b">
+        <circle class="nd-s" cx="106" cy="82" r="8"/><text x="106" y="86">1</text>
+        <circle class="nd" cx="130" cy="100" r="8"/><text x="130" y="104">2</text>
+        <circle class="nd-m" cx="163.6" cy="125.2" r="8"/><text x="163.6" y="129.2">3</text>
+        <circle class="nd-x" cx="202" cy="118" r="8"/><text x="202" y="122">4</text>
+        <circle class="nd-c" cx="202" cy="163.6" r="8"/><text x="202" y="167.6">5</text>
+        <circle class="nd-v" cx="298" cy="172" r="8"/><text x="298" y="176">6</text>
+        <circle class="nd-r" cx="394" cy="226" r="8"/><text x="394" y="230">7</text>
+        <circle class="nd-s" cx="586" cy="334" r="8"/><text x="586" y="338">8</text>
+      </g>
+      <g class="sm">
+        <circle class="nd-s" cx="632" cy="40" r="8"/><text x="648" y="44">VGA 640×480</text>
+        <circle class="nd" cx="632" cy="68" r="8"/><text x="648" y="72">SVGA 800×600</text>
+        <circle class="nd-m" cx="632" cy="96" r="8"/><text x="648" y="100">XGA 1024×768</text>
+        <circle class="nd-x" cx="632" cy="124" r="8"/><text x="648" y="128">HD 1280×720</text>
+        <circle class="nd-c" cx="632" cy="152" r="8"/><text x="648" y="156">SXGA 1280×1024</text>
+        <circle class="nd-v" cx="632" cy="180" r="8"/><text x="648" y="184">Full HD 1920×1080</text>
+        <circle class="nd-r" cx="632" cy="208" r="8"/><text x="648" y="212">WQHD 2560×1440</text>
+        <circle class="nd-s" cx="632" cy="236" r="8"/><text x="648" y="240">4K 3840×2160</text>
+      </g>
+      <g class="c xs b"><text x="632" y="44">1</text><text x="632" y="72">2</text><text x="632" y="100">3</text><text x="632" y="128">4</text><text x="632" y="156">5</text><text x="632" y="184">6</text><text x="632" y="212">7</text><text x="632" y="240">8</text></g>
+      <text class="xs mut" x="612" y="280">4K = 4 × Full HD</text><text class="xs mut" x="612" y="296">(cuatro veces los píxeles)</text>
+      <text class="xs mut" x="612" y="326">escala: 0,15 px por píxel</text>
+    </svg>
+    <figcaption><b>Formatos de video a escala, desde una esquina común.</b> Las resoluciones son las del cuestionario del profesor; el dibujo (escala 0,15 px por píxel, 2×2 pantallas Full HD dentro del 4K) es un esquema propio. Así se ve el error del material: 4K tiene <b>cuatro veces</b> los píxeles de Full HD, no el doble.</figcaption>
+  </figure>
   <div class="grid g2">
     <div class="card tile"><span class="tag">FORMATOS DE VIDEO GENERAL</span><ul class="small"><li>Analógicos: NTSC (480i, América/Japón) · PAL/SECAM (576i, Europa)</li><li>720p, 1080i (entrelazado) / 1080p (progresivo)</li><li>2K 2048x1080 · 4K 3840x2160 · 8K 7680x4320</li><li>Interfaces: HDMI, DisplayPort, DVI</li></ul></div>
     <div class="card tile"><span class="tag">DISPLAYPORT</span><p class="small">Interfaz para <b>pantallas digitales</b>, compatible con <b>4K</b> y futuros <b>8K</b>.</p></div>
@@ -568,12 +888,140 @@
 <!-- ======================= M3 ======================= -->
 <section id="usomouse" class="topic" data-sec="m3">
   <div class="sec-head"><div class="meta"><p class="eyebrow">Bloque 4 · Mouse</p><h2>M3 · usomouse.asm</h2></div><button class="mark-btn" data-mark="m3" aria-pressed="false">Marcar como repasado</button></div>
+  <figure>
+    <svg class="dg wide" viewBox="0 0 760 520" role="img" aria-label="Diagrama de flujo de usomouse.asm: imprime un mensaje, inicializa el mouse con INT 33h AX=0; si AX es 0 sale; si no, muestra el puntero con AX=1 y entra a un bucle que lee el estado con AX=3 (BX botones, CX, DX). Si TEST BX,1 es distinto de cero, oculta el puntero con AX=2 y termina; si no, hace una pausa con INT 15h AH=86h y vuelve a leer.">
+      <rect class="nd-s" x="190" y="10" width="120" height="26" rx="13"/>
+      <text class="c b sm" x="250" y="27">Inicio</text>
+      <rect class="nd" x="130" y="52" width="240" height="38" rx="6"/>
+      <text class="c b sm" x="250" y="67.5">Mensaje en pantalla</text>
+      <text class="c xs" x="250" y="82.5">DS = @data · INT 21h / AH=09h</text>
+      <rect class="nd-m" x="130" y="106" width="240" height="38" rx="6"/>
+      <text class="c b sm" x="250" y="121.5">Inicializar el mouse</text>
+      <text class="c xs mono" x="250" y="136.5">AX=0000h · INT 33h</text>
+      <polygon class="nd" points="250,162 350,190 250,218 150,190"/>
+      <text class="c b sm" x="250" y="189">¿AX = 0?</text><text class="c xs mut" x="250" y="203">sin mouse</text>
+      <rect class="nd-m" x="130" y="236" width="240" height="38" rx="6"/>
+      <text class="c b sm" x="250" y="251.5">Mostrar el puntero</text>
+      <text class="c xs mono" x="250" y="266.5">AX=0001h · INT 33h</text>
+      <rect class="nd-v" x="130" y="290" width="240" height="38" rx="6"/>
+      <text class="c b sm" x="250" y="305.5">Leer estado (sondeo)</text>
+      <text class="c xs mono" x="250" y="320.5">AX=0003h → BX, CX, DX</text>
+      <polygon class="nd" points="250,344 370,374 250,404 130,374"/>
+      <text class="c b sm" x="250" y="373">¿TEST BX,1 ≠ 0?</text><text class="c xs mut" x="250" y="387">bit 0 = botón izquierdo</text>
+      <rect class="nd-m" x="130" y="420" width="240" height="38" rx="6"/>
+      <text class="c b sm" x="250" y="435.5">Ocultar el puntero</text>
+      <text class="c xs mono" x="250" y="450.5">AX=0002h · INT 33h</text>
+      <rect class="nd-s" x="130" y="474" width="240" height="30" rx="15"/>
+      <text class="c b sm" x="250" y="493">salir: INT 21h / AH=4Ch · fin</text>
+      <rect class="nd" x="480" y="355" width="220" height="38" rx="6"/>
+      <text class="c b sm" x="590" y="370.5">Pausa</text>
+      <text class="c xs" x="590" y="385.5">INT 15h / AH=86h ≈ 0,06 s</text>
+      <line class="ar" x1="250" y1="36" x2="250" y2="42"/><polygon class="ah" points="250,52 245,42 255,42"/>
+      <line class="ar" x1="250" y1="90" x2="250" y2="96"/><polygon class="ah" points="250,106 245,96 255,96"/>
+      <line class="ar" x1="250" y1="144" x2="250" y2="152"/><polygon class="ah" points="250,162 245,152 255,152"/>
+      <line class="ar" x1="250" y1="218" x2="250" y2="226"/><polygon class="ah" points="250,236 245,226 255,226"/>
+      <text class="xs mut lbl" x="262" y="230">no</text>
+      <line class="ar" x1="250" y1="274" x2="250" y2="280"/><polygon class="ah" points="250,290 245,280 255,280"/>
+      <line class="ar" x1="250" y1="328" x2="250" y2="334"/><polygon class="ah" points="250,344 245,334 255,334"/>
+      <line class="ar" x1="250" y1="404" x2="250" y2="410"/><polygon class="ah" points="250,420 245,410 255,410"/>
+      <text class="xs mut lbl" x="262" y="414">sí</text>
+      <line class="ar" x1="250" y1="458" x2="250" y2="464"/><polygon class="ah" points="250,474 245,464 255,464"/>
+      <line class="ar" x1="370" y1="374" x2="470" y2="374"/><polygon class="ah" points="480,374 470,369 470,379"/>
+      <text class="xs mut lbl" x="425" y="368">no</text>
+      <path class="ar" d="M590,355 V309 H374"/><polygon class="ah" points="370,309 380,304 380,314"/>
+      <text class="xs mut lbl" x="480" y="303">repite el sondeo</text>
+      <path class="ar" d="M150,190 H40 V489 H126"/><polygon class="ah" points="130,489 120,484 120,494"/>
+      <text class="xs mut lbl" x="46" y="183">sí: sin mouse → salir</text>
+      <rect class="nd-r" x="470" y="62" width="270" height="128" rx="8"/>
+      <text class="c b sm" x="605" y="85">INT 33h · AX=0003h</text>
+      <text class="c xs" x="605" y="100">BX = botones (bit 0 = izquierdo)</text>
+      <text class="c xs" x="605" y="115">CX = coordenada X · DX = coordenada Y</text>
+      <text class="c xs" x="605" y="130"></text>
+      <text class="c xs" x="605" y="145">TEST BX,1 solo mira el bit 0:</text>
+      <text class="c xs" x="605" y="160">sale con clic izquierdo, aunque</text>
+      <text class="c xs" x="605" y="175">el derecho también esté presionado</text>
+    </svg>
+    <figcaption><b>Flujo de usomouse.asm.</b> Los pasos y las llamadas son los del código del profesor. La duración de la pausa (CX:DX = 0:F000h, unos 0,06 s) es <span class="badge ded">deducido</span>; la disposición del diagrama es un esquema propio.</figcaption>
+  </figure>
   <div data-prog="usomouse"></div>
 </section>
 
 <!-- ======================= M4 ======================= -->
 <section id="modografico" class="topic" data-sec="m4">
   <div class="sec-head"><div class="meta"><p class="eyebrow">Bloque 4 · Mouse</p><h2>M4 · modografico.asm</h2></div><button class="mark-btn" data-mark="m4" aria-pressed="false">Marcar como repasado</button></div>
+  <figure>
+    <svg class="dg wide" viewBox="0 0 760 810" role="img" aria-label="Diagrama de flujo de modografico.asm y pantalla del modo 13h. Entra al modo gráfico 13h con INT 10h AX=0013h, inicializa el mouse; si no hay mouse restaura el modo texto. Si hay, muestra el puntero y en un bucle lee el estado: si el botón derecho está presionado termina (oculta el puntero, restaura el modo texto y sale); si el izquierdo está presionado divide CX entre 2, oculta el puntero, pinta un píxel con INT 10h AH=0Ch, AL=0Bh y lo muestra de nuevo. A la derecha, una pantalla de 320 por 200 con origen en la esquina superior izquierda, X hacia la derecha y Y hacia abajo.">
+      <rect class="nd-s" x="155" y="10" width="120" height="26" rx="13"/>
+      <text class="c b sm" x="215" y="27">Inicio</text>
+      <rect class="nd-x" x="85" y="52" width="260" height="44" rx="6"/>
+      <text class="c b sm" x="215" y="63">Modo gráfico 13h</text>
+      <text class="c xs mono" x="215" y="78">AX=0013h · INT 10h</text>
+      <text class="c xs mut" x="215" y="93">320×200, 256 colores</text>
+      <rect class="nd-m" x="85" y="112" width="260" height="38" rx="6"/>
+      <text class="c b sm" x="215" y="127.5">Inicializar el mouse</text>
+      <text class="c xs mono" x="215" y="142.5">AX=0000h · INT 33h</text>
+      <polygon class="nd" points="215,166 320,196 215,226 110,196"/>
+      <text class="c b sm" x="215" y="195">¿AX = 0?</text><text class="c xs mut" x="215" y="209">sin mouse</text>
+      <rect class="nd-m" x="85" y="242" width="260" height="38" rx="6"/>
+      <text class="c b sm" x="215" y="257.5">Mostrar el puntero</text>
+      <text class="c xs mono" x="215" y="272.5">AX=0001h · INT 33h</text>
+      <rect class="nd-v" x="85" y="296" width="260" height="38" rx="6"/>
+      <text class="c b sm" x="215" y="311.5">Leer estado (bucle_dibujo)</text>
+      <text class="c xs mono" x="215" y="326.5">AX=0003h → BX, CX, DX</text>
+      <polygon class="nd" points="215,352 335,382 215,412 95,382"/>
+      <text class="c b sm" x="215" y="381">¿TEST BX,2 ≠ 0?</text><text class="c xs mut" x="215" y="395">bit 1 = botón derecho</text>
+      <polygon class="nd" points="215,436 335,466 215,496 95,466"/>
+      <text class="c b sm" x="215" y="465">¿TEST BX,1 ≠ 0?</text><text class="c xs mut" x="215" y="479">bit 0 = botón izquierdo</text>
+      <rect class="nd-c" x="85" y="516" width="260" height="38" rx="6"/>
+      <text class="c b sm" x="215" y="531.5">Ajustar la escala</text>
+      <text class="c xs mono" x="215" y="546.5">SHR CX,1 → CX = CX / 2</text>
+      <rect class="nd-c" x="85" y="570" width="260" height="62" rx="6"/>
+      <text class="c b sm" x="215" y="582.5">Dibujar un píxel</text>
+      <text class="c xs mono" x="215" y="597.5">ocultar puntero · AX=0002h</text>
+      <text class="c xs mono" x="215" y="612.5">INT 10h/0Ch: AL=0Bh, BH=0 → (CX,DX)</text>
+      <text class="c xs mono" x="215" y="627.5">mostrar puntero · AX=0001h</text>
+      <rect class="nd-m" x="85" y="660" width="260" height="38" rx="6"/>
+      <text class="c b sm" x="215" y="675.5">terminar_grafico</text>
+      <text class="c xs mono" x="215" y="690.5">ocultar puntero · AX=0002h</text>
+      <rect class="nd-x" x="85" y="714" width="260" height="38" rx="6"/>
+      <text class="c b sm" x="215" y="729.5">restaurar_texto</text>
+      <text class="c xs mono" x="215" y="744.5">AX=0003h · INT 10h</text>
+      <rect class="nd-s" x="85" y="768" width="260" height="30" rx="15"/>
+      <text class="c b sm" x="215" y="787">INT 21h / AH=4Ch · fin</text>
+      <line class="ar" x1="215" y1="36" x2="215" y2="42"/><polygon class="ah" points="215,52 210,42 220,42"/>
+      <line class="ar" x1="215" y1="96" x2="215" y2="102"/><polygon class="ah" points="215,112 210,102 220,102"/>
+      <line class="ar" x1="215" y1="150" x2="215" y2="156"/><polygon class="ah" points="215,166 210,156 220,156"/>
+      <line class="ar" x1="215" y1="226" x2="215" y2="232"/><polygon class="ah" points="215,242 210,232 220,232"/>
+      <text class="xs mut lbl" x="227" y="238">no</text>
+      <line class="ar" x1="215" y1="280" x2="215" y2="286"/><polygon class="ah" points="215,296 210,286 220,286"/>
+      <line class="ar" x1="215" y1="334" x2="215" y2="342"/><polygon class="ah" points="215,352 210,342 220,342"/>
+      <line class="ar" x1="215" y1="412" x2="215" y2="426"/><polygon class="ah" points="215,436 210,426 220,426"/>
+      <text class="xs mut lbl" x="227" y="430">no</text>
+      <line class="ar" x1="215" y1="496" x2="215" y2="506"/><polygon class="ah" points="215,516 210,506 220,506"/>
+      <text class="xs mut lbl" x="227" y="510">sí</text>
+      <line class="ar" x1="215" y1="554" x2="215" y2="560"/><polygon class="ah" points="215,570 210,560 220,560"/>
+      <line class="ar" x1="215" y1="698" x2="215" y2="704"/><polygon class="ah" points="215,714 210,704 220,704"/>
+      <line class="ar" x1="215" y1="752" x2="215" y2="758"/><polygon class="ah" points="215,768 210,758 220,758"/>
+      <path class="ar" d="M345,601 H385 V315 H349"/><polygon class="ah" points="345,315 355,310 355,320"/>
+      <line class="ar" x1="335" y1="466" x2="385" y2="466"/>
+      <text class="xs mut lbl" x="360" y="460">no</text>
+      <path class="ar" d="M95,382 H40 V679 H81"/><polygon class="ah" points="85,679 75,674 75,684"/>
+      <text class="xs mut lbl" x="46" y="375">sí</text>
+      <path class="ar" d="M110,196 H20 V733 H81"/><polygon class="ah" points="85,733 75,728 75,738"/>
+      <text class="xs mut lbl" x="24" y="189">sí</text>
+      <rect class="cls" x="470" y="70" width="256" height="160"/>
+      <rect class="nd-c" x="626" y="114" width="8" height="8"/>
+      <text class="xs mono" x="476" y="86">(0,0)</text><text class="xs mono e" x="720" y="224">(319,199)</text><text class="xs mono" x="640" y="116">(x, y)</text>
+      <line class="ar acc" x1="470" y1="54" x2="590" y2="54"/><polygon class="ah" points="596,54 586,49 586,59"/>
+      <text class="xs b" x="604" y="58">X (0 a 319)</text>
+      <line class="ar acc" x1="454" y1="70" x2="454" y2="150"/><polygon class="ah" points="454,156 449,146 459,146"/>
+      <text class="xs b e" x="448" y="176">Y (0 a 199)</text>
+      <text class="b sm" x="470" y="40">Pantalla del modo 13h</text>
+      <text class="xs mono" x="470" y="256">CX: 0 a 639 (virtual)</text><text class="xs mono" x="470" y="274">x = CX / 2   (SHR CX,1)</text><text class="xs mono" x="470" y="292">y = DX       (0 a 199)</text><text class="xs mono" x="470" y="310">AL = 0Bh: cian claro</text>
+      <text class="xs mut" x="470" y="332">origen (0,0) arriba a la izquierda;</text><text class="xs mut" x="470" y="348">X crece hacia la derecha, Y hacia abajo</text>
+    </svg>
+    <figcaption><b>Flujo de modografico.asm y pantalla 320×200.</b> Los pasos son los del código del profesor; el modo 13h es 320×200 con 256 colores. El origen (0,0) arriba a la izquierda, con X hacia la derecha y Y hacia abajo, es la convención habitual de la pantalla gráfica <span class="badge ded">deducido</span> (el material no la dibuja); la posición del píxel de ejemplo y el diagrama son un esquema propio.</figcaption>
+  </figure>
   <div data-prog="modografico"></div>
 </section>
 
@@ -581,6 +1029,89 @@
 <section id="reto1" class="topic" data-sec="r1">
   <div class="sec-head"><div class="meta"><p class="eyebrow">Retos del laboratorio</p><h2>R1 · Reto 1: identificación de botones</h2></div><button class="mark-btn" data-mark="r1" aria-pressed="false">Marcar como repasado</button></div>
   <div class="key"><b>Enunciado</b><p class="small">Distinguir clic izquierdo y derecho: derecho imprime “D”, izquierdo “I”. El programa termina <b>únicamente</b> al presionar ambos botones al mismo tiempo.</p></div>
+  <figure>
+    <svg class="dg wide" viewBox="0 0 760 690" role="img" aria-label="Diagrama de flujo de decisión del Reto 1. Tras mostrar el puntero, el sondeo lee BX: si BX es 3, ambos botones, sale; si es 1, solo izquierdo, guarda I en BL; si es 2, solo derecho, guarda D en BL; si es 0 vuelve a sondear. Luego imprime la letra y espera a soltar los botones antes de volver a sondear; durante la espera también sale si BX es 3.">
+      <rect class="nd-s" x="95" y="8" width="110" height="26" rx="13"/>
+      <text class="c b sm" x="150" y="25">Inicio</text>
+      <rect class="nd" x="40" y="46" width="220" height="36" rx="6"/>
+      <text class="c b sm" x="150" y="60.5">Imprimir el título</text>
+      <text class="c xs mono" x="150" y="75.5">INT 21h / AH=09h</text>
+      <rect class="nd-m" x="40" y="96" width="220" height="36" rx="6"/>
+      <text class="c b sm" x="150" y="110.5">Inicializar el mouse</text>
+      <text class="c xs mono" x="150" y="125.5">AX=0000h · INT 33h</text>
+      <polygon class="nd" points="150,148 250,176 150,204 50,176"/>
+      <text class="c b sm" x="150" y="175">¿AX = 0?</text><text class="c xs mut" x="150" y="189">sin mouse</text>
+      <rect class="nd-m" x="40" y="220" width="220" height="36" rx="6"/>
+      <text class="c b sm" x="150" y="234.5">Mostrar el puntero</text>
+      <text class="c xs mono" x="150" y="249.5">AX=0001h · INT 33h</text>
+      <rect class="nd-v" x="40" y="272" width="220" height="36" rx="6"/>
+      <text class="c b sm" x="150" y="286.5">Sondeo: leer estado</text>
+      <text class="c xs mono" x="150" y="301.5">AX=0003h → BX</text>
+      <polygon class="nd" points="150,326 250,354 150,382 50,354"/>
+      <text class="c b sm" x="150" y="353">¿BX = 3?</text><text class="c xs mut" x="150" y="367">ambos botones</text>
+      <polygon class="nd" points="150,404 250,432 150,460 50,432"/>
+      <text class="c b sm" x="150" y="431">¿BX = 1?</text><text class="c xs mut" x="150" y="445">solo izquierdo</text>
+      <polygon class="nd" points="150,482 250,510 150,538 50,510"/>
+      <text class="c b sm" x="150" y="509">¿BX = 2?</text><text class="c xs mut" x="150" y="523">solo derecho</text>
+      <rect class="nd" x="330" y="158" width="170" height="36" rx="6"/>
+      <text class="c b sm" x="415" y="172.5">Error: sin mouse</text>
+      <text class="c xs" x="415" y="187.5">mensaje</text>
+      <rect class="nd-s" x="560" y="158" width="180" height="36" rx="6"/>
+      <text class="c b sm" x="650" y="172.5">Terminar</text>
+      <text class="c xs mono" x="650" y="187.5">INT 21h / AH=4Ch</text>
+      <rect class="nd-s" x="330" y="334" width="170" height="40" rx="6"/>
+      <text class="c b sm" x="415" y="350.5">SALIR</text>
+      <text class="c xs" x="415" y="365.5">ocultar puntero y mensaje</text>
+      <rect class="nd-c" x="330" y="412" width="170" height="40" rx="6"/>
+      <text class="c b sm" x="415" y="428.5">BL = 'I'</text>
+      <text class="c xs" x="415" y="443.5">clic izquierdo</text>
+      <rect class="nd-v" x="330" y="490" width="170" height="40" rx="6"/>
+      <text class="c b sm" x="415" y="506.5">BL = 'D'</text>
+      <text class="c xs" x="415" y="521.5">clic derecho</text>
+      <rect class="nd-r" x="560" y="420" width="180" height="100" rx="8"/>
+      <text class="c b sm" x="650" y="451.5">Imprimir</text>
+      <text class="c xs" x="650" y="466.5">ocultar puntero (AX=0002h)</text>
+      <text class="c xs" x="650" y="481.5">DL = BL · INT 21h / AH=02h</text>
+      <text class="c xs" x="650" y="496.5">mostrar puntero (AX=0001h)</text>
+      <polygon class="nd" points="650,560 745,590 650,620 555,590"/>
+      <text class="c b sm" x="650" y="589">¿BX = 0?</text><text class="c xs mut" x="650" y="603">EsperaSoltar</text>
+      <line class="ar" x1="150" y1="34" x2="150" y2="36"/><polygon class="ah" points="150,46 145,36 155,36"/>
+      <line class="ar" x1="150" y1="82" x2="150" y2="86"/><polygon class="ah" points="150,96 145,86 155,86"/>
+      <line class="ar" x1="150" y1="132" x2="150" y2="138"/><polygon class="ah" points="150,148 145,138 155,138"/>
+      <line class="ar" x1="150" y1="204" x2="150" y2="210"/><polygon class="ah" points="150,220 145,210 155,210"/>
+      <text class="xs mut lbl" x="162" y="214">no</text>
+      <line class="ar" x1="150" y1="256" x2="150" y2="262"/><polygon class="ah" points="150,272 145,262 155,262"/>
+      <line class="ar" x1="150" y1="308" x2="150" y2="316"/><polygon class="ah" points="150,326 145,316 155,316"/>
+      <line class="ar" x1="150" y1="382" x2="150" y2="394"/><polygon class="ah" points="150,404 145,394 155,394"/>
+      <text class="xs mut lbl" x="162" y="398">no</text>
+      <line class="ar" x1="150" y1="460" x2="150" y2="472"/><polygon class="ah" points="150,482 145,472 155,472"/>
+      <text class="xs mut lbl" x="162" y="476">no</text>
+      <line class="ar" x1="250" y1="176" x2="320" y2="176"/><polygon class="ah" points="330,176 320,171 320,181"/>
+      <text class="xs mut lbl" x="290" y="170">sí</text>
+      <line class="ar" x1="500" y1="176" x2="550" y2="176"/><polygon class="ah" points="560,176 550,171 550,181"/>
+      <line class="ar" x1="250" y1="354" x2="320" y2="354"/><polygon class="ah" points="330,354 320,349 320,359"/>
+      <text class="xs mut lbl" x="290" y="348">sí</text>
+      <path class="ar" d="M500,354 H650 V198"/><polygon class="ah" points="650,194 645,204 655,204"/>
+      <line class="ar" x1="250" y1="432" x2="320" y2="432"/><polygon class="ah" points="330,432 320,427 320,437"/>
+      <text class="xs mut lbl" x="290" y="426">sí</text>
+      <line class="ar" x1="250" y1="510" x2="320" y2="510"/><polygon class="ah" points="330,510 320,505 320,515"/>
+      <text class="xs mut lbl" x="290" y="504">sí</text>
+      <line class="ar" x1="500" y1="432" x2="530" y2="432"/>
+      <line class="ar" x1="500" y1="510" x2="530" y2="510"/>
+      <line class="ar" x1="530" y1="432" x2="530" y2="510"/>
+      <line class="ar" x1="530" y1="470" x2="550" y2="470"/><polygon class="ah" points="560,470 550,465 550,475"/>
+      <line class="ar" x1="650" y1="520" x2="650" y2="550"/><polygon class="ah" points="650,560 645,550 655,550"/>
+      <path class="ar" d="M555,590 H14 V290 H36"/><polygon class="ah" points="40,290 30,285 30,295"/>
+      <text class="xs mut lbl" x="300" y="584">sí: soltó todo → Sondeo</text>
+      <line class="ar" x1="150" y1="538" x2="150" y2="560"/>
+      <line class="ar" x1="150" y1="560" x2="14" y2="560"/>
+      <text class="xs mut lbl" x="22" y="554">no → Sondeo</text>
+      <path class="ar" d="M745,590 H754 V642 H650 V624"/><polygon class="ah" points="650,620 645,630 655,630"/>
+      <text class="xs mut c lbl" x="650" y="660">no: sigue pulsado</text>
+      <text class="xs mut c lbl" x="650" y="676">(también vigila BX = 3 → Salir)</text>
+    </svg>
+    <figcaption><b>Flujo de decisión del Reto 1.</b> BX se compara completo, no por bits, y se pregunta primero por 3. El programa termina <b>únicamente</b> con ambos botones; la espera a soltar (anti-rebote) evita imprimir cientos de letras por un solo clic. Dibujo según el código del profesor; la disposición es un esquema propio.</figcaption>
+  </figure>
   <div data-prog="reto1"></div>
 </section>
 
@@ -588,6 +1119,100 @@
 <section id="reto2" class="topic" data-sec="r2">
   <div class="sec-head"><div class="meta"><p class="eyebrow">Retos del laboratorio</p><h2>R2 · Reto 2: el botón de cierre</h2></div><button class="mark-btn" data-mark="r2" aria-pressed="false">Marcar como repasado</button></div>
   <div class="key"><b>Enunciado</b><p class="small">Cambiar la condición de salida: solo cerrar si el usuario hace clic izquierdo dentro de una “zona caliente” (ejemplo: esquina superior izquierda, X entre 0 y 40, Y entre 0 y 10).</p></div>
+  <figure>
+    <svg class="dg wide" viewBox="0 0 760 662" role="img" aria-label="Diagrama de flujo de decisión del Reto 2. Se limpia la pantalla, se dibuja [X] y el título, se inicializa el mouse y se sondea BX. Si BX es 1, clic izquierdo, se compara CX con 40 y DX con 10: solo si CX es menor o igual a 40 y DX menor o igual a 10 sale; si alguna falla, guarda I en BL. Si BX es 2, clic derecho, guarda D en BL. Con BX igual a 3 no hace nada. Luego imprime la letra y espera a soltar los botones antes de volver a sondear.">
+      <rect class="nd-s" x="80" y="6" width="100" height="26" rx="13"/>
+      <text class="c b sm" x="130" y="23">Inicio</text>
+      <rect class="nd-x" x="30" y="42" width="200" height="36" rx="6"/>
+      <text class="c b sm" x="130" y="56.5">Limpiar pantalla</text>
+      <text class="c xs mono" x="130" y="71.5">AX=0003h · INT 10h</text>
+      <rect class="nd-x" x="30" y="90" width="200" height="36" rx="6"/>
+      <text class="c b sm" x="130" y="104.5">Dibujar [X] y título</text>
+      <text class="c xs mono" x="130" y="119.5">INT 10h/02h · INT 21h/09h</text>
+      <rect class="nd-m" x="30" y="138" width="200" height="36" rx="6"/>
+      <text class="c b sm" x="130" y="152.5">Inicializar el mouse</text>
+      <text class="c xs mono" x="130" y="167.5">AX=0000h · INT 33h</text>
+      <polygon class="nd" points="130,192 225,220 130,248 35,220"/>
+      <text class="c b sm" x="130" y="219">¿AX = 0?</text><text class="c xs mut" x="130" y="233">sin mouse</text>
+      <rect class="nd-m" x="30" y="264" width="200" height="36" rx="6"/>
+      <text class="c b sm" x="130" y="278.5">Mostrar el puntero</text>
+      <text class="c xs mono" x="130" y="293.5">AX=0001h · INT 33h</text>
+      <rect class="nd-v" x="30" y="316" width="200" height="36" rx="6"/>
+      <text class="c b sm" x="130" y="330.5">Sondeo: leer estado</text>
+      <text class="c xs mono" x="130" y="345.5">AX=0003h → BX, CX, DX</text>
+      <polygon class="nd" points="130,368 225,398 130,428 35,398"/>
+      <text class="c b sm" x="130" y="397">¿BX = 1?</text><text class="c xs mut" x="130" y="411">solo izquierdo</text>
+      <polygon class="nd" points="130,456 225,486 130,516 35,486"/>
+      <text class="c b sm" x="130" y="485">¿BX = 2?</text><text class="c xs mut" x="130" y="499">solo derecho</text>
+      <rect class="nd-v" x="30" y="540" width="200" height="36" rx="6"/>
+      <text class="c b sm" x="130" y="554.5">BL = 'D'</text>
+      <text class="c xs" x="130" y="569.5">clic derecho</text>
+      <rect class="nd" x="290" y="202" width="200" height="36" rx="6"/>
+      <text class="c b sm" x="390" y="216.5">Error: sin mouse</text>
+      <text class="c xs" x="390" y="231.5">mensaje y terminar</text>
+      <rect class="nd-s" x="540" y="202" width="200" height="36" rx="6"/>
+      <text class="c b sm" x="640" y="216.5">Terminar</text>
+      <text class="c xs mono" x="640" y="231.5">INT 21h / AH=4Ch</text>
+      <polygon class="nd" points="340,368 425,398 340,428 255,398"/>
+      <text class="c b sm" x="340" y="397">¿CX ≤ 40?</text><text class="c xs mut" x="340" y="411">CMP CX,40 / JA</text>
+      <polygon class="nd" points="540,368 625,398 540,428 455,398"/>
+      <text class="c b sm" x="540" y="397">¿DX ≤ 10?</text><text class="c xs mut" x="540" y="411">CMP DX,10 / JA</text>
+      <rect class="nd-s" x="655" y="368" width="90" height="60" rx="6"/>
+      <text class="c b sm" x="700" y="387">SALIR</text>
+      <text class="c xs" x="700" y="402">ocultar puntero</text>
+      <text class="c xs" x="700" y="417">mensaje · 4Ch</text>
+      <rect class="nd-c" x="350" y="470" width="180" height="36" rx="6"/>
+      <text class="c b sm" x="440" y="484.5">BL = 'I'</text>
+      <text class="c xs" x="440" y="499.5">fuera de la zona</text>
+      <rect class="nd-r" x="290" y="548" width="240" height="72" rx="8"/>
+      <text class="c b sm" x="410" y="565.5">Imprimir</text>
+      <text class="c xs" x="410" y="580.5">ocultar puntero (AX=0002h)</text>
+      <text class="c xs" x="410" y="595.5">escribe BL: INT 21h / AH=02h</text>
+      <text class="c xs" x="410" y="610.5">mostrar puntero (AX=0001h)</text>
+      <polygon class="nd" points="655,555 742.5,585 655,615 567.5,585"/>
+      <text class="c b sm" x="655" y="584">¿BX = 0?</text><text class="c xs mut" x="655" y="598">EsperaSoltar</text>
+      <line class="ar" x1="130" y1="32" x2="130" y2="32"/><polygon class="ah" points="130,42 125,32 135,32"/>
+      <line class="ar" x1="130" y1="78" x2="130" y2="80"/><polygon class="ah" points="130,90 125,80 135,80"/>
+      <line class="ar" x1="130" y1="126" x2="130" y2="128"/><polygon class="ah" points="130,138 125,128 135,128"/>
+      <line class="ar" x1="130" y1="174" x2="130" y2="182"/><polygon class="ah" points="130,192 125,182 135,182"/>
+      <line class="ar" x1="130" y1="248" x2="130" y2="254"/><polygon class="ah" points="130,264 125,254 135,254"/>
+      <text class="xs mut lbl" x="142" y="258">no</text>
+      <line class="ar" x1="130" y1="300" x2="130" y2="306"/><polygon class="ah" points="130,316 125,306 135,306"/>
+      <line class="ar" x1="130" y1="352" x2="130" y2="358"/><polygon class="ah" points="130,368 125,358 135,358"/>
+      <line class="ar" x1="225" y1="220" x2="280" y2="220"/><polygon class="ah" points="290,220 280,215 280,225"/>
+      <text class="xs mut lbl" x="257" y="214">sí</text>
+      <line class="ar" x1="490" y1="220" x2="530" y2="220"/><polygon class="ah" points="540,220 530,215 530,225"/>
+      <line class="ar" x1="225" y1="398" x2="245" y2="398"/><polygon class="ah" points="255,398 245,393 245,403"/>
+      <text class="xs mut lbl" x="240" y="392">sí</text>
+      <line class="ar" x1="425" y1="398" x2="445" y2="398"/><polygon class="ah" points="455,398 445,393 445,403"/>
+      <text class="xs mut lbl" x="440" y="392">sí</text>
+      <line class="ar" x1="625" y1="398" x2="645" y2="398"/><polygon class="ah" points="655,398 645,393 645,403"/>
+      <text class="xs mut lbl" x="640" y="392">sí</text>
+      <line class="ar" x1="700" y1="368" x2="700" y2="248"/><polygon class="ah" points="700,238 695,248 705,248"/>
+      <line class="ar" x1="340" y1="428" x2="340" y2="452"/>
+      <line class="ar" x1="540" y1="428" x2="540" y2="452"/>
+      <line class="ar" x1="340" y1="452" x2="540" y2="452"/>
+      <text class="xs mut lbl" x="350" y="444">no</text>
+      <text class="xs mut lbl" x="550" y="444">no</text>
+      <line class="ar" x1="440" y1="452" x2="440" y2="460"/><polygon class="ah" points="440,470 435,460 445,460"/>
+      <line class="ar" x1="130" y1="428" x2="130" y2="446"/><polygon class="ah" points="130,456 125,446 135,446"/>
+      <text class="xs mut lbl" x="142" y="446">no</text>
+      <line class="ar" x1="130" y1="516" x2="130" y2="530"/><polygon class="ah" points="130,540 125,530 135,530"/>
+      <text class="xs mut lbl" x="142" y="534">sí</text>
+      <line class="ar" x1="230" y1="558" x2="280" y2="558"/><polygon class="ah" points="290,558 280,553 280,563"/>
+      <line class="ar" x1="440" y1="506" x2="440" y2="538"/><polygon class="ah" points="440,548 435,538 445,538"/>
+      <line class="ar" x1="530" y1="585" x2="557" y2="585"/><polygon class="ah" points="567,585 557,580 557,590"/>
+      <path class="ar" d="M35,486 H14 V334 H26"/><polygon class="ah" points="30,334 20,329 20,339"/>
+      <text class="xs mut lbl" x="24" y="480">no</text>
+      <line class="ar" x1="655" y1="615" x2="655" y2="644"/>
+      <line class="ar" x1="655" y1="644" x2="14" y2="644"/>
+      <line class="ar" x1="14" y1="644" x2="14" y2="486"/>
+      <text class="xs mut lbl" x="330" y="638">sí: soltó todo → Sondeo</text>
+      <path class="ar" d="M700,570 V538 H655 V545"/><polygon class="ah" points="655,555 650,545 660,545"/>
+      <text class="xs mut e lbl" x="752" y="532">no: sigue esperando</text>
+    </svg>
+    <figcaption><b>Flujo de decisión del Reto 2.</b> Solo el clic izquierdo dentro de la zona caliente (CX ≤ 40 y DX ≤ 10, extremos incluidos) cierra el programa; fuera de ella imprime I, y el derecho imprime D en cualquier lugar. Con BX = 3 no pasa nada y la espera a soltar ya no vigila ninguna salida. Dibujo según el código del profesor; la disposición es un esquema propio.</figcaption>
+  </figure>
   <div data-prog="reto2"></div>
   <div class="key warn"><b>Diferencias con el Reto 1</b><ul class="small"><li>Se limpia la pantalla y se dibuja “[X]” (INT 10h).</li><li>Ya no se sale con ambos botones: BX=3 se ignora.</li><li>El anti-rebote no vigila ninguna salida.</li><li>Las letras salen donde está el cursor de texto, no donde se hizo clic.</li></ul></div>
 </section>

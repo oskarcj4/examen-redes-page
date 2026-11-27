@@ -1012,3 +1012,7 @@ svg.dg .sig.on text{fill:var(--accent);font-weight:700;opacity:1}
   .rl-print{display:block}
   .rl-print ul{margin:0 0 10px;padding-left:1.2em;font-size:12px}
 }
+
+/* ===== Guía Arquitectura II · Final · diagramas ===== */
+svg.dg .wf{fill:none;stroke:var(--accent);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+svg.dg .cut{stroke:var(--err);stroke-width:2.5;stroke-linecap:round}
